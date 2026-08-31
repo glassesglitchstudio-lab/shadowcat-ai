@@ -2,7 +2,7 @@
     "name": "web_scraper",
     "version": "1.0.0",
     "description": "Web scraping ve veri çıkarma uzmanı",
-    "author": "GlassesCat",
+    "author": "Shadowcat",
     "category": "productivity",
     "dependencies": [],
     "python_deps": [

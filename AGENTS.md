@@ -1,4 +1,4 @@
-﻿# GlassesCat AI - Obsidian Sınırsız Hafıza + Otonom Ajan Sistemi
+﻿# Shadowcat AI - Obsidian Sınırsız Hafıza + Otonom Ajan Sistemi
 
 ## ZORUNLU: Push & Yayınla Workflow (Unutma!)
 Berkay "push la", "yayınla", "github'a at" dediğinde HER ZAMAN:
@@ -9,13 +9,13 @@ Berkay "push la", "yayınla", "github'a at" dediğinde HER ZAMAN:
 ## ZORUNLU: Oturum Başlangıcı
 Her yeni oturumda BU KOMUTU ÇALIŞTIRARAK başla:
 ```bash
-cd C:\Users\ErCuM\CascadeProjects\shadowcat && python -c "from glassescat_core import get_core; c = get_core(); print(f'Glassescat Core: {c.get_status()[\"stats\"][\"tools_available\"]} tools, {c.memory.get_memory_count() if c.memory else 0} memory files')"
+cd C:\Users\ErCuM\CascadeProjects\shadowcat && python -c "from glassescat_core import get_core; c = get_core(); print(f'Shadowcat Core: {c.get_status()[\"stats\"][\"tools_available\"]} tools, {c.memory.get_memory_count() if c.memory else 0} memory files')"
 ```
 
 ## Yeni Mimari (v3.0)
 
 ```
-Glassescat Core (glassescat_core.py)
+Shadowcat Core (glassescat_core.py)
   ├── AgentLoop (glassescat_agent_loop.py)    → ReAct: Düşün + Karar Ver + Uygula
   ├── TaskPlanner (glassescat_task_planner.py) → Çok adımlı görev planlama
   ├── StateManager (glassescat_state_manager.py) → Kalıcı durum yönetimi
@@ -128,6 +128,6 @@ Bundan sonra VS Code yerine **Orca IDE** (stablyai/orca) kullanılacak. Orca:
 |-------|-------|
 | glitch-code | ✅ Aktif, v0.4.5, provider fix |
 | shadowcat-r1 | ⏸ 761K dataset hazır, Colab Pro+ bekliyor |
-| shadowcat (GlassesCat) | ⏸ V7_HYBRID_TITAN |
+| shadowcat (Shadowcat) | ⏸ V7_HYBRID_TITAN |
 | deenemee | ✅ Portfolyo hazır |
 | jarvis my pc | ⏸ Snapchat entegrasyonu tamam |

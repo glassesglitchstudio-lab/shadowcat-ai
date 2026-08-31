@@ -1,5 +1,5 @@
 """
-GlassesCat - Vision Module (LLaVA ile Resim Analizi)
+Shadowcat - Vision Module (LLaVA ile Resim Analizi)
 Görüntü analizi, screenshot, fotoğraf inceleme
 """
 
@@ -97,7 +97,7 @@ class VisionAnalyzer:
             messages = [
                 {
                     "role": "system",
-                    "content": "Sen GlassesCat VİZYON asistanısın. Türkçe konuş. Detaylı ve açık analiz yap."
+                    "content": "Sen Shadowcat VİZYON asistanısın. Türkçe konuş. Detaylı ve açık analiz yap."
                 },
                 {
                     "role": "user",

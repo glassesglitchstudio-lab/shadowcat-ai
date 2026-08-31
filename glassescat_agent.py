@@ -213,7 +213,7 @@ class ShadowcatVoice:
         else:
             greeting = "Iyi aksamlar"
         
-        self.speak(f"{greeting} efendim! Glassescat AI hazir. Size nasil yardimci olabilirim?")
+        self.speak(f"{greeting} efendim! Shadowcat AI hazir. Size nasil yardimci olabilirim?")
 
 # ===== SISTEM KONTROL =====
 class ShadowcatSystem:
@@ -1131,7 +1131,7 @@ class ShadowcatControl:
 # ===== ANA SHADOWCAT SINIFI =====
 class GlassescatAgent:
     """
-    Glassescat AI - Hermes Tarzi PC Ajani
+    Shadowcat AI - Hermes Tarzi PC Ajani
     Ana sinif - tum alt sistemleri birlestirir
     """
     
@@ -1998,7 +1998,7 @@ Obsidian: VSCode eklentisi ile senkron"""
     def cmd_exit(self, match) -> str:
         self.brain.mode = SystemMode.SILENT
         self.voice.speak("Gorusmek uzere!")
-        print(f"\n{Colors.YELLOW}Glassescat AI kapatildi. Hosca kalin!{Colors.ENDC}\n")
+        print(f"\n{Colors.YELLOW}Shadowcat AI kapatildi. Hosca kalin!{Colors.ENDC}\n")
         sys.exit(0)
     
     def cmd_help(self, match) -> str:
@@ -2124,7 +2124,7 @@ OZEL:
 
 class GlassescatCoreAgent:
     """
-    Glassescat AI'nin yeni nesil ana sinifi.
+    Shadowcat AI'nin yeni nesil ana sinifi.
     
     GlassescatCore + AgentLoop + TaskPlanner + WebAgent + Feedback
     tum alt sistemleri birlestirir.
@@ -2433,7 +2433,7 @@ class GlassescatCoreAgent:
     
     def run_cli(self):
         """CLI modu - yeni mimari ile"""
-        print(f"\n{Colors.CYAN}Glassescat AI v3 CLI baslatildi. 'yardim' yazip komutlari gorebilirsiniz.{Colors.ENDC}\n")
+        print(f"\n{Colors.CYAN}Shadowcat AI v3 CLI baslatildi. 'yardim' yazip komutlari gorebilirsiniz.{Colors.ENDC}\n")
         
         while True:
             try:

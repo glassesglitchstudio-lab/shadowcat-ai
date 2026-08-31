@@ -4,7 +4,7 @@
    DEEPER ENGINE - Cognitive Architecture Katmanları
 ╚═══════════════════════════════════════════════════════════════╝
 
-GlassesCat'i statik LLM chatbot'undan goal-oriented otonom bir
+Shadowcat'i statik LLM chatbot'undan goal-oriented otonom bir
 cognitive system'e dönüştüren 3 katman:
 
   1. CriticAgent   -> Çıktıyı değerlendirir, puanlar, eleştirir
@@ -323,7 +323,7 @@ class DeeperResult:
 
 
 class DeeperEngine:
-    """GlassesCat cognitive katmanlarını yönetir ve expose eder."""
+    """Shadowcat cognitive katmanlarını yönetir ve expose eder."""
 
     def __init__(self, enabled: bool = True, memory=None):
         self.enabled = enabled

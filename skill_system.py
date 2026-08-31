@@ -20,7 +20,7 @@
 ║                                                                           ║
 ╚═══════════════════════════════════════════════════════════════════════════╝
 
-Glassescat AI Skill Sistemi - AI'nin domain-specific bilgi ve yetenek kazanmasini
+Shadowcat AI Skill Sistemi - AI'nin domain-specific bilgi ve yetenek kazanmasini
 saglayan paket yonetim sistemi.
 
 Her skill bir pakettir ve su bilesenlerden olusur:
@@ -217,7 +217,7 @@ class Skill:
             name=data.get("name", ""),
             version=data.get("version", "0.0.1"),
             description=data.get("description", ""),
-            author=data.get("author", "GlassesCat"),
+            author=data.get("author", "Shadowcat"),
             category=data.get("category", "general"),
             system_prompt="",
             tools=[],
@@ -928,7 +928,7 @@ class SkillManager:
         self,
         name: str,
         category: str = "general",
-        author: str = "GlassesCat",
+        author: str = "Shadowcat",
         description: str = "",
     ) -> Skill:
         """Yeni bir skill iskeleti olusturur.
@@ -1320,7 +1320,7 @@ def get_skill_manager() -> SkillManager:
 def create_skill(
     name: str,
     category: str = "general",
-    author: str = "GlassesCat",
+    author: str = "Shadowcat",
     description: str = "",
 ) -> Skill:
     """Yeni bir skill sablonu olusturur (kisa yol).
@@ -1370,7 +1370,7 @@ def main() -> None:
     """
     import argparse
 
-    parser = argparse.ArgumentParser(description="Glassescat AI Skill Yoneticisi")
+    parser = argparse.ArgumentParser(description="Shadowcat AI Skill Yoneticisi")
     parser.add_argument("command", help="Komut (discover, list, show, enable, disable, toggle, create, install, uninstall, check-deps, install-deps, export, reload)")
     parser.add_argument("args", nargs="*", help="Komut argumanlari")
 

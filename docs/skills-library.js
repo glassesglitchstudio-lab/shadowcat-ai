@@ -1,4 +1,4 @@
-/* GlassesCat Global Skill Library - executable skills (fonksiyon tabanlı) */
+/* Shadowcat Global Skill Library - executable skills (fonksiyon tabanlı) */
 window.SKILL_LIBRARY = [
 {
     id:'hesapla', name:'Hesaplama', icon:'calc',

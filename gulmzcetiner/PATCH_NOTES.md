@@ -30,5 +30,5 @@
 ### Özellikler
 - Base: qwen2.5-coder:14b
 - Monolithic AGI mimarisi
-- GlassesCat AI entegrasyonu
+- Shadowcat AI entegrasyonu
 - CEO Berkay yetkilendirmesi

@@ -1,5 +1,5 @@
 """
-GlassesCat - Sesli Yanıt Modülü (Text-to-Speech)
+Shadowcat - Sesli Yanıt Modülü (Text-to-Speech)
 Yanıtları sesli olarak okuma
 gTTS, pyttsx3, ve edge-tts desteği
 """

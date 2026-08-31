@@ -1,5 +1,5 @@
 """
-GlassesCat - Görev Zamanlayıcı Modülü
+Shadowcat - Görev Zamanlayıcı Modülü
 Cron benzeri tek seferlik ve tekrarlayan görevleri yönetir
 """
 

@@ -1,5 +1,5 @@
 """
-GlassesCat AI v4.0 - Nexus Memory Engine (Yüksek Performanslı Hibrit Hafıza)
+Shadowcat AI v4.0 - Nexus Memory Engine (Yüksek Performanslı Hibrit Hafıza)
 
 Obsidian .md bağımlılığı yerine SQLite FTS5 (Tam Metin Arama) tabanlı,
 hızlı, kategorize edilebilir ve ilişkisel hafıza motoru.
@@ -27,7 +27,7 @@ logger = logging.getLogger(__name__)
 
 class NexusMemoryEngine:
     """
-    GlassesCat AI Nexus Hafıza Motoru.
+    Shadowcat AI Nexus Hafıza Motoru.
     SQLite + FTS5 tam metin arama desteği ile yüksek hızlı hafıza yönetimi.
     """
 

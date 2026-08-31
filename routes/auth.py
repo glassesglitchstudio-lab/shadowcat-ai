@@ -43,7 +43,7 @@ async def register(req: RegisterRequest, response: Response):
         except Exception:
             valid = False
     if not valid:
-        raise HTTPException(status_code=403, detail="Gecersiz veya eksik davet kodu. GlassesCat su anda davetli kullanicilara aciktir.")
+        raise HTTPException(status_code=403, detail="Gecersiz veya eksik davet kodu. Shadowcat su anda davetli kullanicilara aciktir.")
     if req.email in users:
         raise HTTPException(status_code=400, detail="E-posta zaten kayıtlı")
     users[req.email] = {
@@ -130,7 +130,7 @@ async def simple_login(req: SimpleLoginRequest, response: Response):
         except Exception:
             valid = False
     if not valid:
-        raise HTTPException(status_code=401, detail="Gecersiz veya pasif davet kodu! GlassesCat su anda davetli kullanicilara aciktir.")
+        raise HTTPException(status_code=401, detail="Gecersiz veya pasif davet kodu! Shadowcat su anda davetli kullanicilara aciktir.")
 
     users[name] = {
         "name": name,

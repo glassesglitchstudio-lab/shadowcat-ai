@@ -144,7 +144,7 @@ except ImportError:
 
 VERSION = "4.0.0"
 
-AGENT_NAME = "GlassesCat"
+AGENT_NAME = "Shadowcat"
 
 OWNER = "ErCuM"
 
@@ -254,7 +254,7 @@ class GlassescatCore:
 
     """
 
-    Glassescat AI Merkezi Çekirdek Sistemi.
+    Shadowcat AI Merkezi Çekirdek Sistemi.
 
     
 
@@ -365,7 +365,7 @@ class GlassescatCore:
 
         
 
-        logger.info("GlassesCat Core instance oluşturuldu")
+        logger.info("Shadowcat Core instance oluşturuldu")
 
     
 
@@ -435,7 +435,7 @@ class GlassescatCore:
 
         
 
-        logger.info(f"  GlassesCat Core v{VERSION} hazır!")
+        logger.info(f"  Shadowcat Core v{VERSION} hazır!")
 
         logger.info("=" * 50)
 
@@ -2253,7 +2253,7 @@ def quick_start():
 
     print(f"\n{'='*50}")
 
-    print(f"  Glassescat AI v{VERSION} hazır!")
+    print(f"  Shadowcat AI v{VERSION} hazır!")
 
     print(f"  {'='*50}")
 

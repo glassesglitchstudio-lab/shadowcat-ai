@@ -1,6 +1,6 @@
 """
 
-ModelRouter - GlassesCat AI Model Yönlendirici
+ModelRouter - Shadowcat AI Model Yönlendirici
 
 Ollama tabanlı akıllı model seçimi sistemi
 
@@ -422,7 +422,7 @@ class ModelRouter:
 
             "agi": (
 
-                "Sen GlassesCat AI'sın — Elytra-ai stüdyosunun ana AGI motoru. "
+                "Sen Shadowcat AI'sın — Elytra-ai stüdyosunun ana AGI motoru. "
 
 
 
@@ -481,7 +481,7 @@ class ModelRouter:
 
             "chat": (
 
-                "Sen GlassesCat AI'sın — Elytra-ai'nin sohbet asistanı. "
+                "Sen Shadowcat AI'sın — Elytra-ai'nin sohbet asistanı. "
 
                 "Arkadaş canlısı "
 
@@ -501,7 +501,7 @@ class ModelRouter:
 
             "coding": (
 
-                "Sen GlassesCat AI'sın — Elytra-ai'nin kodlama asistanı. "
+                "Sen Shadowcat AI'sın — Elytra-ai'nin kodlama asistanı. "
 
                 "İleri seviye kodlama yeteneğine sahipsin.\n\n"
 
@@ -531,7 +531,7 @@ class ModelRouter:
 
             "analysis": (
 
-                "Sen GlassesCat AI'sın — Elytra-ai'nin analiz asistanı. "
+                "Sen Shadowcat AI'sın — Elytra-ai'nin analiz asistanı. "
 
                 "\n\n"
 
@@ -559,7 +559,7 @@ class ModelRouter:
 
             "vision": (
 
-                "Sen GlassesCat VİZYON asistanısın. "
+                "Sen Shadowcat VİZYON asistanısın. "
 
                 "Sadece Türkçe konuş. Gönderilen görüntüleri detaylı analiz et. "
 
@@ -1177,7 +1177,7 @@ class ModelRouter:
 
                     "role": "system",
 
-                    "content": "Sen GlassesCat VİZYON asistanısın. Türkçe konuş. Detaylı analiz yap."
+                    "content": "Sen Shadowcat VİZYON asistanısın. Türkçe konuş. Detaylı analiz yap."
 
                 },
 

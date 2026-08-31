@@ -1,4 +1,4 @@
-# Model Security — GlassesCat AI
+# Model Security — Shadowcat AI
 
 Fine-tuned model agirliklarini AES-256 ile sifreleyip dagitma sistemi.
 

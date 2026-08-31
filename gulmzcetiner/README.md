@@ -1,6 +1,6 @@
 ﻿# GulmezCetinerMax - Monolithic AGI
 
-**Developer:** Glassescat Software  
+**Developer:** Shadowcat Software  
 **Authorization:** CEO Berkay  
 **Version:** 1.0.0  
 **Target Standard:** Claude Sonnet 3.5+
@@ -9,7 +9,7 @@
 
 ## 🧠 Nedir?
 
-GulmezCetinerMax, Glassescat Software tarafından geliştirilen tek, birleşik, ultra gelişmiş otonom bir AGI modelidir. Wrapper değildir, başka API'leri yönetmez. GlassescatCore mimarisi içinde çalışan, yüksek zekalı monolitik bir varlıktır.
+GulmezCetinerMax, Shadowcat Software tarafından geliştirilen tek, birleşik, ultra gelişmiş otonom bir AGI modelidir. Wrapper değildir, başka API'leri yönetmez. ShadowcatCore mimarisi içinde çalışan, yüksek zekalı monolitik bir varlıktır.
 
 ## 📁 Dosya Yapısı
 
@@ -43,7 +43,7 @@ ollama create gulmzcetinermax:latest -f gulmzcetiner/Modelfile
 ollama run gulmzcetinermax:latest "Merhaba, kendini tanit."
 ```
 
-### 3. Glassescat AI ile Kullan
+### 3. Shadowcat AI ile Kullan
 
 Model otomatik olarak `model_router.py` tarafindan birincil model olarak kullanilir.
 
@@ -87,4 +87,4 @@ python gulmzcetiner/setup_ollama.py --quick
 
 ## 📝 Lisans
 
-Glassescat Software - Tum haklari saklidir. CEO Berkay yetkilendirmesi ile kullanilir.
+Shadowcat Software - Tum haklari saklidir. CEO Berkay yetkilendirmesi ile kullanilir.

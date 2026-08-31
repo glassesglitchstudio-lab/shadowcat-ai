@@ -81,7 +81,7 @@ class AgentLoopResult:
 # REACT PROMPT ŞABLONU
 # ─────────────────────────────────────────────────────────────
 
-REACT_SYSTEM_PROMPT = """Sen Glassescat AI'sın - tam donanımlı bir yapay zeka asistanı.
+REACT_SYSTEM_PROMPT = """Sen Shadowcat AI'sın - tam donanımlı bir yapay zeka asistanı.
 
 ## Görevin
 Kullanıcının isteğini yerine getirmek için adım adım düşünür, 
@@ -693,7 +693,7 @@ def get_agent_loop(core=None) -> AgentLoop:
 
 if __name__ == "__main__":
     print("=" * 50)
-    print("  Glassescat AI - Agent Loop Test")
+    print("  Shadowcat AI - Agent Loop Test")
     print("=" * 50)
     
     from glassescat_core import get_core

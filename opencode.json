@@ -4,7 +4,7 @@
   "instructions": ["AGENTS.md"],
   "agent": {
     "glassescat-ai": {
-      "description": "Glassescat AI - Obsidian sinirsiz hafiza ile calisan kisisel asistan",
+      "description": "Shadowcat AI - Obsidian sinirsiz hafiza ile calisan kisisel asistan",
       "model": "opencode/deepseek-v4-flash-free",
       "mode": "primary"
     }

@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Admin — GlassesCat</title>
+<title>Admin — Shadowcat</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
@@ -105,9 +105,9 @@ button.small{padding:4px 10px;font-size:.72rem;border-radius:6px}
 <aside id="sidebar" class="sidebar">
   <div class="sidebar-header">
     <a class="sidebar-brand" href="/">
-      <img src="/static/glassescat-logo.png" alt="GlassesCat">
+      <img src="/static/shadowcat-logo.png" alt="Shadowcat">
       <div>
-        <div class="sidebar-brand-text">GlassesCat</div>
+        <div class="sidebar-brand-text">Shadowcat</div>
         <div class="sidebar-brand-sub">Admin Panel</div>
       </div>
     </a>
@@ -132,9 +132,9 @@ button.small{padding:4px 10px;font-size:.72rem;border-radius:6px}
 <div class="main">
   <div id="loginView" style="display:none" class="login-wrap">
     <div class="login-box">
-      <div class="logo"><img src="/static/glassescat-logo.png" alt="GlassesCat"></div>
+      <div class="logo"><img src="/static/shadowcat-logo.png" alt="Shadowcat"></div>
       <h1>Admin Girişi</h1>
-      <p class="sub">GlassesCat yönetim paneline erişmek için şifreni gir</p>
+      <p class="sub">Shadowcat yönetim paneline erişmek için şifreni gir</p>
       <label for="adminPass">Admin Şifresi</label>
       <input type="password" id="adminPass" placeholder="••••••••" onkeydown="if(event.key==='Enter')adminLogin()">
       <button onclick="adminLogin()">Giriş Yap</button>
@@ -148,7 +148,7 @@ button.small{padding:4px 10px;font-size:.72rem;border-radius:6px}
         <button class="hamburger" onclick="toggleSidebar()">&#9776;</button>
         <div>
           <h1 id="pageTitle">Dashboard</h1>
-          <div class="crumb" id="pageCrumb">GlassesCat yönetim merkezi</div>
+          <div class="crumb" id="pageCrumb">Shadowcat yönetim merkezi</div>
         </div>
       </div>
       <div class="right">
@@ -193,7 +193,7 @@ button.small{padding:4px 10px;font-size:.72rem;border-radius:6px}
       <div class="view" id="view-inside" style="display:none">
         <div class="card"><div class="card-hdr"><h2>Sistem Hakkında</h2></div>
           <p style="font-size:.82rem;color:#555;line-height:1.7">
-            GlassesCat yönetim paneli, tek tek kişilere özel API anahtarları dağıtarak sohbet arayüzüne giriş izni verir.
+            Shadowcat yönetim paneli, tek tek kişilere özel API anahtarları dağıtarak sohbet arayüzüne giriş izni verir.
             Her anahtar aktif/pasif olarak anlık yönetilebilir ve silinebilir. Anahtar sahibi <b>/api/auth/simple-login</b> ile
             giriş yapar; kullanımı "Kullanan" sütununda izlenir.
           </p>

@@ -1,5 +1,5 @@
 """
-Model Security — GlassesCat AI
+Model Security — Shadowcat AI
 Şifreli model yönetimi için paket.
 """
 

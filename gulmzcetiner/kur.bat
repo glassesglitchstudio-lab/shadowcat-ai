@@ -2,7 +2,7 @@
 chcp 65001 >nul
 echo ============================================================
 echo   GULMEZCETINERMAX - Hizli Kurulum
-echo   Glassescat Software | CEO: Berkay
+echo   Shadowcat Software | CEO: Berkay
 echo ============================================================
 echo.
 
@@ -45,7 +45,7 @@ if %errorlevel% equ 0 (
     echo ============================================================
     echo.
     echo   Test etmek icin: ollama run gulmzcetinermax:latest
-    echo   Glassescat AI ile kullanmak icin: python glassescat_agent.py
+    echo   Shadowcat AI ile kullanmak icin: python glassescat_agent.py
     echo.
 ) else (
     echo.

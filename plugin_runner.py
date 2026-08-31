@@ -20,7 +20,7 @@
 ║                                                                           ║
 ╚═══════════════════════════════════════════════════════════════════════════╝
 
-Glassescat AI Coklu-Dil Plugin Altyapisi - Python disi dillerde plugin calistirma.
+Shadowcat AI Coklu-Dil Plugin Altyapisi - Python disi dillerde plugin calistirma.
 
 Kullanim:
     >>> from plugin_runner import MultiLanguagePluginManager
@@ -2273,7 +2273,7 @@ def create_plugin_template(
     language: str,
     name: str = "OrnekPlugin",
     version: str = "1.0.0",
-    author: str = "Glassescat AI",
+    author: str = "Shadowcat AI",
     description: str = "Ornek plugin",
 ) -> str:
     """Belirtilen dilde plugin sablonu olusturur.
@@ -2312,11 +2312,11 @@ def create_plugin_template(
 def _js_template(
     name: str = "OrnekPlugin",
     version: str = "1.0.0",
-    author: str = "Glassescat AI",
+    author: str = "Shadowcat AI",
     description: str = "Ornek plugin",
 ) -> str:
     return textwrap.dedent(f'''\
-    // {name} - Glassescat AI / GlassesCat Plugin
+    // {name} - Shadowcat AI / Shadowcat Plugin
     // Version: {version}
     // Author: {author}
     // Description: {description}
@@ -2421,11 +2421,11 @@ def _js_template(
 def _lua_template(
     name: str = "OrnekPlugin",
     version: str = "1.0.0",
-    author: str = "Glassescat AI",
+    author: str = "Shadowcat AI",
     description: str = "Ornek plugin",
 ) -> str:
     return textwrap.dedent(f'''\
-    -- {name} - Glassescat AI / GlassesCat Plugin
+    -- {name} - Shadowcat AI / Shadowcat Plugin
     -- Version: {version}
     -- Author: {author}
     -- Description: {description}
@@ -2530,11 +2530,11 @@ def _lua_template(
 def _rb_template(
     name: str = "OrnekPlugin",
     version: str = "1.0.0",
-    author: str = "Glassescat AI",
+    author: str = "Shadowcat AI",
     description: str = "Ornek plugin",
 ) -> str:
     return textwrap.dedent(f'''\
-    # {name} - Glassescat AI / GlassesCat Plugin
+    # {name} - Shadowcat AI / Shadowcat Plugin
     # Version: {version}
     # Author: {author}
     # Description: {description}
@@ -2629,12 +2629,12 @@ def _rb_template(
 def _sh_template(
     name: str = "OrnekPlugin",
     version: str = "1.0.0",
-    author: str = "Glassescat AI",
+    author: str = "Shadowcat AI",
     description: str = "Ornek plugin",
 ) -> str:
     return textwrap.dedent(f'''\
     #!/usr/bin/env bash
-    # {name} - Glassescat AI / GlassesCat Plugin
+    # {name} - Shadowcat AI / Shadowcat Plugin
     # Version: {version}
     # Author: {author}
     # Description: {description}
@@ -2719,7 +2719,7 @@ def _sh_template(
 def _go_template(
     name: str = "OrnekPlugin",
     version: str = "1.0.0",
-    author: str = "Glassescat AI",
+    author: str = "Shadowcat AI",
     description: str = "Ornek plugin",
 ) -> str:
     return textwrap.dedent(f'''\
@@ -2734,7 +2734,7 @@ def _go_template(
         "syscall"
     )
 
-    // {name} - Glassescat AI / GlassesCat Plugin
+    // {name} - Shadowcat AI / Shadowcat Plugin
     // Version: {version}
     // Author: {author}
     // Description: {description}

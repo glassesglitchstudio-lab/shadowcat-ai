@@ -2,7 +2,7 @@
     "name": "game_dev",
     "version": "1.0.0",
     "description": "Oyun geliştirme uzmanı - Pygame, Tkinter, Godot",
-    "author": "GlassesCat",
+    "author": "Shadowcat",
     "category": "coding",
     "dependencies": [],
     "python_deps": [

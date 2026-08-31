@@ -595,7 +595,7 @@ if __name__ == "__main__":
     
     # Test
     print("=" * 50)
-    print("  Glassescat AI - Web Agent Test")
+    print("  Shadowcat AI - Web Agent Test")
     print("=" * 50)
     
     print("\n1. DuckDuckGo arama:")

@@ -76,7 +76,7 @@ import csv
 
 
 
-# Glassescat AI Core - Yeni mimari
+# Shadowcat AI Core - Yeni mimari
 
 try:
 
@@ -299,7 +299,7 @@ def generate_token() -> str:
 
 app = FastAPI(
 
-    title="GlassesCat BETA",
+    title="Shadowcat BETA",
 
     description="SWA 1.6 Mimarisi - Hibrit Zeka Sistemi",
 
@@ -343,9 +343,9 @@ def _find_static_file(filename: str) -> Optional[str]:
     return None
 
 # Root statik dosya rotaları (404 önleyici)
-@app.get("/glassescat-logo.png")
+@app.get("/shadowcat-logo.png")
 async def get_root_logo():
-    p = _find_static_file("glassescat-logo.png")
+    p = _find_static_file("shadowcat-logo.png")
     if p:
         return FileResponse(p, media_type="image/png")
     return Response(status_code=404)
@@ -373,7 +373,7 @@ async def get_root_select_script():
 
 @app.get("/favicon.ico")
 async def get_root_favicon():
-    p = _find_static_file("glassescat-logo.png")
+    p = _find_static_file("shadowcat-logo.png")
     if p:
         return FileResponse(p, media_type="image/png")
     return Response(status_code=204)
@@ -560,7 +560,7 @@ async def call_ai_engine(message: str, config: Dict[str, Any], num_predict: int 
 
                 "messages": [
 
-                    {"role": "system", "content": "Sen GlassesCat'sın. Yardımcı ve nazik bir Türkçe yapay zeka asistanısın. Kısa ve faydalı yanıtlar verirsin. Oyunları bilirsin. Saygılı davranırsın."},
+                    {"role": "system", "content": "Sen Shadowcat'sın. Yardımcı ve nazik bir Türkçe yapay zeka asistanısın. Kısa ve faydalı yanıtlar verirsin. Oyunları bilirsin. Saygılı davranırsın."},
 
                     {"role": "user", "content": message}
 
@@ -688,7 +688,7 @@ async def root(request: Request):
 
         logger.error(f"Error: {type(e).__name__}: {str(e)}")
 
-        return HTMLResponse(content="<h1>GlassesCat AI</h1><p>Template yüklenemedi</p>")
+        return HTMLResponse(content="<h1>Shadowcat AI</h1><p>Template yüklenemedi</p>")
 
 
 
@@ -708,13 +708,13 @@ async def docs_page(request: Request):
 
                 return HTMLResponse(content=f.read())
 
-        return HTMLResponse(content="<h1>GlassesCat AI</h1><p>Doküman bulunamadı</p>")
+        return HTMLResponse(content="<h1>Shadowcat AI</h1><p>Doküman bulunamadı</p>")
 
     except Exception as e:
 
         logger.error(f"Error: {type(e).__name__}: {str(e)}")
 
-        return HTMLResponse(content="<h1>GlassesCat AI</h1><p>Template yüklenemedi</p>")
+        return HTMLResponse(content="<h1>Shadowcat AI</h1><p>Template yüklenemedi</p>")
 
 
 
@@ -856,7 +856,7 @@ async def chat(request: ChatRequest):
                             stream_model = os.getenv("DEFAULT_MODEL", "glassesglitchstudio/x_opus:V1_X_OPUS")
 
                         # Sistem prompt'u
-                        system_prompt = "Sen GlassesCat AI'sın — Elytra-ai stüdyosunun yapay zeka asistanı. Türkçe yanıt ver, kısa ve faydalı ol. Kod bloklarında dil etiketi kullan. Doğrudan çözüme odaklan."
+                        system_prompt = "Sen Shadowcat AI'sın — Elytra-ai stüdyosunun yapay zeka asistanı. Türkçe yanıt ver, kısa ve faydalı ol. Kod bloklarında dil etiketi kullan. Doğrudan çözüme odaklan."
                         
                         # Extended thinking desteği
                         think_enabled = getattr(core, '_extended_thinking', False) if core else False
@@ -1284,7 +1284,7 @@ async def register(request: RegisterRequest):
 
             "success": False,
 
-            "error": "Gecersiz veya eksik davet kodu. GlassesCat su anda davetli kullanicilara aciktir."
+            "error": "Gecersiz veya eksik davet kodu. Shadowcat su anda davetli kullanicilara aciktir."
 
         }
 
@@ -1805,11 +1805,11 @@ async def share_page(share_id: str):
 
         content = m.get("content", "")
 
-        label = "Kullanıcı" if role == "user" else "GlassesCat"
+        label = "Kullanıcı" if role == "user" else "Shadowcat"
 
         msgs_html += f'<div style="margin-bottom:16px;padding:12px;background:{ "#f5f5f5" if role=="user" else "#f3e8ff" };border-radius:8px"><strong>{label}</strong><p style="margin-top:4px">{content}</p></div>'
 
-    return HTMLResponse(f"""<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>{share["title"]} — GlassesCat</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"><style>*{{margin:0;padding:0;box-sizing:border-box}}body{{font-family:'Inter',sans-serif;background:#fafafa;color:#1a1a1a;padding:40px 24px;max-width:720px;margin:0 auto}}h1{{font-size:1.1rem;font-weight:600;margin-bottom:24px;color:#7c3aed}}.meta{{font-size:0.75rem;color:#888;margin-bottom:32px}}</style></head><body><h1>{share["title"]}</h1><div class="meta">{share.get("created","")} · Paylaşılan Sohbet</div>{msgs_html}</body></html>""")
+    return HTMLResponse(f"""<!DOCTYPE html><html lang="tr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>{share["title"]} — Shadowcat</title><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"><style>*{{margin:0;padding:0;box-sizing:border-box}}body{{font-family:'Inter',sans-serif;background:#fafafa;color:#1a1a1a;padding:40px 24px;max-width:720px;margin:0 auto}}h1{{font-size:1.1rem;font-weight:600;margin-bottom:24px;color:#7c3aed}}.meta{{font-size:0.75rem;color:#888;margin-bottom:32px}}</style></head><body><h1>{share["title"]}</h1><div class="meta">{share.get("created","")} · Paylaşılan Sohbet</div>{msgs_html}</body></html>""")
 
 
 
@@ -1862,7 +1862,7 @@ async def manage_panel(request: Request):
 
 <html lang="tr"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
 
-<title>Yönetim — GlassesCat</title>
+<title>Yönetim — Shadowcat</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
@@ -1882,7 +1882,7 @@ h1{{font-size:1.3rem;font-weight:600;margin-bottom:24px}}
 
 </style></head><body>
 
-<h1>GlassesCat Yönetim</h1>
+<h1>Shadowcat Yönetim</h1>
 
 <div class="card"><h2>Yönetim Paneli</h2><p>Yapım aşamasında.</p></div>
 
@@ -2926,7 +2926,7 @@ async def skills_hunt(req: SkillHuntRequest):
 
 async def skills_install(req: SkillInstallRequest):
 
-    """Verilen kurulum komutunu GlassesCat'in kendi terminalinde calistirir."""
+    """Verilen kurulum komutunu Shadowcat'in kendi terminalinde calistirir."""
 
     command = (req.command or "").strip()
 
@@ -4224,7 +4224,7 @@ async def _swarm_web_search(query: str) -> str:
 
                 params={"q": query, "format": "json", "no_html": 1, "skip_disambig": 1},
 
-                headers={"User-Agent": "GlassesCat-Swarm/1.0"}
+                headers={"User-Agent": "Shadowcat-Swarm/1.0"}
 
             )
 

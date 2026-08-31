@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Storage Adapter - GlassesCat veri katmani soyutlamasi.
+Storage Adapter - Shadowcat veri katmani soyutlamasi.
 
 Amac: Kod icindeki tum veri erisimleri bu adapter uzerinden yapilir.
 Ileride Firebase/Firestore'a gecmek istedigimizde sadece bu dosyadaki

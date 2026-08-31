@@ -2,7 +2,7 @@
     "name": "security_analyst",
     "version": "1.0.0",
     "description": "Güvenlik analizi ve penetrasyon testi uzmanı",
-    "author": "GlassesCat",
+    "author": "Shadowcat",
     "category": "security",
     "dependencies": [],
     "python_deps": [

@@ -515,7 +515,7 @@ if __name__ == "__main__":
     
     # Test
     print("=" * 50)
-    print("  Glassescat AI - Feedback Loop Test")
+    print("  Shadowcat AI - Feedback Loop Test")
     print("=" * 50)
     
     # Etkileşim ekle

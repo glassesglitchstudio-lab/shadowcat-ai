@@ -9,7 +9,7 @@
 ║     ╚══▀▀═╝  ╚══╝╚══╝ ╚══════╝╚═╝  ╚═══╝                       ║
 ║                                                                  ║
 ║     14B ASSISTANT PLUGIN - FULL POWER AUTO-FIX ENGINE           ║
-║     GlassesCat için Qwen 14B - Akıllı Hata Düzeltme Motoru      ║
+║     Shadowcat için Qwen 14B - Akıllı Hata Düzeltme Motoru      ║
 ║                                                                  ║
 ║     ⚡ Multi-Strategy Fix: 5 farklı strateji ile hata düzeltme  ║
 ║     🧠 Context-Aware: Python 3.14.4, .venv paketleri, OS bilgisi║

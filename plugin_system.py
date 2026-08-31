@@ -20,7 +20,7 @@
 ║                                                                           ║
 ╚═══════════════════════════════════════════════════════════════════════════╝
 
-Glassescat AI Plugin Sistemi - Dinamik eklenti yukleme, yonetim ve hook altyapisi.
+Shadowcat AI Plugin Sistemi - Dinamik eklenti yukleme, yonetim ve hook altyapisi.
 
 Kullanim:
     >>> from plugin_system import PluginManager
@@ -2258,7 +2258,7 @@ class PluginMetrics:
 # ----------------------------------------------------------------
 
 PLUGIN_TEMPLATE = '''"""
-{s_name} - Glassescat AI / GlassesCat Plugin
+{s_name} - Shadowcat AI / Shadowcat Plugin
 Version: {s_version}
 Author: {s_author}
 Description: {s_description}
@@ -2314,7 +2314,7 @@ class {s_class}(BasePlugin):
 def create_plugin_template(
     name: str = "OrnekPlugin",
     version: str = "1.0.0",
-    author: str = "Glassescat AI",
+    author: str = "Shadowcat AI",
     description: str = "Ornek plugin",
     command: str = "ornek",
 ) -> str:
