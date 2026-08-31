@@ -1,6 +1,6 @@
 ﻿"""
 GulmezCetinerMax - Egitim Verisi Hazirlama
-Glassescat Software | CEO: Berkay
+Elytra-ai | Developer: Berkay
 
 Kullanim:
     python data_prep.py

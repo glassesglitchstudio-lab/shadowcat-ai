@@ -110,7 +110,7 @@ logger = logging.getLogger(__name__)
 
 # Kullanıcı veritabanı
 
-USERS_DB = "users.json"
+USERS_DB = os.path.join(os.path.dirname(os.path.abspath(__file__)), "auth_users.json")
 
 SESSIONS = {}
 
@@ -145,12 +145,27 @@ def save_users(users):
         json.dump(users, f, ensure_ascii=False, indent=2)
 
 
-
 def hash_password(password: str) -> str:
+    """Sifreyi guvende hashle - PBKDF2-HMAC-SHA256 + rastgele salt (100_000 tur)."""
+    salt = secrets.token_bytes(16)
+    key = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt, 100_000)
+    return f"pbkdf2:{salt.hex()}:{key.hex()}"
 
-    """Şifre hash'le"""
 
-    return hashlib.sha256(password.encode()).hexdigest()
+def verify_password(password: str, stored: str) -> bool:
+    """Geriye donuk uyumlu dogrulama: PBKDF2 (yeni) + plain SHA256 (eski kayitlar)."""
+    if not stored:
+        return False
+    try:
+        parts = stored.split(":", 2)
+        if len(parts) == 3 and parts[0] == "pbkdf2":
+            salt = bytes.fromhex(parts[1])
+            key = hashlib.pbkdf2_hmac("sha256", password.encode("utf-8"), salt, 100_000)
+            return key.hex() == parts[2]
+        return hashlib.sha256(password.encode()).hexdigest() == stored
+    except Exception:
+        return False
+
 
 
 
@@ -841,7 +856,7 @@ async def chat(request: ChatRequest):
                             stream_model = os.getenv("DEFAULT_MODEL", "glassesglitchstudio/x_opus:V1_X_OPUS")
 
                         # Sistem prompt'u
-                        system_prompt = "Sen GlassesCat'sın. Yardımcı ve nazik bir Türkçe yapay zeka asistanısın. Kısa ve faydalı yanıtlar verirsin."
+                        system_prompt = "Sen GlassesCat AI'sın — Elytra-ai stüdyosunun yapay zeka asistanı. Türkçe yanıt ver, kısa ve faydalı ol. Kod bloklarında dil etiketi kullan. Doğrudan çözüme odaklan."
                         
                         # Extended thinking desteği
                         think_enabled = getattr(core, '_extended_thinking', False) if core else False
@@ -1325,14 +1340,13 @@ async def login(request: LoginRequest):
 
     
 
-    if users[request.username]["password"] != hash_password(request.password):
-
+    user_info = users[request.username]
+    stored_password = user_info.get("password") if isinstance(user_info, dict) else None
+    
+    if not stored_password or not verify_password(request.password, stored_password):
         return {
-
             "success": False,
-
             "error": "Şifre hatalı"
-
         }
 
     

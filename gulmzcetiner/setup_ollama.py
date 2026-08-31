@@ -1,6 +1,6 @@
 ﻿"""
 GulmezCetinerMax - GGUF Donusturme ve Ollama Yukleme
-Glassescat Software | CEO: Berkay
+Elytra-ai | Developer: Berkay
 
 Bu script, egitilen modeli GGUF formatina donusturur
 ve Ollama'ya yukler.
