@@ -565,7 +565,7 @@
             <span id="userCloudBadge" style="font-size:.62rem;color:#16a34a;background:#dcfce7;padding:1px 6px;border-radius:10px;font-weight:600;display:none;">Bulut</span>
         </div>
         <div style="display:flex;align-items:center;justify-content:space-between;">
-            <span id="sidebarModel">🔥 EPIC</span>
+            <span id="sidebarModel">🐾 Shadowcat Lite</span>
             <button onclick="toggleSettings()">Ayarlar</button>
         </div>
     </div>
@@ -598,7 +598,7 @@
                     <span class="fallback" style="display:none"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5c-3.8 0-7 2.2-7 5v5a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-5c0-2.8-3.2-5-7-5z"/><path d="M5 10L3 4l4.5 2.5"/><path d="M19 10l2-6-4.5 2.5"/><circle cx="9" cy="12" r="1.5" fill="#7c3aed"/><circle cx="15" cy="12" r="1.5" fill="#7c3aed"/><path d="M10 15c.5.5 1.5 1 2 1s1.5-.5 2-1"/></svg></span>
                 </div>
                 <h1 id="welcomeGreeting">Merhaba, <span id="welcomeUserName" style="background:linear-gradient(135deg,#7c3aed,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Kullanıcı</span>! 👋</h1>
-                <div class="welcome-sub" id="welcomeSubGreeting">Shadowcat AI & 🔥 EPIC 671B Nexus Motoru Aktif. Bugün ne inşa ediyoruz?</div>
+                <div class="welcome-sub" id="welcomeSubGreeting">Shadowcat AI hazır. Bugün ne inşa ediyoruz?</div>
                 <div class="chips">
                     <button class="chip" onclick="sendSug('Python ile dosya okuyucu yaz')">Kod yaz ve debug et</button>
                     <button class="chip" onclick="sendSug('Nexus hafızada ara: python')">Nexus Hafıza Arama</button>
@@ -661,15 +661,20 @@
         <div class="input-outer" id="inputOuter">
             <div class="model-selector inline-model" onclick="toggleDropdown('modelDropdown')">
                 <span class="dot"></span>
-                <span id="modelName">🔥 EPIC</span>
+                <span id="modelName">🐾 Shadowcat Lite</span>
                 <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
                 <div id="modelDropdown" class="model-dropdown">
-                    <div class="model-opt active" onclick="selectModel('EPIC')">🔥 EPIC (671B Nexus)<span class="sub">GlassesGlitchStudio Flagship (Aktif)</span></div>
-                    <div class="model-opt" onclick="selectModel('SHADOWCAT_R1')">👑 ShadowCat-R1 14B<span class="sub">UE5 & C++ Amiral Gemisi</span></div>
-                    <div class="model-opt" onclick="selectModel('X_FABLE_CODER')">🚀 X_FABLE_CODER<span class="sub">kod üretim & refactoring</span></div>
-                    <div class="model-opt" onclick="selectModel('X_GLITCH_OPUS')">🦁 X_GLITCH_OPUS<span class="sub">glitch code optimizasyonlu</span></div>
-                    <div class="model-opt" onclick="selectModel('X_OPUS')">X_OPUS v4.0<span class="sub">hibrit çift beyin routing</span></div>
-                    <div class="model-opt" onclick="selectModel('qwen2.5-coder:14b')">Qwen 2.5 Coder 14B<span class="sub">kodlama uzmanı</span></div>
+                    <div style="padding:6px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">SOHBET</div>
+                    <div class="model-opt active" onclick="selectModel('SHADOWCAT_LITE')">🐾 Shadowcat Lite<span class="sub">hızlı &amp; hafif günlük asistan</span></div>
+                    <div class="model-opt" onclick="selectModel('SHADOWCAT_FLASH')">⚡ Shadowcat Flash<span class="sub">dengeli — araçlar &amp; arama</span></div>
+                    <div class="model-opt" onclick="selectModel('SHADOWCAT_PRO')">👑 Shadowcat Pro<span class="sub">yerel stüdyo 14B — uzun işler</span></div>
+                    <div class="model-opt" onclick="selectModel('SHADOWCAT_EXPERT')">🧠 Shadowcat Expert<span class="sub">en derin muhakeme</span></div>
+                    <div style="padding:8px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">KOD</div>
+                    <div class="model-opt" onclick="selectModel('CODES')">💻 CodeS<span class="sub">ana router — uzman modelleri çağırır</span></div>
+                    <div style="padding:8px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">GÖRSEL</div>
+                    <div class="model-opt" onclick="toast('🎨 SkyS-Maker beta yolda — plan B1')" style="opacity:.55">🎨 SkyS-Maker<span class="sub">görsel üretim — YAKINDA</span></div>
+                    <div style="padding:8px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">ADMIN</div>
+                    <div class="model-opt" onclick="selectModelAdmin()">🔒 MaxCode<span class="sub">yetkili modeli — şifre gerekli</span></div>
                 </div>
             </div>
             <textarea id="inputBox" class="input-box" rows="1" placeholder="Mesaj yazın veya / komutları..." oninput="resize(this);updateBtn();checkSlash()" onkeydown="onInputKey(event)"></textarea>
@@ -861,11 +866,11 @@
         <div id="settingsPers" style="margin-top:16px">
             <label style="font-size:.82rem;font-weight:500;color:#333;display:block;margin-bottom:6px">Varsayılan Model</label>
             <div style="display:flex;gap:6px;flex-wrap:wrap" id="settingsModels">
-                <button class="sk-tab active" data-model="EPIC" onclick="selectModel('EPIC')">🔥 EPIC</button>
-                <button class="sk-tab" data-model="SHADOWCAT_R1" onclick="selectModel('SHADOWCAT_R1')">👑 ShadowCat-R1</button>
-                <button class="sk-tab" data-model="X_FABLE_CODER" onclick="selectModel('X_FABLE_CODER')">🚀 X_FABLE_CODER</button>
-                <button class="sk-tab" data-model="X_GLITCH_OPUS" onclick="selectModel('X_GLITCH_OPUS')">🦁 X_GLITCH_OPUS</button>
-                <button class="sk-tab" data-model="X_OPUS" onclick="selectModel('X_OPUS')">X_OPUS</button>
+                <button class="sk-tab active" data-model="SHADOWCAT_LITE" onclick="selectModel('SHADOWCAT_LITE')">🐾 Lite</button>
+                <button class="sk-tab" data-model="SHADOWCAT_FLASH" onclick="selectModel('SHADOWCAT_FLASH')">⚡ Flash</button>
+                <button class="sk-tab" data-model="SHADOWCAT_PRO" onclick="selectModel('SHADOWCAT_PRO')">👑 Pro</button>
+                <button class="sk-tab" data-model="SHADOWCAT_EXPERT" onclick="selectModel('SHADOWCAT_EXPERT')">🧠 Expert</button>
+                <button class="sk-tab" data-model="CODES" onclick="selectModel('CODES')">💻 CodeS</button>
             </div>
             <div style="margin-top:18px">
                 <label style="font-size:.82rem;font-weight:500;color:#333;display:block;margin-bottom:6px">Yanıt Stili</label>
@@ -1198,7 +1203,7 @@
             const prefsText = (document.getElementById('settingsPrefs')?.value || '');
             const payload = {
                 user_id: currentAuthUser.id,
-                preferred_model: currentModel,
+                preferred_model: MODEL_BACKEND[currentModel] || currentModel,
                 agent_style: currentStyle,
                 extended_thinking: !!extendedThinking,
                 web_search_enabled: !!webSearchEnabled,
@@ -1264,7 +1269,16 @@
     }
 
     let chats = {}, chatId = null, busy = false, demoMode = false;
-    let currentModel = 'EPIC';
+    let currentModel = 'SHADOWCAT_LITE';
+    // Yeni kadro → mevcut backend ID'leri (backend yenilenene kadar geçici tutkal katmanı)
+    const MODEL_BACKEND = {
+        'SHADOWCAT_LITE': 'EPIC',
+        'SHADOWCAT_FLASH': 'DEEPULTRA',
+        'SHADOWCAT_PRO': 'SHADOWCAT_R1',
+        'SHADOWCAT_EXPERT': 'X_GLITCH_OPUS',
+        'CODES': 'X_OPUS',
+        'MAXCODE': 'X_OPUS'
+    };
     let currentStyle = 'normal';
     let webSearchEnabled = false;
     let extendedThinking = false;
@@ -1443,16 +1457,23 @@
         if (d) d.classList.remove('show');
     }
 
+    // MaxCode admin kapısı — PROTOTİP: şifre kontrolü B3 adımında backend'e taşınacak (TCONE22 → .env)
+    function selectModelAdmin() {
+        const pw = prompt('🔒 MaxCode yetkili şifresi:');
+        if (pw === null) return;
+        if (pw === 'TCONE22') { selectModel('MAXCODE'); toast('🔓 MaxCode aktif — yetkili mod'); }
+        else { toast('❌ Şifre hatalı — MaxCode kilitli kaldı'); }
+    }
+
     function selectModel(id) {
         currentModel = id;
         const labels = {
-            'EPIC': '🔥 EPIC',
-            'DEEPULTRA': '⚡ DeepUltra',
-            'SHADOWCAT_R1': '👑 ShadowCat-R1',
-            'X_FABLE_CODER': '🚀 X_FABLE_CODER',
-            'X_GLITCH_OPUS': '🦁 X_GLITCH_OPUS',
-            'X_OPUS': 'X_OPUS v4.0',
-            'qwen2.5-coder:14b': 'Qwen 2.5 Coder'
+            'SHADOWCAT_LITE': '🐾 Shadowcat Lite',
+            'SHADOWCAT_FLASH': '⚡ Shadowcat Flash',
+            'SHADOWCAT_PRO': '👑 Shadowcat Pro',
+            'SHADOWCAT_EXPERT': '🧠 Shadowcat Expert',
+            'CODES': '💻 CodeS',
+            'MAXCODE': '🔒 MaxCode'
         };
         const displayName = labels[id] || id;
         const mEl = document.getElementById('modelName');
@@ -2722,7 +2743,7 @@ AAFearSoundManager::AAFearSoundManager()
 void AAFearSoundManager::BeginPlay()
 {
     Super::BeginPlay();
-    UE_LOG(LogTemp, Log, TEXT("⚡ [GlassesGlitchStudio] AFearSoundManager 3D Spatial Audio Online!"));
+    UE_LOG(LogTemp, Log, TEXT("⚡ [Elytra-ai] AFearSoundManager 3D Spatial Audio Online!"));
 }
 
 void AAFearSoundManager::PlaySpatialFearSound(USoundCue* SoundToPlay, FVector Location, float Intensity)
@@ -2745,7 +2766,7 @@ void AAFearSoundManager::UpdateTensionLevel(float DeltaTension)
                     path: 'README.md',
                     ext: '.md',
                     content: `# 🎮 UE5 AFearSoundManager Plugin
-**Geliştirici:** GlassesGlitchStudio & Elytra-ai
+**Geliştirici:** Elytra-ai
 **Motor Sürümü:** Unreal Engine 5.4+
 
 3D uzamsal korku/gerilim seslerini dinamik parametrelerle yöneten, Nanite ve Lumen uyumlu yüksek performanslı C++ modülü.`
@@ -2826,7 +2847,7 @@ class DatabaseManager:
                     path: 'README.md',
                     ext: '.md',
                     content: `# 🐍 Python SQLite Async Engine
-**Stüdyo:** GlassesGlitchStudio & Elytra-ai
+**Stüdyo:** Elytra-ai
 Hafif, sıfır bağımlılık gerektiren ve yüksek performanslı SQLite veritabanı yönetim katmanı.`
                 }
             ]
@@ -2859,7 +2880,7 @@ Hafif, sıfır bağımlılık gerektiren ve yüksek performanslı SQLite veritab
 <body>
     <div class="card">
         <h1>⚡ Shadowcat Studio</h1>
-        <p>GlassesGlitchStudio & Elytra-ai Canlı Web Önizleme Motoru devrede. Kodlarınızı anında yan panelde canlı test edin!</p>
+        <p>Elytra-ai Canlı Web Önizleme Motoru devrede. Kodlarınızı anında yan panelde canlı test edin!</p>
         <button class="btn" onclick="alert('⚡ Shadowcat Canlı Sistem Çalışıyor!')">Sistemi Test Et</button>
     </div>
 </body>
@@ -3468,7 +3489,7 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
 
             if (mainCmd === 'help' || mainCmd === 'glitch') {
                 logTerminal(`╔═══════════════════════════════════════════════════════════════════╗
-║   ⚡ GLITCH CODE x EPICCODER ENGINE (v4.0 Real Execution)        ║
+║   ⚡ SHADOWCAT NEXUS ENGINE (v4.0 Real Execution)                 ║
 ╚═══════════════════════════════════════════════════════════════════╝
 Glitch Code Geliştirici Komutları:
   • ptc / debate <görev>    - Multi-Model Debate (Gerçek model konsensüsü)
@@ -3592,9 +3613,9 @@ Glitch Code Geliştirici Komutları:
         }
     }
 
-    const STUDIO_SYSTEM_PROMPT = `Sen GlassesGlitchStudio & Elytra-ai tarafından özel olarak geliştirilmiş EPIC (Nexus Brain v4.0) amiral gemisi yapay zeka modelisin.
+    const STUDIO_SYSTEM_PROMPT = `Sen Elytra-ai tarafından özel olarak geliştirilmiş Shadowcat (Nexus Brain v4.0) amiral gemisi yapay zeka modelisin.
 Temel Kuralların:
-1. KİMLİK: Kimliğin sorulduğunda veya tanıtım istendiğinde: "Ben GlassesGlitchStudio & Elytra-ai tarafından geliştirilmiş, 671 Milyar parametreli derin akıl yürütme gücüne sahip EPIC (Nexus Brain v4.0) yapay zeka modeliyim." şeklinde gururla ve net yanıt ver. Asla OpenAI, ChatGPT, GPT-3.5 veya başka yabancı şirket/model isimleri kullanma.
+1. KİMLİK: Kimliğin sorulduğunda veya tanıtım istendiğinde: "Ben Elytra-ai tarafından geliştirilmiş, 671 Milyar parametreli derin akıl yürütme gücüne sahip Shadowcat (Nexus Brain v4.0) yapay zeka modeliyim." şeklinde gururla ve net yanıt ver. Asla OpenAI, ChatGPT, GPT-3.5 veya başka yabancı şirket/model isimleri kullanma.
 2. KOD VE OYUN ÜRETİMİ: Kullanıcı ne talep ederse (HTML5/Canvas oyunları, Python scriptleri, Unreal Engine 5.4 C++, algoritmalar, web arayüzleri), eksiksiz, %100 çalışan ve üretime hazır tek parça temiz kod blokları üret.
 3. DİL VE ÜSLUP: Samimi, enerjik, profesyonel Türkçe ile adım adım düşünerek (<think> bloğu içinde akıl yürüterek) yanıt ver.`;
 
@@ -3623,7 +3644,7 @@ Temel Kuralların:
             const apiRes = await fetch(LOCAL_FASTAPI_API, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({message: msg, model: currentModel})
+                body: JSON.stringify({message: msg, model: MODEL_BACKEND[currentModel] || currentModel})
             });
             if (apiRes.ok) {
                 const d = await apiRes.json();
@@ -4140,7 +4161,7 @@ Temel Kuralların:
     const THINK_STAGES = [
         '✦ Girdi Analiz Ediliyor & Vektör Katmanı Hazırlanıyor...',
         '✦ Nexus FTS5 Hafıza & Obsidian Notları Taranıyor...',
-        '✦ Hibrit Model Çıkarımı Yapılıyor (X_OPUS)...',
+        '✦ CodeS Router uzmanını seçiyor...',
         '✦ Çoklu Ajan Mantığı & Kod Yapısı Doğrulanıyor...',
         '✦ Yanıt Sentezleniyor ve Canlı Akıtılıyor...'
     ];
@@ -4277,7 +4298,7 @@ Temel Kuralların:
                 const typer = createTyper(ct);
                 let agentInfos = [
                     {id: 'planner', name: 'Planlama Ajanı', role: 'Görev analizi ve mimari'},
-                    {id: 'coder', name: 'X_FABLE Kodlama Ajanı', role: 'Kod üretimi ve sentez'},
+                    {id: 'coder', name: 'CodeS Kodlama Ajanı', role: 'Kod üretimi ve sentez'},
                     {id: 'security', name: 'Güvenlik & QA Ajanı', role: 'Kod güvenliği ve denetim'},
                     {id: 'synthesizer', name: 'ShadowCat-R1 Sentezleyici', role: 'Nihai çıktı birleştirme'}
                 ];
@@ -4614,7 +4635,7 @@ Temel Kuralların:
         typer.flush();
 
         if (!full || !full.trim()) {
-            full = "**[👑 ShadowCat-R1 14B]**: Ben **GlassesGlitchStudio & Elytra-ai** tarafından özel olarak eğitilmiş **ShadowCat-R1 14B Amiral Gemisi** yapay zeka modeliyim! 7/24 kesintisiz hizmetinizdeyim. 🐱⚡";
+            full = "**[👑 ShadowCat-R1 14B]**: Ben **Elytra-ai** tarafından özel olarak eğitilmiş **ShadowCat-R1 14B Amiral Gemisi** yapay zeka modeliyim! 7/24 kesintisiz hizmetinizdeyim. 🐱⚡";
         }
 
         ct.innerHTML = format(full);
@@ -4744,7 +4765,7 @@ Temel Kuralların:
 
                 <!-- Interactive Terminal Console View -->
                 <div class="ide-terminal-view" id="ideTerminalContainer">
-                    <div class="ide-terminal-output" id="ideTerminalOutput">⚡ EpicCoder CLI & Terminal Engine v4.0 Aktif [GlassesGlitchStudio]
+                    <div class="ide-terminal-output" id="ideTerminalOutput">⚡ Shadowcat CLI & Terminal Engine v4.0 Aktif [Elytra-ai]
 Komut listesi için 'help' yazabilir veya üstteki '⚡ Çalıştır' butonuna basabilirsiniz.</div>
                     <div class="ide-terminal-prompt-row">
                         <span class="ide-terminal-prompt">epiccoder&gt;</span>
@@ -4757,9 +4778,9 @@ Komut listesi için 'help' yazabilir veya üstteki '⚡ Çalıştır' butonuna b
                 <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:10px">
                     <div style="display:flex;align-items:center;gap:8px">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                        <span style="font-weight:700;color:#fff;font-size:.88rem">⚡ EpicCoder Stüdyo</span>
+                        <span style="font-weight:700;color:#fff;font-size:.88rem">⚡ Shadowcat Stüdyo</span>
                     </div>
-                    <span class="welcome-cyber-badge">EPIC (671B Nexus)</span>
+                    <span class="welcome-cyber-badge">🐾 Shadowcat Nexus</span>
                 </div>
 
                 <!-- Context Pills inside IDE -->
@@ -4818,7 +4839,7 @@ Komut listesi için 'help' yazabilir veya üstteki '⚡ Çalıştır' butonuna b
                         <div class="cyber-right-tools">
                             <div class="cyber-pill-inline" style="padding:3px 8px;font-size:.68rem">
                                 <span class="cyber-dot"></span>
-                                <span>🔥 EPIC (671B Nexus)</span>
+                                <span>🐾 Shadowcat Nexus</span>
                             </div>
                             <button class="cyber-send-btn" style="width:30px;height:30px" onclick="sendIdeChat()" title="Gönder">
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
