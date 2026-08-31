@@ -565,7 +565,7 @@
             <span id="userCloudBadge" style="font-size:.62rem;color:#16a34a;background:#dcfce7;padding:1px 6px;border-radius:10px;font-weight:600;display:none;">Bulut</span>
         </div>
         <div style="display:flex;align-items:center;justify-content:space-between;">
-            <span id="sidebarModel">⚡ CodeS Lite</span>
+            <span id="sidebarModel">💻 CodeS</span>
             <button onclick="toggleSettings()">Ayarlar</button>
         </div>
     </div>
@@ -661,20 +661,20 @@
         <div class="input-outer" id="inputOuter">
             <div class="model-selector inline-model" onclick="toggleDropdown('modelDropdown')">
                 <span class="dot"></span>
-                <span id="modelName">⚡ CodeS Lite</span>
+                <span id="modelName">💻 CodeS</span>
                 <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
                 <div id="modelDropdown" class="model-dropdown">
-                    <div style="padding:6px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">CODES</div>
-                    <div class="model-opt active" onclick="selectModel('CODES_LITE')">⚡ CodeS Lite<span class="sub">hızlı &amp; hafif</span></div>
-                    <div class="model-opt" onclick="selectModel('CODES_FLASH')">🔥 CodeS Flash<span class="sub">dengeli asistan</span></div>
-                    <div class="model-opt" onclick="selectModel('CODES_PRO')">👑 CodeS Pro<span class="sub">kodlama &amp; uzun işler</span></div>
-                    <div class="model-opt" onclick="selectModel('CODES_EXPERT')">🧠 CodeS Expert<span class="sub">en derin muhakeme</span></div>
-                    <div style="padding:8px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">OTOMATİK</div>
-                    <div class="model-opt" onclick="selectModel('CODES')">💻 CodeS<span class="sub">soruya göre modeli kendi seçer</span></div>
+                    <div style="padding:6px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">KOD — CODES</div>
+                    <div class="model-opt active" onclick="selectModel('CODES')">💻 CodeS<span class="sub">🔧 v2: tek model + XLoRA uzmanları (codeS_design_lora vb.) — şu an geçici motorlarla akıyor</span></div>
+                    <div style="padding:8px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">GEÇİCİ KADEMELER (eski motor zinciri)</div>
+                    <div class="model-opt" onclick="selectModel('CODES_LITE')">⚡ CodeS Lite<span class="sub">geçici — hızlı &amp; hafif</span></div>
+                    <div class="model-opt" onclick="selectModel('CODES_FLASH')">🔥 CodeS Flash<span class="sub">geçici — dengeli asistan</span></div>
+                    <div class="model-opt" onclick="selectModel('CODES_PRO')">👑 CodeS Pro<span class="sub">geçici — kodlama &amp; uzun işler</span></div>
+                    <div class="model-opt" onclick="selectModel('CODES_EXPERT')">🧠 CodeS Expert<span class="sub">geçici — en derin muhakeme</span></div>
                     <div style="padding:8px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">GÖRSEL</div>
-                    <div class="model-opt" onclick="toast('🎨 SkyS-Maker beta yolda — plan B1')" style="opacity:.55">🎨 SkyS-Maker<span class="sub">görsel üretim</span></div>
+                    <div class="model-opt" onclick="toast('🎨 SkyS-Maker beta yolda — plan B1')" style="opacity:.55">🎨 SkyS-Maker<span class="sub">🔧 yapılacak — görsel üretim</span></div>
                     <div style="padding:8px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">ADMIN</div>
-                    <div class="model-opt" onclick="selectModelAdmin()">🔒 MaxCode<span class="sub">yetkili modeli, şifre gerekli</span></div>
+                    <div class="model-opt" onclick="selectModelAdmin()">🔒 MaxCode<span class="sub">🔧 yapılacak — yetkili modeli, şifre gerekli</span></div>
                 </div>
             </div>
             <textarea id="inputBox" class="input-box" rows="1" placeholder="Mesaj yazın veya / komutları..." oninput="resize(this);updateBtn();checkSlash()" onkeydown="onInputKey(event)"></textarea>
@@ -1269,7 +1269,7 @@
     }
 
     let chats = {}, chatId = null, busy = false, demoMode = false;
-    let currentModel = 'CODES_LITE';
+    let currentModel = 'CODES';
     // Backend artık CodeS kademelerini doğrudan anlıyor (codes_router.py)
     const MODEL_BACKEND = {
         'CODES_LITE': 'CODES_LITE',
@@ -1478,6 +1478,7 @@
     function selectModel(id) {
         currentModel = id;
         const labels = {
+            'CODES': '💻 CodeS',
             'CODES_LITE': '⚡ CodeS Lite',
             'CODES_FLASH': '🔥 CodeS Flash',
             'CODES_PRO': '👑 CodeS Pro',
