@@ -603,7 +603,7 @@
                     <button class="chip" onclick="sendSug('Python ile dosya okuyucu yaz')">Kod yaz ve debug et</button>
                     <button class="chip" onclick="sendSug('Nexus hafızada ara: python')">Nexus Hafıza Arama</button>
                     <button class="chip" onclick="sendSug('Sistem durumunu göster')">Sistem İstatistikleri</button>
-                    <button class="chip" onclick="sendSug('EpicCoder yetenekleri ve otonom kodlama')">⚡ EpicCoder Motoru</button>
+                    <button class="chip" onclick="sendSug('Shadowcat yetenekleri ve otonom kodlama')">⚡ Shadowcat Motoru</button>
                 </div>
             </div>
             <div id="msgsInner" class="msgs-inner hidden"></div>
@@ -2973,7 +2973,7 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
                     name: 'PluginModule.cpp',
                     path: 'Source/Private/PluginModule.cpp',
                     ext: '.cpp',
-                    content: `#include "CoreMinimal.h"\n#include "Modules/ModuleManager.h"\n\nclass F${name.replace(/[^a-zA-Z0-9]/g,'')}Module : public IModuleInterface\n{\npublic:\n    virtual void StartupModule() override {\n        UE_LOG(LogTemp, Log, TEXT("⚡ [EpicCoder] ${name} Modülü Başlatıldı!"));\n    }\n    virtual void ShutdownModule() override {\n        UE_LOG(LogTemp, Log, TEXT("⚡ [EpicCoder] ${name} Modülü Kapatıldı."));\n    }\n};\n\nIMPLEMENT_MODULE(F${name.replace(/[^a-zA-Z0-9]/g,'')}Module, ${name.replace(/[^a-zA-Z0-9]/g,'')});`
+                    content: `#include "CoreMinimal.h"\n#include "Modules/ModuleManager.h"\n\nclass F${name.replace(/[^a-zA-Z0-9]/g,'')}Module : public IModuleInterface\n{\npublic:\n    virtual void StartupModule() override {\n        UE_LOG(LogTemp, Log, TEXT("⚡ [Shadowcat] ${name} Modülü Başlatıldı!"));\n    }\n    virtual void ShutdownModule() override {\n        UE_LOG(LogTemp, Log, TEXT("⚡ [Shadowcat] ${name} Modülü Kapatıldı."));\n    }\n};\n\nIMPLEMENT_MODULE(F${name.replace(/[^a-zA-Z0-9]/g,'')}Module, ${name.replace(/[^a-zA-Z0-9]/g,'')});`
                 },
                 {
                     name: 'GameplayActor.h',
@@ -2985,7 +2985,7 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
                     name: 'README.md',
                     path: 'README.md',
                     ext: '.md',
-                    content: `# ${name}\n**Kategori:** Unreal Engine 5.4 C++\n**Motor:** EpicCoder Studio\n\n${instructions || 'Özel UE5 C++ Oyun ve Eklenti Mimarisi.'}`
+                    content: `# ${name}\n**Kategori:** Unreal Engine 5.4 C++\n**Motor:** Shadowcat Studio\n\n${instructions || 'Özel UE5 C++ Oyun ve Eklenti Mimarisi.'}`
                 }
             ];
         } else if (tpl === 'python') {
@@ -2995,7 +2995,7 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
                     name: 'main.py',
                     path: 'main.py',
                     ext: '.py',
-                    content: `# ${name} - Python Async Core\nimport asyncio\nimport sqlite3\n\nasync def main():\n    print("⚡ [EpicCoder] ${name} Python Motoru Aktif!")\n    conn = sqlite3.connect("${name.toLowerCase().replace(/[^a-z0-9]/g,'_')}.db")\n    cursor = conn.cursor()\n    cursor.execute("CREATE TABLE IF NOT EXISTS records (id INTEGER PRIMARY KEY, title TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)")\n    conn.commit()\n    print("✓ Veritabanı ve tablolar doğrulandı.")\n\nif __name__ == '__main__':\n    asyncio.run(main())`
+                    content: `# ${name} - Python Async Core\nimport asyncio\nimport sqlite3\n\nasync def main():\n    print("⚡ [Shadowcat] ${name} Python Motoru Aktif!")\n    conn = sqlite3.connect("${name.toLowerCase().replace(/[^a-z0-9]/g,'_')}.db")\n    cursor = conn.cursor()\n    cursor.execute("CREATE TABLE IF NOT EXISTS records (id INTEGER PRIMARY KEY, title TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)")\n    conn.commit()\n    print("✓ Veritabanı ve tablolar doğrulandı.")\n\nif __name__ == '__main__':\n    asyncio.run(main())`
                 },
                 {
                     name: 'database.py',
@@ -3017,7 +3017,7 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
                     name: 'index.html',
                     path: 'index.html',
                     ext: '.html',
-                    content: `<!DOCTYPE html>\n<html lang="tr">\n<head>\n    <meta charset="UTF-8">\n    <title>${name}</title>\n    <style>\n        body{background:#0a0910;color:#f8fafc;font-family:system-ui,-apple-system,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:20px}\n        .box{background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.3);padding:36px;border-radius:16px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,0.5);max-width:500px}\n        h1{color:#c084fc;margin:0 0 10px}\n        p{color:#94a3b8;font-size:0.95rem;line-height:1.6}\n        button{background:#7c3aed;color:#fff;border:none;padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;margin-top:14px;transition:all 0.2s}\n        button:hover{background:#6d28d9;transform:translateY(-1px)}\n    </style>\n</head>\n<body>\n    <div class="box">\n        <h1>⚡ ${name}</h1>\n        <p>Shadowcat EpicCoder Canlı Web Önizlemesi</p>\n        <button onclick="alert('⚡ EpicCoder Motoru Çalışıyor!')">Etkileşim Testi</button>\n    </div>\n</body>\n</html>`
+                    content: `<!DOCTYPE html>\n<html lang="tr">\n<head>\n    <meta charset="UTF-8">\n    <title>${name}</title>\n    <style>\n        body{background:#0a0910;color:#f8fafc;font-family:system-ui,-apple-system,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:20px}\n        .box{background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.3);padding:36px;border-radius:16px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,0.5);max-width:500px}\n        h1{color:#c084fc;margin:0 0 10px}\n        p{color:#94a3b8;font-size:0.95rem;line-height:1.6}\n        button{background:#7c3aed;color:#fff;border:none;padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;margin-top:14px;transition:all 0.2s}\n        button:hover{background:#6d28d9;transform:translateY(-1px)}\n    </style>\n</head>\n<body>\n    <div class="box">\n        <h1>⚡ ${name}</h1>\n        <p>Shadowcat Canlı Web Önizlemesi</p>\n        <button onclick="alert('⚡ Shadowcat Motoru Çalışıyor!')">Etkileşim Testi</button>\n    </div>\n</body>\n</html>`
                 },
                 {
                     name: 'README.md',
@@ -3056,7 +3056,7 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
         hideNewProjectModal();
         renderProjects();
         openIdeModal(newDemoProj);
-        toast('✓ ' + name + ' projesi EpicCoder çalışma alanında açıldı!');
+        toast('✓ ' + name + ' projesi Shadowcat çalışma alanında açıldı!');
     }
 
     function openIdeModal(proj) {
@@ -3844,8 +3844,8 @@ Temel Kuralların:
         const cleanName = name.trim();
         const ext = cleanName.includes('.') ? cleanName.substring(cleanName.lastIndexOf('.')) : '.txt';
         
-        let initCode = `// ⚡ ${cleanName} - EpicCoder Proje Dosyası\n// Oluşturuldu: ${new Date().toLocaleTimeString()}\n\n`;
-        if (ext === '.py') initCode = `# ${cleanName}\n# EpicCoder Python Modülü\n\ndef main():\n    pass\n\nif __name__ == '__main__':\n    main()\n`;
+        let initCode = `// ⚡ ${cleanName} - Shadowcat Proje Dosyası\n// Oluşturuldu: ${new Date().toLocaleTimeString()}\n\n`;
+        if (ext === '.py') initCode = `# ${cleanName}\n# Shadowcat Python Modülü\n\ndef main():\n    pass\n\nif __name__ == '__main__':\n    main()\n`;
         else if (ext === '.cpp') initCode = `#include "CoreMinimal.h"\n\n// ${cleanName}\n`;
         else if (ext === '.h') initCode = `#pragma once\n#include "CoreMinimal.h"\n\n`;
         else if (ext === '.html') initCode = `<!DOCTYPE html>\n<html>\n<head><title>${cleanName}</title></head>\n<body>\n    <h1>${cleanName}</h1>\n</body>\n</html>\n`;
@@ -3949,7 +3949,7 @@ Temel Kuralların:
 
         const aiDiv = document.createElement('div');
         aiDiv.style.cssText = 'padding:10px;border-radius:8px;background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.25);color:#e0d9fc;word-break:break-word';
-        aiDiv.innerHTML = '<span style="font-weight:600;color:#c084fc">⚡ Glitch x EpicCoder:</span> <span class="ide-ai-txt">Multi-model analizi yapılıyor ve kod sentezleniyor...</span>';
+        aiDiv.innerHTML = '<span style="font-weight:600;color:#c084fc">⚡ CodeS:</span> <span class="ide-ai-txt">Multi-model analizi yapılıyor ve kod sentezleniyor...</span>';
         hist.appendChild(aiDiv);
         hist.scrollTop = hist.scrollHeight;
 
@@ -3990,7 +3990,7 @@ Temel Kuralların:
 
         const aiDiv = document.createElement('div');
         aiDiv.style.cssText = 'padding:10px;border-radius:8px;background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.25);color:#e0d9fc;word-break:break-word';
-        aiDiv.innerHTML = '<span style="font-weight:600;color:#c084fc">⚡ EpicCoder:</span> <span class="ide-ai-txt">Analiz ediliyor...</span>';
+        aiDiv.innerHTML = '<span style="font-weight:600;color:#c084fc">⚡ Shadowcat:</span> <span class="ide-ai-txt">Analiz ediliyor...</span>';
         hist.appendChild(aiDiv);
         hist.scrollTop = hist.scrollHeight;
 
@@ -4679,7 +4679,7 @@ Temel Kuralların:
     <div class="upload-modal" style="max-width:500px">
         <button class="close-overlay" onclick="hideNewProjectModal()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
         <h2>Yeni Stüdyo Projesi Oluştur</h2>
-        <div class="sub">Shadowcat Workspace & ⚡ EpicCoder Otonom Motoru</div>
+        <div class="sub">Shadowcat Workspace & ⚡ Shadowcat Otonom Motoru</div>
         <div style="margin-top:16px;display:flex;flex-direction:column;gap:12px">
             <div>
                 <label style="font-size:.75rem;color:#666;display:block;margin-bottom:4px">Proje Adı</label>
@@ -4696,9 +4696,9 @@ Temel Kuralların:
             </div>
             <div>
                 <label style="font-size:.75rem;color:#666;display:block;margin-bottom:4px">Açıklama & AI Talimatları</label>
-                <textarea id="npDesc" rows="3" placeholder="EpicCoder'a özel mimari talimatları..." style="width:100%;padding:8px 12px;border-radius:6px;border:1px solid #e0ddd5;font-size:.82rem;outline:none;font-family:inherit"></textarea>
+                <textarea id="npDesc" rows="3" placeholder="Shadowcat'a özel mimari talimatları..." style="width:100%;padding:8px 12px;border-radius:6px;border:1px solid #e0ddd5;font-size:.82rem;outline:none;font-family:inherit"></textarea>
             </div>
-            <button onclick="submitNewProject()" style="padding:10px;border-radius:8px;border:1px solid #7c3aed;background:#7c3aed;color:#fff;font-weight:600;font-size:.82rem;cursor:pointer;margin-top:6px;font-family:inherit">Oluştur ve EpicCoder Çalışma Alanını Aç</button>
+            <button onclick="submitNewProject()" style="padding:10px;border-radius:8px;border:1px solid #7c3aed;background:#7c3aed;color:#fff;font-weight:600;font-size:.82rem;cursor:pointer;margin-top:6px;font-family:inherit">Oluştur ve Shadowcat Çalışma Alanını Aç</button>
         </div>
     </div>
 </div>
@@ -4711,7 +4711,7 @@ Temel Kuralların:
                 <div class="ide-title">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
                     <span id="ideProjName">Proje Yükleniyor...</span>
-                    <span class="ide-title-badge" id="ideProjBadge">⚡ EpicCoder Workspace</span>
+                    <span class="ide-title-badge" id="ideProjBadge">⚡ Shadowcat Workspace</span>
                 </div>
             </div>
             <div class="ide-hdr-right">
@@ -4752,7 +4752,7 @@ Temel Kuralların:
                 <div class="ide-status-bar" id="ideStatusBar">
                     <span id="ideStatusCursor">Satır 1, Sütun 1</span>
                     <span id="ideStatusStats">0 karakter | 1 satır</span>
-                    <span id="ideStatusEncoding">UTF-8 | LF | EpicCoder v4.0</span>
+                    <span id="ideStatusEncoding">UTF-8 | LF | Shadowcat v4.0</span>
                     <span id="ideStatusSave" style="color:#10b981">● Kaydedildi</span>
                 </div>
 
@@ -4817,13 +4817,13 @@ Komut listesi için 'help' yazabilir veya üstteki '⚡ Çalıştır' butonuna b
                 <!-- Interactive Chat History inside IDE -->
                 <div class="ide-chat-history" id="ideChatHistory" style="flex:1;overflow-y:auto;margin-top:10px;padding-right:4px;display:flex;flex-direction:column;gap:8px;font-size:.75rem">
                     <div style="padding:10px;border-radius:10px;background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.18);color:#dfd6cd">
-                        <span style="font-weight:600;color:#c084fc">⚡ EpicCoder:</span> Merhaba! Proje çalışma alanı hazır. Sol panelden dosya seçebilir, düzenleyebilir veya yapay zekaya kod yazdırabilirsiniz.
+                        <span style="font-weight:600;color:#c084fc">⚡ Shadowcat:</span> Merhaba! Proje çalışma alanı hazır. Sol panelden dosya seçebilir, düzenleyebilir veya yapay zekaya kod yazdırabilirsiniz.
                     </div>
                 </div>
 
                 <!-- Floating Cyber Omnibox for Project IDE -->
                 <div class="cyber-omnibox-card" style="margin-top:10px;padding:12px 14px 10px;border-radius:14px;background:rgba(20,17,30,0.95);box-shadow:0 10px 30px rgba(0,0,0,0.5)">
-                    <textarea id="ideChatInput" class="cyber-textarea" rows="2" placeholder="EpicCoder'a kod yazdır, soru sor veya geliştirme talimatı ver... (Enter ile gönder)" style="font-size:.82rem;min-height:38px" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendIdeChat();}"></textarea>
+                    <textarea id="ideChatInput" class="cyber-textarea" rows="2" placeholder="Shadowcat'a kod yazdır, soru sor veya geliştirme talimatı ver... (Enter ile gönder)" style="font-size:.82rem;min-height:38px" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendIdeChat();}"></textarea>
                     <div class="cyber-bottom-bar" style="margin-top:8px">
                         <div class="cyber-left-tools">
                             <button class="cyber-icon-btn" style="width:28px;height:28px" onclick="addNewIdeFilePrompt()" title="Projeye Yeni Dosya Ekle"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
