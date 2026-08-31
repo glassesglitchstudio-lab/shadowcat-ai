@@ -576,7 +576,7 @@ class PluginLoader:
             PluginLoadError: Yukleme basarisiz olursa
         """
         try:
-            module_name = f"glassescat_plugin_{filepath.stem}"
+            module_name = f"shadowcat_plugin_{filepath.stem}"
 
             if module_name in self._loaded_modules:
                 logger.debug(
@@ -631,7 +631,7 @@ class PluginLoader:
         Args:
             plugin_name: Modul adi
         """
-        module_name = f"glassescat_plugin_{plugin_name}"
+        module_name = f"shadowcat_plugin_{plugin_name}"
         if module_name in sys.modules:
             del sys.modules[module_name]
         if module_name in self._loaded_modules:

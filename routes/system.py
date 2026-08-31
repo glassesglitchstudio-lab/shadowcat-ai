@@ -36,7 +36,7 @@ async def health_check():
     checks = {"core": False, "ollama": False, "memory": False}
 
     try:
-        from glassescat_core import get_core
+        from shadowcat_core import get_core
         c = get_core()
         checks["core"] = True
     except:
@@ -63,7 +63,7 @@ async def health_check():
 async def core_status():
     """Core modül durumu"""
     try:
-        from glassescat_core import get_core
+        from shadowcat_core import get_core
         c = get_core()
         s = c.get_status()
         return {

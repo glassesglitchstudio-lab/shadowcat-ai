@@ -1,4 +1,6 @@
 from fastapi import APIRouter, WebSocket, WebSocketDisconnect
+from fastapi.concurrency import run_in_threadpool
+from fastapi.responses import StreamingResponse
 from pydantic import BaseModel
 from typing import Optional
 import json
@@ -9,14 +11,44 @@ import os
 logger = logging.getLogger("routes.chat")
 router = APIRouter()
 
+try:
+    from codes_router import get_codes_router, is_codes_tier
+except ImportError:
+    def get_codes_router():
+        raise RuntimeError("codes_router.py eksik")
+    def is_codes_tier(value: str) -> bool:
+        return False
+
 class ChatMessage(BaseModel):
     message: str
     session_id: Optional[str] = "default"
     model: Optional[str] = None
+    stream: bool = False
+
+def _sse(obj) -> str:
+    return f"data: {json.dumps(obj, ensure_ascii=False)}\n\n"
+
+def _codes_sse(message: str, tier: str):
+    try:
+        codes = get_codes_router()
+        for ch in codes.chat_stream(message, tier=tier):
+            yield _sse(ch)
+    except Exception as e:
+        yield _sse({"error": str(e), "done": True})
+    yield _sse({"done": True})
+
+def _direct_sse(message: str, model: str):
+    try:
+        from xopus_router import get_xopus
+        for ch in get_xopus().chat_stream(message=message, model=model):
+            yield _sse(ch)
+    except Exception as e:
+        yield _sse({"error": str(e), "done": True})
+    yield _sse({"done": True})
 
 def get_core():
     try:
-        from glassescat_core import get_core as _get_core
+        from shadowcat_core import get_core as _get_core
         return _get_core()
     except:
         return None
@@ -100,7 +132,47 @@ async def websocket_chat(websocket: WebSocket):
 
 @router.post("/")
 async def http_chat(msg: ChatMessage):
-    """HTTP ile sohbet (streaming yok, geriye uyumluluk)"""
+    """HTTP ile sohbet — CodeS kademeleri codes_router'a yönlendirilir."""
+    model_choice = (msg.model or "").strip()
+
+    # 1) Ticari CodeS kademesi → codeS router (sınıflandırma + fallback zinciri)
+    if model_choice and is_codes_tier(model_choice):
+        if msg.stream:
+            return StreamingResponse(
+                _codes_sse(msg.message, model_choice),
+                media_type="text/event-stream",
+            )
+        result = await run_in_threadpool(
+            lambda: get_codes_router().chat(msg.message, tier=model_choice)
+        )
+        if result.get("success"):
+            thinking = result.get("thinking", "") or ""
+            return {
+                "response": result.get("response", ""),
+                "thinking": thinking,
+                "tool_calls": [],
+                "thoughts": [thinking] if thinking else [],
+                "model": result.get("model"),
+                "tier": result.get("tier"),
+                "tier_label": result.get("tier_label"),
+                "routing": result.get("routing"),
+                "success": True,
+            }
+        return {
+            "response": "",
+            "error": result.get("error", ""),
+            "tool_calls": [],
+            "thoughts": [],
+            "success": False,
+        }
+
+    # 2) Açık geliştirici model adı verilmişse doğrudan ona git
+    if model_choice and msg.stream:
+        return StreamingResponse(
+            _direct_sse(msg.message, model_choice),
+            media_type="text/event-stream",
+        )
+
     core = get_core()
     if core:
         result = core.process_message(msg.message, session_id=msg.session_id)

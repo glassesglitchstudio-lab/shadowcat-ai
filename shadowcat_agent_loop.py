@@ -28,7 +28,7 @@ from datetime import datetime
 from typing import Dict, List, Optional, Any, Callable
 from dataclasses import dataclass, field, asdict
 
-logger = logging.getLogger("GlassescatAgentLoop")
+logger = logging.getLogger("ShadowcatAgentLoop")
 
 # ─────────────────────────────────────────────────────────────
 # PLUGIN & SKILL SİSTEMLERİ (opsiyonel)
@@ -179,7 +179,7 @@ class AgentLoop:
     araçları kullandığı ve sonuçları değerlendirdiği ana döngü.
     
     Kullanım:
-        loop = AgentLoop(core=glassescat_core)
+        loop = AgentLoop(core=shadowcat_core)
         result = loop.run(
             user_input="Chrome'u aç ve YouTube'da Mavislime ara",
             conversation_history=[...],
@@ -696,7 +696,7 @@ if __name__ == "__main__":
     print("  Shadowcat AI - Agent Loop Test")
     print("=" * 50)
     
-    from glassescat_core import get_core
+    from shadowcat_core import get_core
     core = get_core()
     
     loop = get_agent_loop(core=core)

@@ -963,11 +963,11 @@ class ToolHandlers:
         """
         Uygulama başlatır.
         
-        glassescat_agent.py'deki GlassescatApps sistemini kullanır.
+        shadowcat_agent.py'deki ShadowcatApps sistemini kullanır.
         """
         try:
-            from glassescat_agent import GlassescatApps
-            return GlassescatApps.open_app(name)
+            from shadowcat_agent import ShadowcatApps
+            return ShadowcatApps.open_app(name)
         except ImportError:
             # Fallback: start komutu
             try:
@@ -1222,16 +1222,16 @@ class ToolHandlers:
         """
         Hatırlatıcı oluşturur.
         
-        glassescat_agent.py'deki GlassescatNotes.add_reminder kullanır.
+        shadowcat_agent.py'deki ShadowcatNotes.add_reminder kullanır.
         """
         try:
-            from glassescat_agent import GlassescatNotes
-            return GlassescatNotes.add_reminder(text, minutes)
+            from shadowcat_agent import ShadowcatNotes
+            return ShadowcatNotes.add_reminder(text, minutes)
         except ImportError:
             reminder_time = datetime.datetime.now() + datetime.timedelta(minutes=minutes)
             
             # Hatırlatıcıyı JSON dosyasına kaydet
-            reminders_file = "glassescat_reminders.json"
+            reminders_file = "shadowcat_reminders.json"
             reminders = []
             
             if os.path.exists(reminders_file):

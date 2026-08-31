@@ -25,7 +25,7 @@ from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Any
 from pathlib import Path
 
-logger = logging.getLogger("GlassescatStateManager")
+logger = logging.getLogger("ShadowcatStateManager")
 
 # ─────────────────────────────────────────────────────────────
 # SABİTLER

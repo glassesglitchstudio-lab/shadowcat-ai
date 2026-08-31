@@ -8,7 +8,7 @@
 
 ║                                                           ║
 
-║    GlassescatCore + AgentLoop + TaskPlanner + Web UI         ║
+║    ShadowcatCore + AgentLoop + TaskPlanner + Web UI         ║
 
 ║                                                           ║
 
@@ -80,13 +80,27 @@ import csv
 
 try:
 
-    from glassescat_core import get_core
+    from shadowcat_core import get_core
 
     CORE_AVAILABLE = True
 
 except ImportError:
 
     CORE_AVAILABLE = False
+
+
+
+try:
+
+    from codes_router import get_codes_router, is_codes_tier
+
+except ImportError:
+
+    def get_codes_router():
+        raise RuntimeError("codes_router.py eksik")
+
+    def is_codes_tier(value: str) -> bool:
+        return False
 
 
 
@@ -838,6 +852,14 @@ async def chat(request: ChatRequest):
 
                         yield sse({"done": True})
 
+                    elif is_codes_tier(model_choice):
+
+                        # CodeS ticari kademeleri → sınıflandırma + fallback
+                        codes = get_codes_router()
+                        for ch in codes.chat_stream(request.message, tier=model_choice):
+                            yield sse(ch)
+                        yield sse({"done": True})
+
                     elif CORE_AVAILABLE:
 
                         # ── GERÇEK TOKEN-BY-TOKEN STREAMING ──
@@ -910,7 +932,7 @@ async def chat(request: ChatRequest):
                             logger.warning(f"Ollama streaming hatası, fallback: {stream_err}")
                             # Fallback: Core ile non-streaming
                             import threading
-                            from glassescat_agent_loop import extract_answer
+                            from shadowcat_agent_loop import extract_answer
                             holder = {}
                             def run_core():
                                 try:
@@ -1029,6 +1051,33 @@ async def chat(request: ChatRequest):
                 logger.error(f"X_OPUS hatası: {e}")
 
                 response_text = f"{model_choice} hatası: {e}"
+
+        elif is_codes_tier(model_choice):
+
+            # CodeS ticari kademeleri → sınıflandırma + tam fallback
+            try:
+
+                codes = get_codes_router()
+
+                result = codes.chat(request.message, tier=model_choice)
+
+                response_text = result.get("response", "")
+
+                thinking_text = result.get("thinking", "")
+
+                if result.get("routing"):
+
+                    thoughts = [result["routing"]]
+
+                if not response_text:
+
+                    response_text = f"Üzgünüm, {model_choice} yanıt üretemedi: {result.get('error', 'bilinmeyen hata')}"
+
+            except Exception as e:
+
+                logger.error(f"CodeS router hatası: {e}")
+
+                response_text = f"CodeS hatası: {e}"
 
         elif CORE_AVAILABLE:
 
@@ -1615,7 +1664,7 @@ async def upload_file(file: UploadFile = File(...), project_id: str = Form(defau
 
         if project_id:
 
-            from glassescat_core import get_core
+            from shadowcat_core import get_core
 
             c = get_core()
 
@@ -1900,7 +1949,7 @@ async def set_mode(data: dict):
 
     try:
 
-        from glassescat_core import get_core
+        from shadowcat_core import get_core
 
         c = get_core()
 
@@ -1934,7 +1983,7 @@ async def api_set_mode(req: SetModeRequest):
 
     try:
 
-        from glassescat_core import get_core
+        from shadowcat_core import get_core
 
         c = get_core()
 
@@ -1964,7 +2013,7 @@ async def set_style(data: dict):
 
     try:
 
-        from glassescat_core import get_core, BUILTIN_STYLES, STYLES
+        from shadowcat_core import get_core, BUILTIN_STYLES, STYLES
 
         c = get_core()
 
@@ -1990,7 +2039,7 @@ async def get_style():
 
     try:
 
-        from glassescat_core import get_core
+        from shadowcat_core import get_core
 
         c = get_core()
 
@@ -2002,13 +2051,71 @@ async def get_style():
 
 
 
+# ── MaxCode (GCVIPER) yetkili kilit açma ────────────────────────────────────
+
+_maxcode_attempts = {"count": 0, "locked_until": 0.0}
+
+
+
+@app.post("/api/admin/maxcode-unlock")
+
+async def maxcode_unlock(data: dict):
+
+    """Yetkili (Admin) kilit açma. Şifre .env'deki MAXCODE_ADMIN_PASSWORD.
+
+    5 hatalı deneme = 5 dakika kilit (brute-force koruması)."""
+
+    import time as _time
+
+    now = _time.time()
+
+    if now < _maxcode_attempts["locked_until"]:
+
+        wait = int(_maxcode_attempts["locked_until"] - now)
+
+        return {"success": False, "error": f"Çok fazla hatalı deneme. {wait} sn bekleyin."}
+
+
+
+    expected = os.getenv("MAXCODE_ADMIN_PASSWORD", "").strip()
+
+    if not expected:
+
+        return {"success": False, "error": "Admin şifresi tanımlı değil (.env → MAXCODE_ADMIN_PASSWORD)."}
+
+
+
+    given = str(data.get("password", ""))
+
+    if given == expected:
+
+        _maxcode_attempts["count"] = 0
+
+        return {"success": True, "model": "MAXCODE", "tier_label": "MaxCode (GCVIPER)"}
+
+
+
+    _maxcode_attempts["count"] += 1
+
+    if _maxcode_attempts["count"] >= 5:
+
+        _maxcode_attempts["locked_until"] = now + 300
+
+        _maxcode_attempts["count"] = 0
+
+        return {"success": False, "error": "5 hatalı deneme — 5 dakika kilitlendi."}
+
+    return {"success": False, "error": "Şifre hatalı."}
+
+
+
 @app.post("/api/settings/preferences")
 
 async def set_preferences(data: dict):
 
     try:
 
-        from glassescat_core import get_core
+        from shadowcat_core import get_core
 
         c = get_core()
 
@@ -2030,7 +2137,7 @@ async def get_preferences():
 
     try:
 
-        from glassescat_core import get_core
+        from shadowcat_core import get_core
 
         c = get_core()
 
@@ -2048,7 +2155,7 @@ async def set_extended_thinking(data: dict):
 
     try:
 
-        from glassescat_core import get_core
+        from shadowcat_core import get_core
 
         c = get_core()
 
@@ -2077,7 +2184,7 @@ async def set_extended_thinking(data: dict):
 @app.post("/api/projects")
 async def create_project(data: dict):
     try:
-        from glassescat_core import get_core
+        from shadowcat_core import get_core
         c = get_core()
         proj = c.create_project(
             project_id=data.get("id", ""),
@@ -2092,7 +2199,7 @@ async def create_project(data: dict):
 @app.post("/api/projects/{project_id}/scan")
 async def scan_project(project_id: str, data: dict = None):
     try:
-        from glassescat_core import get_core
+        from shadowcat_core import get_core
         c = get_core()
         folder_path = (data or {}).get("folder_path", "")
         files = c.scan_project_directory(project_id, folder_path=folder_path)
@@ -2108,7 +2215,7 @@ async def list_projects():
 
     try:
 
-        from glassescat_core import get_core
+        from shadowcat_core import get_core
 
         c = get_core()
 
@@ -2126,7 +2233,7 @@ async def get_project(project_id: str):
 
     try:
 
-        from glassescat_core import get_core
+        from shadowcat_core import get_core
 
         c = get_core()
 
@@ -2150,7 +2257,7 @@ async def activate_project(project_id: str):
 
     try:
 
-        from glassescat_core import get_core
+        from shadowcat_core import get_core
 
         c = get_core()
 
@@ -2170,7 +2277,7 @@ async def delete_project(project_id: str):
 
     try:
 
-        from glassescat_core import get_core
+        from shadowcat_core import get_core
 
         c = get_core()
 
@@ -2200,7 +2307,7 @@ async def edit_message(conv_id: str, data: dict):
 
     try:
 
-        from glassescat_core import get_core
+        from shadowcat_core import get_core
 
         c = get_core()
 
@@ -2224,7 +2331,7 @@ async def get_branches(conv_id: str):
 
     try:
 
-        from glassescat_core import get_core
+        from shadowcat_core import get_core
 
         c = get_core()
 
@@ -2244,7 +2351,7 @@ async def switch_branch(branch_id: str):
 
     try:
 
-        from glassescat_core import get_core
+        from shadowcat_core import get_core
 
         c = get_core()
 
@@ -2356,7 +2463,7 @@ async def core_status():
 
     if not CORE_AVAILABLE:
 
-        return {"available": False, "message": "GlassescatCore yuklu degil"}
+        return {"available": False, "message": "ShadowcatCore yuklu degil"}
 
     
 
@@ -2506,7 +2613,7 @@ async def execute_task(request: TaskRequest):
 
     if not CORE_AVAILABLE:
 
-        return {"success": False, "error": "GlassescatCore yuklu degil"}
+        return {"success": False, "error": "ShadowcatCore yuklu degil"}
 
     
 
@@ -2552,7 +2659,7 @@ async def edit_artifact(req: dict):
 
     if not CORE_AVAILABLE:
 
-        return {"success": False, "error": "GlassescatCore yuklu degil"}
+        return {"success": False, "error": "ShadowcatCore yuklu degil"}
 
     
 
@@ -2620,7 +2727,7 @@ async def edit_artifact(req: dict):
 
     css = m.group(0).strip()
 
-    return {"success": True, "css": css, "engine_used": "GlassescatCore"}
+    return {"success": True, "css": css, "engine_used": "ShadowcatCore"}
 
 
 
@@ -2636,7 +2743,7 @@ async def edit_artifact(req: dict):
 
 def _gh_headers():
 
-    return {"User-Agent": "glassescat-skill-hunter", "Accept": "application/vnd.github+json"}
+    return {"User-Agent": "shadowcat-skill-hunter", "Accept": "application/vnd.github+json"}
 
 
 
@@ -3148,7 +3255,7 @@ async def agent_loop_status():
 
     try:
 
-        from glassescat_agent_loop import get_agent_loop
+        from shadowcat_agent_loop import get_agent_loop
 
         loop = get_agent_loop()
 

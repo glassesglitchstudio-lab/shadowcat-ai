@@ -1033,7 +1033,7 @@
                 return user.email.split('@')[0];
             }
         }
-        const savedName = localStorage.getItem('glassescat_username');
+        const savedName = localStorage.getItem('shadowcat_username');
         if (savedName) return savedName;
         return 'Geliştirici';
     }
@@ -1148,7 +1148,7 @@
             toast('Lütfen geçerli bir isim yazın.');
             return;
         }
-        localStorage.setItem('glassescat_username', name);
+        localStorage.setItem('shadowcat_username', name);
         updateAuthModalView();
         toast('Hoş geldiniz, ' + name + '! Profil aktif edildi.');
         hideAuthModal();
@@ -1277,7 +1277,7 @@
     let activeTab = 'chats';
     let activeSkill = null;
     let userSkills = [];
-    try { userSkills = JSON.parse(localStorage.getItem('glassescat_skills') || '[]'); } catch(e) { userSkills = []; }
+    try { userSkills = JSON.parse(localStorage.getItem('shadowcat_skills') || '[]'); } catch(e) { userSkills = []; }
 
     const BUILTIN_SKILLS = [
         {id:'site-builder', name:'Site Builder', desc:'Web sitesi ve arayüz geliştirme, HTML/CSS/JS', icon:'wrench', keywords:['site','web sitesi','web sayfası','arayüz']},
@@ -1391,7 +1391,7 @@
         if (c === '/pull') return 'Kullanım: `/pull <SKILL.md URL>` — GitHub\'dan skill indirir. Örnek: `/pull https://raw.githubusercontent.com/anthropics/skills/main/skills/pdf/SKILL.md`';
         if (c.startsWith('/search ')) return `**Web arama:** "${cmd.slice(8)}" için sonuçlar hazırlanıyor... (demo)`;
         if (c === '/export') { const t = JSON.stringify(chats[chatId], null, 2); navigator.clipboard.writeText(t); return 'Sohbet panoya kopyalandı.'; }
-        if (c === '/share') return '**Paylaşım linki:** `https://demo.glassescat.ai/share/demo123` (demo)';
+        if (c === '/share') return '**Paylaşım linki:** `https://demo.shadowcat.ai/share/demo123` (demo)';
         return `Bilinmeyen komut: ${cmd}. /help yazın.`;
     }
 
@@ -1501,7 +1501,7 @@
         document.querySelectorAll('#settingsModes .sk-tab').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.mode === mode);
         });
-        localStorage.setItem('glassescat_agent_mode', mode);
+        localStorage.setItem('shadowcat_agent_mode', mode);
         toast('Agent modu: ' + mode);
         if (typeof syncCloudSettings === 'function') syncCloudSettings();
     }
@@ -1538,7 +1538,7 @@
 
     function savePrefsFromSettings() {
         savedPrefs = document.getElementById('settingsPrefs').value;
-        localStorage.setItem('glassescat_prefs', savedPrefs);
+        localStorage.setItem('shadowcat_prefs', savedPrefs);
         toast('Tercihler kaydedildi');
         if (typeof syncCloudSettings === 'function') syncCloudSettings();
     }
@@ -1577,7 +1577,7 @@
 
     function setStyle(s) {
         currentStyle = s;
-        localStorage.setItem('glassescat_style', s);
+        localStorage.setItem('shadowcat_style', s);
         renderStyleList();
         toast('Stil: ' + STYLES[s]);
         if (typeof syncCloudSettings === 'function') syncCloudSettings();
@@ -1585,7 +1585,7 @@
 
     function savePrefs() {
         savedPrefs = document.getElementById('prefsInput').value;
-        localStorage.setItem('glassescat_prefs', savedPrefs);
+        localStorage.setItem('shadowcat_prefs', savedPrefs);
         toast('Tercihler kaydedildi');
         if (typeof syncCloudSettings === 'function') syncCloudSettings();
     }
@@ -1658,7 +1658,7 @@
         const skill = {id, name, icon, desc, inst};
         const ix = userSkills.findIndex(s => s.id === id);
         if (ix >= 0) userSkills[ix] = skill; else userSkills.push(skill);
-        localStorage.setItem('glassescat_skills', JSON.stringify(userSkills));
+        localStorage.setItem('shadowcat_skills', JSON.stringify(userSkills));
         toggleSkillForm();
         renderSkills();
         toast('Skill kaydedildi');
@@ -1674,7 +1674,7 @@
     function delUserSkill(id) {
         userSkills = userSkills.filter(s => s.id !== id);
         if (activeSkill === id) activeSkill = null;
-        localStorage.setItem('glassescat_skills', JSON.stringify(userSkills));
+        localStorage.setItem('shadowcat_skills', JSON.stringify(userSkills));
         renderSkills();
         toast('Skill silindi');
     }
@@ -1737,7 +1737,7 @@
             const sk = parseSkillMd(text, path.split('/').pop());
             const ix = userSkills.findIndex(s => s.id === sk.id);
             if (ix >= 0) userSkills[ix] = sk; else userSkills.push(sk);
-            localStorage.setItem('glassescat_skills', JSON.stringify(userSkills));
+            localStorage.setItem('shadowcat_skills', JSON.stringify(userSkills));
             switchSkillTab('local');
             renderSkills();
             toast(sk.name + ' yüklendi');
@@ -1757,7 +1757,7 @@
             const sk = parseSkillMd(text, raw.split('/').pop());
             const ix = userSkills.findIndex(s => s.id === sk.id);
             if (ix >= 0) userSkills[ix] = sk; else userSkills.push(sk);
-            localStorage.setItem('glassescat_skills', JSON.stringify(userSkills));
+            localStorage.setItem('shadowcat_skills', JSON.stringify(userSkills));
             return sk;
         } catch(e) {
             throw new Error(e.message);
@@ -1795,7 +1795,7 @@
     function saveUserSkillObj(sk) {
         const ix = userSkills.findIndex(s => s.id === sk.id);
         if (ix >= 0) userSkills[ix] = sk; else userSkills.push(sk);
-        localStorage.setItem('glassescat_skills', JSON.stringify(userSkills));
+        localStorage.setItem('shadowcat_skills', JSON.stringify(userSkills));
         renderSkills();
         return sk;
     }
@@ -2070,7 +2070,7 @@
         extendedThinking = !extendedThinking;
         document.getElementById('thinkBtn').classList.toggle('active', extendedThinking);
         document.getElementById('thinkBtn').innerHTML = thinkBtnHTML(extendedThinking);
-        localStorage.setItem('glassescat_thinking', extendedThinking ? 'true' : 'false');
+        localStorage.setItem('shadowcat_thinking', extendedThinking ? 'true' : 'false');
         toast(extendedThinking ? 'Derin düşünme açık' : 'Derin düşünme kapalı');
         if (typeof syncCloudSettings === 'function') syncCloudSettings();
     }
@@ -2919,7 +2919,7 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
 
     function loadSavedProjects() {
         try {
-            const saved = localStorage.getItem('glassescat_projects');
+            const saved = localStorage.getItem('shadowcat_projects');
             if (saved) {
                 const parsed = JSON.parse(saved);
                 if (Array.isArray(parsed) && parsed.length > 0) {
@@ -2931,7 +2931,7 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
 
     function persistProjects() {
         try {
-            localStorage.setItem('glassescat_projects', JSON.stringify(sampleDemoProjects));
+            localStorage.setItem('shadowcat_projects', JSON.stringify(sampleDemoProjects));
         } catch(e) {}
     }
 
@@ -4362,7 +4362,7 @@ Temel Kuralların:
             {d:'medium.com', t:'Medium'},
             {d:'reddit.com', t:'Reddit'},
             {d:'youtube.com', t:'YouTube'},
-            {d:'glassescat.ai', t:'Shadowcat'}
+            {d:'shadowcat.ai', t:'Shadowcat'}
         ];
         let seed = 0;
         for (let i = 0; i < q.length; i++) seed = (seed * 31 + q.charCodeAt(i)) % 997;
@@ -4412,7 +4412,7 @@ Temel Kuralların:
             'javascript': 'JavaScript, web tarayıcılarında çalışan, dinamik web sayfaları oluşturmak için kullanılan bir programlama dilidir. Node.js ile sunucu tarafında da çalışabilir. Modern web geliştirmenin temel taşıdır (HTML ve CSS ile birlikte).',
             'web': 'Web (World Wide Web), internet üzerinde HTTP protokolü ile erişilen, birbirine bağlı dokümanlar ve kaynaklar sistemidir. Tarayıcılar (Chrome, Firefox, Edge) kullanıcıların bu içeriklere erişmesini sağlar.',
             'chatgpt': 'ChatGPT, OpenAI tarafından geliştirilen, GPT (Generative Pre-trained Transformer) mimarisine dayalı bir sohbet yapay zekasıdır. Doğal dilde soruları yanıtlar, kod yazar, metin üretir ve birçok görevde yardımcı olur.',
-            'glassescat': 'Shadowcat (Elythra-AI), 37 araç, sınırsız Obsidian tabanlı hafıza, otonom web ajanı ve çoklu model yönlendirme özelliklerine sahip yerel bir yapay zeka asistanıdır. V3.1.0 sürümünde stil seçimi, proje yönetimi ve web araması sunar.'
+            'shadowcat': 'Shadowcat (Elythra-AI), 37 araç, sınırsız Obsidian tabanlı hafıza, otonom web ajanı ve çoklu model yönlendirme özelliklerine sahip yerel bir yapay zeka asistanıdır. V3.1.0 sürümünde stil seçimi, proje yönetimi ve web araması sunar.'
         };
         for (const [k, v] of Object.entries(KNOW)) if (l.includes(k)) return v;
         return '**' + q + '** konusu için web kaynaklarından derlenen özet:\n\nBu sorgu hakkında tarayıcı sonuçları incelendi. Detaylı bilgi için yukarıdaki kaynakları ziyaret edebilir veya daha spesifik bir soru sorabilirsiniz.';

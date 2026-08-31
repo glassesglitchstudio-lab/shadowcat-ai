@@ -565,7 +565,7 @@
             <span id="userCloudBadge" style="font-size:.62rem;color:#16a34a;background:#dcfce7;padding:1px 6px;border-radius:10px;font-weight:600;display:none;">Bulut</span>
         </div>
         <div style="display:flex;align-items:center;justify-content:space-between;">
-            <span id="sidebarModel">🐾 Shadowcat Lite</span>
+            <span id="sidebarModel">⚡ CodeS Lite</span>
             <button onclick="toggleSettings()">Ayarlar</button>
         </div>
     </div>
@@ -661,20 +661,20 @@
         <div class="input-outer" id="inputOuter">
             <div class="model-selector inline-model" onclick="toggleDropdown('modelDropdown')">
                 <span class="dot"></span>
-                <span id="modelName">🐾 Shadowcat Lite</span>
+                <span id="modelName">⚡ CodeS Lite</span>
                 <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
                 <div id="modelDropdown" class="model-dropdown">
-                    <div style="padding:6px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">SOHBET</div>
-                    <div class="model-opt active" onclick="selectModel('SHADOWCAT_LITE')">🐾 Shadowcat Lite<span class="sub">✅ aktif — hızlı &amp; hafif (EPIC motoru üstünde)</span></div>
-                    <div class="model-opt" onclick="selectModel('SHADOWCAT_FLASH')">⚡ Shadowcat Flash<span class="sub">🔧 geliştiriliyor — dengeli asistan</span></div>
-                    <div class="model-opt" onclick="selectModel('SHADOWCAT_PRO')">👑 Shadowcat Pro<span class="sub">✅ aktif — yerel stüdyo 14B, uzun işler</span></div>
-                    <div class="model-opt" onclick="selectModel('SHADOWCAT_EXPERT')">🧠 Shadowcat Expert<span class="sub">🔧 geliştiriliyor — en derin muhakeme</span></div>
-                    <div style="padding:8px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">KOD</div>
-                    <div class="model-opt" onclick="selectModel('CODES')">💻 CodeS<span class="sub">🔧 geliştiriliyor — ana router + uzman LoRA'lar</span></div>
+                    <div style="padding:6px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">CODES</div>
+                    <div class="model-opt active" onclick="selectModel('CODES_LITE')">⚡ CodeS Lite<span class="sub">hızlı &amp; hafif</span></div>
+                    <div class="model-opt" onclick="selectModel('CODES_FLASH')">🔥 CodeS Flash<span class="sub">dengeli asistan</span></div>
+                    <div class="model-opt" onclick="selectModel('CODES_PRO')">👑 CodeS Pro<span class="sub">kodlama &amp; uzun işler</span></div>
+                    <div class="model-opt" onclick="selectModel('CODES_EXPERT')">🧠 CodeS Expert<span class="sub">en derin muhakeme</span></div>
+                    <div style="padding:8px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">OTOMATİK</div>
+                    <div class="model-opt" onclick="selectModel('CODES')">💻 CodeS<span class="sub">soruya göre modeli kendi seçer</span></div>
                     <div style="padding:8px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">GÖRSEL</div>
-                    <div class="model-opt" onclick="toast('🎨 SkyS-Maker beta yolda — plan B1')" style="opacity:.55">🎨 SkyS-Maker<span class="sub">🔧 yapılacak — görsel üretim</span></div>
+                    <div class="model-opt" onclick="toast('🎨 SkyS-Maker beta yolda — plan B1')" style="opacity:.55">🎨 SkyS-Maker<span class="sub">görsel üretim</span></div>
                     <div style="padding:8px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">ADMIN</div>
-                    <div class="model-opt" onclick="selectModelAdmin()">🔒 MaxCode<span class="sub">🔧 yapılacak — yetkili modeli, şifre gerekli</span></div>
+                    <div class="model-opt" onclick="selectModelAdmin()">🔒 MaxCode<span class="sub">yetkili modeli, şifre gerekli</span></div>
                 </div>
             </div>
             <textarea id="inputBox" class="input-box" rows="1" placeholder="Mesaj yazın veya / komutları..." oninput="resize(this);updateBtn();checkSlash()" onkeydown="onInputKey(event)"></textarea>
@@ -866,11 +866,11 @@
         <div id="settingsPers" style="margin-top:16px">
             <label style="font-size:.82rem;font-weight:500;color:#333;display:block;margin-bottom:6px">Varsayılan Model</label>
             <div style="display:flex;gap:6px;flex-wrap:wrap" id="settingsModels">
-                <button class="sk-tab active" data-model="SHADOWCAT_LITE" onclick="selectModel('SHADOWCAT_LITE')">🐾 Lite</button>
-                <button class="sk-tab" data-model="SHADOWCAT_FLASH" onclick="selectModel('SHADOWCAT_FLASH')">⚡ Flash</button>
-                <button class="sk-tab" data-model="SHADOWCAT_PRO" onclick="selectModel('SHADOWCAT_PRO')">👑 Pro</button>
-                <button class="sk-tab" data-model="SHADOWCAT_EXPERT" onclick="selectModel('SHADOWCAT_EXPERT')">🧠 Expert</button>
-                <button class="sk-tab" data-model="CODES" onclick="selectModel('CODES')">💻 CodeS</button>
+                <button class="sk-tab active" data-model="CODES_LITE" onclick="selectModel('CODES_LITE')">⚡ Lite</button>
+                <button class="sk-tab" data-model="CODES_FLASH" onclick="selectModel('CODES_FLASH')">🔥 Flash</button>
+                <button class="sk-tab" data-model="CODES_PRO" onclick="selectModel('CODES_PRO')">👑 Pro</button>
+                <button class="sk-tab" data-model="CODES_EXPERT" onclick="selectModel('CODES_EXPERT')">🧠 Expert</button>
+                <button class="sk-tab" data-model="CODES" onclick="selectModel('CODES')">💻 Otomatik</button>
             </div>
             <div style="margin-top:18px">
                 <label style="font-size:.82rem;font-weight:500;color:#333;display:block;margin-bottom:6px">Yanıt Stili</label>
@@ -1038,7 +1038,7 @@
                 return user.email.split('@')[0];
             }
         }
-        const savedName = localStorage.getItem('glassescat_username');
+        const savedName = localStorage.getItem('shadowcat_username');
         if (savedName) return savedName;
         return 'Geliştirici';
     }
@@ -1153,7 +1153,7 @@
             toast('Lütfen geçerli bir isim yazın.');
             return;
         }
-        localStorage.setItem('glassescat_username', name);
+        localStorage.setItem('shadowcat_username', name);
         updateAuthModalView();
         toast('Hoş geldiniz, ' + name + '! Profil aktif edildi.');
         hideAuthModal();
@@ -1269,15 +1269,15 @@
     }
 
     let chats = {}, chatId = null, busy = false, demoMode = false;
-    let currentModel = 'SHADOWCAT_LITE';
-    // Yeni kadro → mevcut backend ID'leri (backend yenilenene kadar geçici tutkal katmanı)
+    let currentModel = 'CODES_LITE';
+    // Backend artık CodeS kademelerini doğrudan anlıyor (codes_router.py)
     const MODEL_BACKEND = {
-        'SHADOWCAT_LITE': 'EPIC',
-        'SHADOWCAT_FLASH': 'DEEPULTRA',
-        'SHADOWCAT_PRO': 'SHADOWCAT_R1',
-        'SHADOWCAT_EXPERT': 'X_GLITCH_OPUS',
-        'CODES': 'X_OPUS',
-        'MAXCODE': 'X_OPUS'
+        'CODES_LITE': 'CODES_LITE',
+        'CODES_FLASH': 'CODES_FLASH',
+        'CODES_PRO': 'CODES_PRO',
+        'CODES_EXPERT': 'CODES_EXPERT',
+        'CODES': 'CODES',
+        'MAXCODE': 'MAXCODE'
     };
     let currentStyle = 'normal';
     let webSearchEnabled = false;
@@ -1291,7 +1291,7 @@
     let activeTab = 'chats';
     let activeSkill = null;
     let userSkills = [];
-    try { userSkills = JSON.parse(localStorage.getItem('glassescat_skills') || '[]'); } catch(e) { userSkills = []; }
+    try { userSkills = JSON.parse(localStorage.getItem('shadowcat_skills') || '[]'); } catch(e) { userSkills = []; }
 
     const BUILTIN_SKILLS = [
         {id:'site-builder', name:'Site Builder', desc:'Web sitesi ve arayüz geliştirme, HTML/CSS/JS', icon:'wrench', keywords:['site','web sitesi','web sayfası','arayüz']},
@@ -1405,7 +1405,7 @@
         if (c === '/pull') return 'Kullanım: `/pull <SKILL.md URL>` — GitHub\'dan skill indirir. Örnek: `/pull https://raw.githubusercontent.com/anthropics/skills/main/skills/pdf/SKILL.md`';
         if (c.startsWith('/search ')) return `**Web arama:** "${cmd.slice(8)}" için sonuçlar hazırlanıyor... (demo)`;
         if (c === '/export') { const t = JSON.stringify(chats[chatId], null, 2); navigator.clipboard.writeText(t); return 'Sohbet panoya kopyalandı.'; }
-        if (c === '/share') return '**Paylaşım linki:** `https://demo.glassescat.ai/share/demo123` (demo)';
+        if (c === '/share') return '**Paylaşım linki:** `https://demo.shadowcat.ai/share/demo123` (demo)';
         return `Bilinmeyen komut: ${cmd}. /help yazın.`;
     }
 
@@ -1457,21 +1457,31 @@
         if (d) d.classList.remove('show');
     }
 
-    // MaxCode admin kapısı — PROTOTİP: şifre kontrolü B3 adımında backend'e taşınacak (TCONE22 → .env)
-    function selectModelAdmin() {
+    // MaxCode admin kapısı — şifre backend'de (.env → MAXCODE_ADMIN_PASSWORD), brute-force korumalı
+    async function selectModelAdmin() {
         const pw = prompt('🔒 MaxCode yetkili şifresi:');
         if (pw === null) return;
-        if (pw === 'TCONE22') { selectModel('MAXCODE'); toast('🔓 MaxCode aktif — yetkili mod'); }
-        else { toast('❌ Şifre hatalı — MaxCode kilitli kaldı'); }
+        try {
+            const r = await fetch('/api/admin/maxcode-unlock', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({password: pw})
+            });
+            const res = await r.json();
+            if (res.success) { selectModel('MAXCODE'); toast('🔓 MaxCode aktif — yetkili mod'); }
+            else { toast('❌ ' + (res.error || 'Şifre hatalı')); }
+        } catch (e) {
+            toast('❌ Sunucuya ulaşılamadı');
+        }
     }
 
     function selectModel(id) {
         currentModel = id;
         const labels = {
-            'SHADOWCAT_LITE': '🐾 Shadowcat Lite',
-            'SHADOWCAT_FLASH': '⚡ Shadowcat Flash',
-            'SHADOWCAT_PRO': '👑 Shadowcat Pro',
-            'SHADOWCAT_EXPERT': '🧠 Shadowcat Expert',
+            'CODES_LITE': '⚡ CodeS Lite',
+            'CODES_FLASH': '🔥 CodeS Flash',
+            'CODES_PRO': '👑 CodeS Pro',
+            'CODES_EXPERT': '🧠 CodeS Expert',
             'CODES': '💻 CodeS',
             'MAXCODE': '🔒 MaxCode'
         };
@@ -1522,7 +1532,7 @@
         document.querySelectorAll('#settingsModes .sk-tab').forEach(btn => {
             btn.classList.toggle('active', btn.dataset.mode === mode);
         });
-        localStorage.setItem('glassescat_agent_mode', mode);
+        localStorage.setItem('shadowcat_agent_mode', mode);
         toast('Agent modu: ' + mode);
         if (typeof syncCloudSettings === 'function') syncCloudSettings();
     }
@@ -1559,7 +1569,7 @@
 
     function savePrefsFromSettings() {
         savedPrefs = document.getElementById('settingsPrefs').value;
-        localStorage.setItem('glassescat_prefs', savedPrefs);
+        localStorage.setItem('shadowcat_prefs', savedPrefs);
         toast('Tercihler kaydedildi');
         if (typeof syncCloudSettings === 'function') syncCloudSettings();
     }
@@ -1598,7 +1608,7 @@
 
     function setStyle(s) {
         currentStyle = s;
-        localStorage.setItem('glassescat_style', s);
+        localStorage.setItem('shadowcat_style', s);
         renderStyleList();
         toast('Stil: ' + STYLES[s]);
         if (typeof syncCloudSettings === 'function') syncCloudSettings();
@@ -1606,7 +1616,7 @@
 
     function savePrefs() {
         savedPrefs = document.getElementById('prefsInput').value;
-        localStorage.setItem('glassescat_prefs', savedPrefs);
+        localStorage.setItem('shadowcat_prefs', savedPrefs);
         toast('Tercihler kaydedildi');
         if (typeof syncCloudSettings === 'function') syncCloudSettings();
     }
@@ -1679,7 +1689,7 @@
         const skill = {id, name, icon, desc, inst};
         const ix = userSkills.findIndex(s => s.id === id);
         if (ix >= 0) userSkills[ix] = skill; else userSkills.push(skill);
-        localStorage.setItem('glassescat_skills', JSON.stringify(userSkills));
+        localStorage.setItem('shadowcat_skills', JSON.stringify(userSkills));
         toggleSkillForm();
         renderSkills();
         toast('Skill kaydedildi');
@@ -1695,7 +1705,7 @@
     function delUserSkill(id) {
         userSkills = userSkills.filter(s => s.id !== id);
         if (activeSkill === id) activeSkill = null;
-        localStorage.setItem('glassescat_skills', JSON.stringify(userSkills));
+        localStorage.setItem('shadowcat_skills', JSON.stringify(userSkills));
         renderSkills();
         toast('Skill silindi');
     }
@@ -1758,7 +1768,7 @@
             const sk = parseSkillMd(text, path.split('/').pop());
             const ix = userSkills.findIndex(s => s.id === sk.id);
             if (ix >= 0) userSkills[ix] = sk; else userSkills.push(sk);
-            localStorage.setItem('glassescat_skills', JSON.stringify(userSkills));
+            localStorage.setItem('shadowcat_skills', JSON.stringify(userSkills));
             switchSkillTab('local');
             renderSkills();
             toast(sk.name + ' yüklendi');
@@ -1778,7 +1788,7 @@
             const sk = parseSkillMd(text, raw.split('/').pop());
             const ix = userSkills.findIndex(s => s.id === sk.id);
             if (ix >= 0) userSkills[ix] = sk; else userSkills.push(sk);
-            localStorage.setItem('glassescat_skills', JSON.stringify(userSkills));
+            localStorage.setItem('shadowcat_skills', JSON.stringify(userSkills));
             return sk;
         } catch(e) {
             throw new Error(e.message);
@@ -1816,7 +1826,7 @@
     function saveUserSkillObj(sk) {
         const ix = userSkills.findIndex(s => s.id === sk.id);
         if (ix >= 0) userSkills[ix] = sk; else userSkills.push(sk);
-        localStorage.setItem('glassescat_skills', JSON.stringify(userSkills));
+        localStorage.setItem('shadowcat_skills', JSON.stringify(userSkills));
         renderSkills();
         return sk;
     }
@@ -2091,7 +2101,7 @@
         extendedThinking = !extendedThinking;
         document.getElementById('thinkBtn').classList.toggle('active', extendedThinking);
         document.getElementById('thinkBtn').innerHTML = thinkBtnHTML(extendedThinking);
-        localStorage.setItem('glassescat_thinking', extendedThinking ? 'true' : 'false');
+        localStorage.setItem('shadowcat_thinking', extendedThinking ? 'true' : 'false');
         toast(extendedThinking ? 'Derin düşünme açık' : 'Derin düşünme kapalı');
         if (typeof syncCloudSettings === 'function') syncCloudSettings();
     }
@@ -2940,7 +2950,7 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
 
     function loadSavedProjects() {
         try {
-            const saved = localStorage.getItem('glassescat_projects');
+            const saved = localStorage.getItem('shadowcat_projects');
             if (saved) {
                 const parsed = JSON.parse(saved);
                 if (Array.isArray(parsed) && parsed.length > 0) {
@@ -2952,7 +2962,7 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
 
     function persistProjects() {
         try {
-            localStorage.setItem('glassescat_projects', JSON.stringify(sampleDemoProjects));
+            localStorage.setItem('shadowcat_projects', JSON.stringify(sampleDemoProjects));
         } catch(e) {}
     }
 
@@ -3623,7 +3633,21 @@ Temel Kuralların:
     const LOCAL_FASTAPI_API = 'http://localhost:8000/api/chat';
 
     async function callChat(msg) {
-        // 1. ÖNCELİK: Kendi Bilgisayarındaki Yerel Stüdyo Modeli (ShadowCat-R1 14B)
+        // 1. ÖNCELİK: Yerel FastAPI (shadowcat — codeS router)
+        try {
+            const apiRes = await fetch(LOCAL_FASTAPI_API, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({message: msg, model: MODEL_BACKEND[currentModel] || currentModel})
+            });
+            if (apiRes.ok) {
+                const d = await apiRes.json();
+                const reply = d.reply || d.response || "";
+                if (reply) return reply;
+            }
+        } catch(e) {}
+
+        // 2. ÖNCELİK: Yerel Stüdyo Modeli (eski 7860 portu)
         try {
             const localRes = await fetch(LOCAL_STUDIO_API, {
                 method: 'POST',
@@ -3638,20 +3662,6 @@ Temel Kuralların:
         } catch(e) {
             // Yerel sunucu açık değilse sonraki adımlara geç
         }
-
-        // 2. ÖNCELİK: Yerel FastAPI (shadowcat)
-        try {
-            const apiRes = await fetch(LOCAL_FASTAPI_API, {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({message: msg, model: MODEL_BACKEND[currentModel] || currentModel})
-            });
-            if (apiRes.ok) {
-                const d = await apiRes.json();
-                const reply = d.reply || d.response || "";
-                if (reply) return reply;
-            }
-        } catch(e) {}
 
         // 3. ÖNCELİK: Canlı Zeka Motoru (DeepSeek-R1 / DeepSeek-V3)
         if (window.puter && window.puter.ai) {
@@ -3673,6 +3683,40 @@ Temel Kuralların:
     }
 
     async function streamChat(msg, onToken, onThinking) {
+        // 0. ÖNCELİK: Yerel Shadowcat FastAPI — codeS router (SSE, düşünme akışı)
+        try {
+            const apiRes = await fetch(LOCAL_FASTAPI_API, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({message: msg, model: MODEL_BACKEND[currentModel] || currentModel, stream: true})
+            });
+            if (apiRes.ok && apiRes.body) {
+                const reader = apiRes.body.getReader();
+                const decoder = new TextDecoder('utf-8');
+                let fullText = '';
+                while (true) {
+                    const { done, value } = await reader.read();
+                    if (done) break;
+                    const lines = decoder.decode(value, { stream: true }).split('\n');
+                    for (const line of lines) {
+                        if (!line.startsWith('data: ')) continue;
+                        const dataStr = line.slice(6).trim();
+                        if (!dataStr || dataStr === '[DONE]') continue;
+                        try {
+                            const p = JSON.parse(dataStr);
+                            if (p.error) continue;
+                            if (p.thinking_reset) { if (onThinking) onThinking(null); continue; }
+                            if (p.thinking) { if (onThinking) onThinking(p.thinking); continue; }
+                            if (p.token) { fullText += p.token; if (onToken) onToken(p.token); }
+                        } catch(e) {}
+                    }
+                }
+                if (fullText && fullText.trim()) return fullText;
+            }
+        } catch(e) {
+            // Yerel FastAPI kapalıysa sonraki önceliklere geç
+        }
+
         // 1. ÖNCELİK: Kendi Bilgisayarındaki Yerel Stüdyo Modeli (ShadowCat-R1 14B SSE)
         try {
             const localRes = await fetch(LOCAL_STUDIO_API, {
@@ -4383,7 +4427,7 @@ Temel Kuralların:
             {d:'medium.com', t:'Medium'},
             {d:'reddit.com', t:'Reddit'},
             {d:'youtube.com', t:'YouTube'},
-            {d:'glassescat.ai', t:'Shadowcat'}
+            {d:'shadowcat.ai', t:'Shadowcat'}
         ];
         let seed = 0;
         for (let i = 0; i < q.length; i++) seed = (seed * 31 + q.charCodeAt(i)) % 997;
@@ -4433,7 +4477,7 @@ Temel Kuralların:
             'javascript': 'JavaScript, web tarayıcılarında çalışan, dinamik web sayfaları oluşturmak için kullanılan bir programlama dilidir. Node.js ile sunucu tarafında da çalışabilir. Modern web geliştirmenin temel taşıdır (HTML ve CSS ile birlikte).',
             'web': 'Web (World Wide Web), internet üzerinde HTTP protokolü ile erişilen, birbirine bağlı dokümanlar ve kaynaklar sistemidir. Tarayıcılar (Chrome, Firefox, Edge) kullanıcıların bu içeriklere erişmesini sağlar.',
             'chatgpt': 'ChatGPT, OpenAI tarafından geliştirilen, GPT (Generative Pre-trained Transformer) mimarisine dayalı bir sohbet yapay zekasıdır. Doğal dilde soruları yanıtlar, kod yazar, metin üretir ve birçok görevde yardımcı olur.',
-            'glassescat': 'Shadowcat (Elythra-AI), 37 araç, sınırsız Obsidian tabanlı hafıza, otonom web ajanı ve çoklu model yönlendirme özelliklerine sahip yerel bir yapay zeka asistanıdır. V3.1.0 sürümünde stil seçimi, proje yönetimi ve web araması sunar.'
+            'shadowcat': 'Shadowcat (Elythra-AI), 37 araç, sınırsız Obsidian tabanlı hafıza, otonom web ajanı ve çoklu model yönlendirme özelliklerine sahip yerel bir yapay zeka asistanıdır. V3.1.0 sürümünde stil seçimi, proje yönetimi ve web araması sunar.'
         };
         for (const [k, v] of Object.entries(KNOW)) if (l.includes(k)) return v;
         return '**' + q + '** konusu için web kaynaklarından derlenen özet:\n\nBu sorgu hakkında tarayıcı sonuçları incelendi. Detaylı bilgi için yukarıdaki kaynakları ziyaret edebilir veya daha spesifik bir soru sorabilirsiniz.';

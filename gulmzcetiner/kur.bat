@@ -45,7 +45,7 @@ if %errorlevel% equ 0 (
     echo ============================================================
     echo.
     echo   Test etmek icin: ollama run gulmzcetinermax:latest
-    echo   Shadowcat AI ile kullanmak icin: python glassescat_agent.py
+    echo   Shadowcat AI ile kullanmak icin: python shadowcat_agent.py
     echo.
 ) else (
     echo.

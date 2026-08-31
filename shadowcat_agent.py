@@ -3,7 +3,7 @@
 ║                                                           ║
 ║          SHADOWCAT - GELISMIS PC AJANI ║
 ║                                                           ║
-║    GlassescatCore + AgentLoop + TaskPlanner ile calisir       ║
+║    ShadowcatCore + AgentLoop + TaskPlanner ile calisir       ║
 ║    Jarvis • Hermes • Friday • Edith Tarzında              ║
 ║                                                           ║
 ║    Ozellikler:                                            ║
@@ -296,7 +296,7 @@ class ShadowcatSystem:
         if save_path is None:
             desktop = Path(os.path.expanduser("~")) / "Desktop"
             timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-            save_path = str(desktop / f"glassescat_screenshot_{timestamp}.png")
+            save_path = str(desktop / f"shadowcat_screenshot_{timestamp}.png")
         
         try:
             img = pyautogui.screenshot()
@@ -329,7 +329,7 @@ class ShadowcatSystem:
             return False
 
 # ===== UYGULAMA KONTROL =====
-class GlassescatApps:
+class ShadowcatApps:
     """Uygulama baslatma ve kontrol"""
     
     # Bilinen uygulama yollari
@@ -588,8 +588,8 @@ class GlassescatApps:
         app_lower = app_name_clean.lower().replace(' ', '')
         
         # Dogrudan yol kontrolu
-        if app_lower in GlassescatApps.APP_PATHS:
-            path = GlassescatApps.APP_PATHS[app_lower]
+        if app_lower in ShadowcatApps.APP_PATHS:
+            path = ShadowcatApps.APP_PATHS[app_lower]
             expanded = os.path.expandvars(path)
             if os.path.exists(expanded):
                 try:
@@ -610,7 +610,7 @@ class GlassescatApps:
             pass
         
         # Windows'ta ara (klasor tarama - exe + lnk)
-        found_path = GlassescatApps.search_windows_app(app_lower)
+        found_path = ShadowcatApps.search_windows_app(app_lower)
         if found_path:
             try:
                 if found_path.lower().endswith('.lnk'):
@@ -622,7 +622,7 @@ class GlassescatApps:
                 return {'success': False, 'message': str(e)}
         
         # Start Menu kisa yollarinda ara (PWA/WebApp icin)
-        found_shortcut = GlassescatApps.search_windows_start_menu(app_lower)
+        found_shortcut = ShadowcatApps.search_windows_start_menu(app_lower)
         if found_shortcut:
             try:
                 os.startfile(found_shortcut)
@@ -631,7 +631,7 @@ class GlassescatApps:
                 return {'success': False, 'message': str(e)}
         
         # Chrome/Edge WebApps klasorunde ara
-        found_webapp = GlassescatApps.search_windows_apps_folder(app_lower)
+        found_webapp = ShadowcatApps.search_windows_apps_folder(app_lower)
         if found_webapp:
             try:
                 if found_webapp.lower().endswith(('.lnk', '.url')):
@@ -643,7 +643,7 @@ class GlassescatApps:
                 return {'success': False, 'message': str(e)}
         
         # PowerShell ile AppX/StartApps ara
-        ps_result = GlassescatApps.search_with_powershell(app_lower)
+        ps_result = ShadowcatApps.search_with_powershell(app_lower)
         if ps_result:
             try:
                 subprocess.Popen(['explorer', ps_result])
@@ -652,7 +652,7 @@ class GlassescatApps:
                 return {'success': False, 'message': str(e)}
         
         # Son cares: Start Menu'yu ac ve aramayi goster
-        GlassescatApps.open_start_menu_search(app_name)
+        ShadowcatApps.open_start_menu_search(app_name)
         
         # start komutu ile dene (Windows'un kendi aramasini kullan)
         try:
@@ -683,7 +683,7 @@ class GlassescatApps:
     def search_web(query: str) -> Dict:
         """Web'de ara"""
         search_url = f"https://www.google.com/search?q={query.replace(' ', '+')}"
-        return GlassescatApps.open_url(search_url)
+        return ShadowcatApps.open_url(search_url)
     
     @staticmethod
     def search_on_site(site: str, query: str) -> Dict:
@@ -691,26 +691,26 @@ class GlassescatApps:
         site_lower = site.lower().strip().strip("'")
         query_encoded = query.replace(' ', '+')
         
-        known_sites = GlassescatApps.SITE_SEARCH_URLS
+        known_sites = ShadowcatApps.SITE_SEARCH_URLS
         for key, (search_url, base_url) in known_sites.items():
             if key == site_lower or site_lower.startswith(key) or key.startswith(site_lower):
                 full_url = search_url + query_encoded
-                return GlassescatApps.open_url(full_url)
+                return ShadowcatApps.open_url(full_url)
         
         full_url = f"https://www.google.com/search?q=site:{site_lower}+{query_encoded}"
-        return GlassescatApps.open_url(full_url)
+        return ShadowcatApps.open_url(full_url)
     
     @staticmethod
     def open_site(site: str) -> Dict:
         """Siteyi ac (ornek: youtube'a gir)"""
         site_lower = site.lower().strip().strip("'")
         
-        known_sites = GlassescatApps.SITE_SEARCH_URLS
+        known_sites = ShadowcatApps.SITE_SEARCH_URLS
         for key, (search_url, base_url) in known_sites.items():
             if key == site_lower or site_lower.startswith(key) or key.startswith(site_lower):
-                return GlassescatApps.open_url(base_url)
+                return ShadowcatApps.open_url(base_url)
         
-        return GlassescatApps.open_url(f"https://www.{site_lower}.com")
+        return ShadowcatApps.open_url(f"https://www.{site_lower}.com")
     
     @staticmethod
     def search_app_for_download(app_name: str) -> List[Dict]:
@@ -888,11 +888,11 @@ class ShadowcatFiles:
             return {'success': False, 'message': str(e)}
 
 # ===== NOT VE HATIRLATMA =====
-class GlassescatNotes:
+class ShadowcatNotes:
     """Not ve hatirlatma sistemi - Obsidian Sınırsız Hafıza ile"""
     
-    NOTES_FILE = "glassescat_notes.txt"
-    REMINDERS_FILE = "glassescat_reminders.json"
+    NOTES_FILE = "shadowcat_notes.txt"
+    REMINDERS_FILE = "shadowcat_reminders.json"
     
     @staticmethod
     def _get_obsidian():
@@ -908,7 +908,7 @@ class GlassescatNotes:
     def add_note(text: str) -> Dict:
         """Not ekle - Obsidian .md olarak kaydeder (sınırsız)"""
         try:
-            obsidian = GlassescatNotes._get_obsidian()
+            obsidian = ShadowcatNotes._get_obsidian()
             if obsidian:
                 obsidian.save_memory(
                     title=f"Not - {datetime.datetime.now().strftime('%Y-%m-%d %H:%M')}",
@@ -919,7 +919,7 @@ class GlassescatNotes:
             
             # Fallback: eski sistem
             timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M")
-            with open(GlassescatNotes.NOTES_FILE, 'a', encoding='utf-8') as f:
+            with open(ShadowcatNotes.NOTES_FILE, 'a', encoding='utf-8') as f:
                 f.write(f"[{timestamp}] {text}\n")
             return {'success': True, 'message': "Not kaydedildi"}
         except Exception as e:
@@ -929,7 +929,7 @@ class GlassescatNotes:
     def get_notes(limit: int = 10) -> List[str]:
         """Notlari getir - Obsidian'dan oku (sınırsız)"""
         try:
-            obsidian = GlassescatNotes._get_obsidian()
+            obsidian = ShadowcatNotes._get_obsidian()
             if obsidian:
                 recent = obsidian.recall_recent(limit=limit)
                 notes = []
@@ -939,8 +939,8 @@ class GlassescatNotes:
                 return notes if notes else ["Henüz not yok"]
             
             # Fallback
-            if os.path.exists(GlassescatNotes.NOTES_FILE):
-                with open(GlassescatNotes.NOTES_FILE, 'r', encoding='utf-8') as f:
+            if os.path.exists(ShadowcatNotes.NOTES_FILE):
+                with open(ShadowcatNotes.NOTES_FILE, 'r', encoding='utf-8') as f:
                     lines = f.readlines()
                 return [l.strip() for l in lines[-limit:]]
             return []
@@ -950,7 +950,7 @@ class GlassescatNotes:
     @staticmethod
     def search_notes(query: str) -> List[Dict]:
         """Tüm notlarda sınırsız arama"""
-        obsidian = GlassescatNotes._get_obsidian()
+        obsidian = ShadowcatNotes._get_obsidian()
         if obsidian:
             return obsidian.recall(query)
         return []
@@ -959,7 +959,7 @@ class GlassescatNotes:
     def add_reminder(text: str, minutes: int) -> Dict:
         """Hatirlatma ekle"""
         try:
-            obsidian = GlassescatNotes._get_obsidian()
+            obsidian = ShadowcatNotes._get_obsidian()
             if obsidian:
                 reminder_time = datetime.datetime.now() + datetime.timedelta(minutes=minutes)
                 obsidian.save_memory(
@@ -979,13 +979,13 @@ class GlassescatNotes:
             }
             
             reminders = []
-            if os.path.exists(GlassescatNotes.REMINDERS_FILE):
-                with open(GlassescatNotes.REMINDERS_FILE, 'r') as f:
+            if os.path.exists(ShadowcatNotes.REMINDERS_FILE):
+                with open(ShadowcatNotes.REMINDERS_FILE, 'r') as f:
                     reminders = json.load(f)
             
             reminders.append(reminder)
             
-            with open(GlassescatNotes.REMINDERS_FILE, 'w') as f:
+            with open(ShadowcatNotes.REMINDERS_FILE, 'w') as f:
                 json.dump(reminders, f, indent=2)
             
             return {'success': True, 'message': f"{minutes} dakika sonra hatirlatilacak: {text}"}
@@ -993,7 +993,7 @@ class GlassescatNotes:
             return {'success': False, 'message': str(e)}
 
 # ===== AI ENTEGRASYONU =====
-class GlassescatAI:
+class ShadowcatAI:
     """AI sohbet sistemi (Ollama - X_OPUS serisi)"""
     
     OLLAMA_URL = "http://localhost:11434/api/generate"
@@ -1004,7 +1004,7 @@ class GlassescatAI:
     def chat(message: str, model: str = None) -> Dict:
         """AI ile sohbet et"""
         if model is None:
-            model = GlassescatAI.DEFAULT_MODEL
+            model = ShadowcatAI.DEFAULT_MODEL
         
         try:
             import requests
@@ -1014,7 +1014,7 @@ class GlassescatAI:
                 "stream": False
             }
             
-            response = requests.post(GlassescatAI.OLLAMA_URL, json=payload, timeout=60)
+            response = requests.post(ShadowcatAI.OLLAMA_URL, json=payload, timeout=60)
             
             if response.status_code == 200:
                 result = response.json()
@@ -1129,7 +1129,7 @@ class ShadowcatControl:
             return {'success': False, 'message': str(e)}
 
 # ===== ANA SHADOWCAT SINIFI =====
-class GlassescatAgent:
+class ShadowcatAgent:
     """
     Shadowcat AI - Hermes Tarzi PC Ajani
     Ana sinif - tum alt sistemleri birlestirir
@@ -1144,10 +1144,10 @@ class GlassescatAgent:
         self.brain = ShadowcatBrain()
         self.voice = ShadowcatVoice(self.brain)
         self.system = ShadowcatSystem(self.brain)
-        self.apps = GlassescatApps
+        self.apps = ShadowcatApps
         self.files = ShadowcatFiles
-        self.notes = GlassescatNotes
-        self.ai = GlassescatAI
+        self.notes = ShadowcatNotes
+        self.ai = ShadowcatAI
         self.control = ShadowcatControl
         
         # Komutlar
@@ -2122,14 +2122,14 @@ OZEL:
 # SHADOWCAT CORE AGENT - Yeni mimari ile calisan ana sinif
 # ==============================================================
 
-class GlassescatCoreAgent:
+class ShadowcatCoreAgent:
     """
     Shadowcat AI'nin yeni nesil ana sinifi.
     
-    GlassescatCore + AgentLoop + TaskPlanner + WebAgent + Feedback
+    ShadowcatCore + AgentLoop + TaskPlanner + WebAgent + Feedback
     tum alt sistemleri birlestirir.
     
-    Eski GlassescatAgent ile geriye uyumludur.
+    Eski ShadowcatAgent ile geriye uyumludur.
     """
     
     def __init__(self, auto_init: bool = True):
@@ -2140,7 +2140,7 @@ class GlassescatCoreAgent:
         self.feedback = None
         self.state_manager = None
         
-        # Eski GlassescatAgent (geriye uyumluluk)
+        # Eski ShadowcatAgent (geriye uyumluluk)
         self._legacy = None
         
         if auto_init:
@@ -2152,9 +2152,9 @@ class GlassescatCoreAgent:
         print(f"{Colors.BOLD}{Colors.CYAN}  SHADOWCAT CORE v3.0 - GELISMIS AJAN{' '*21}{Colors.ENDC}")
         print(f"{Colors.CYAN}{'='*60}{Colors.ENDC}")
         
-        # 1. GlassescatCore
+        # 1. ShadowcatCore
         try:
-            from glassescat_core import get_core
+            from shadowcat_core import get_core
             self.core = get_core()
             print(f"{Colors.GREEN}[SHADOWCAT] Core baslatildi: {self.core.toolformer.registry.count() if self.core.toolformer else 0} ara{Colors.ENDC}")
         except Exception as e:
@@ -2163,7 +2163,7 @@ class GlassescatCoreAgent:
         
         # 2. Agent Loop
         try:
-            from glassescat_agent_loop import get_agent_loop
+            from shadowcat_agent_loop import get_agent_loop
             self.agent_loop = get_agent_loop(core=self.core)
             print(f"{Colors.GREEN}[SHADOWCAT] Agent Loop: ReAct modu aktif{Colors.ENDC}")
         except ImportError:
@@ -2172,7 +2172,7 @@ class GlassescatCoreAgent:
         
         # 3. Task Planner
         try:
-            from glassescat_task_planner import get_task_planner
+            from shadowcat_task_planner import get_task_planner
             self.task_planner = get_task_planner(core=self.core)
             print(f"{Colors.GREEN}[SHADOWCAT] Task Planner: cok adimli planlama aktif{Colors.ENDC}")
         except ImportError:
@@ -2180,7 +2180,7 @@ class GlassescatCoreAgent:
         
         # 4. Web Agent
         try:
-            from glassescat_web_agent import get_web_agent
+            from shadowcat_web_agent import get_web_agent
             self.web_agent = get_web_agent()
             print(f"{Colors.GREEN}[SHADOWCAT] Web Agent: otonom web gezgini aktif{Colors.ENDC}")
         except ImportError:
@@ -2188,7 +2188,7 @@ class GlassescatCoreAgent:
         
         # 5. Feedback
         try:
-            from glassescat_feedback import get_feedback_system
+            from shadowcat_feedback import get_feedback_system
             self.feedback = get_feedback_system()
             print(f"{Colors.GREEN}[SHADOWCAT] Feedback Loop: ogrenme sistemi aktif{Colors.ENDC}")
         except ImportError:
@@ -2196,15 +2196,15 @@ class GlassescatCoreAgent:
         
         # 6. State Manager
         try:
-            from glassescat_state_manager import get_state_manager
+            from shadowcat_state_manager import get_state_manager
             self.state_manager = get_state_manager()
             print(f"{Colors.GREEN}[SHADOWCAT] State Manager: kalici durum aktif{Colors.ENDC}")
         except ImportError:
             self.state_manager = None
         
-        # 7. Legacy GlassescatAgent (opsiyonel)
+        # 7. Legacy ShadowcatAgent (opsiyonel)
         try:
-            self._legacy = GlassescatAgent()
+            self._legacy = ShadowcatAgent()
         except:
             self._legacy = None
         
@@ -2465,10 +2465,10 @@ if __name__ == "__main__":
     
     # Yeni mimariyi dene, olmazsa legacy'e dön
     try:
-        agent = GlassescatCoreAgent()
+        agent = ShadowcatCoreAgent()
         agent.run_cli()
     except Exception as e:
         print(f"[SHADOWCAT] Yeni mimari baslatilamadi, legacy mod: {e}")
-        agent = GlassescatAgent()
+        agent = ShadowcatAgent()
         agent.voice.greet()
         agent.run_cli()

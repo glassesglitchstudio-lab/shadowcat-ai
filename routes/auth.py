@@ -102,7 +102,7 @@ async def logout(response: Response):
     response.delete_cookie("session_token")
     return {"message": "Çıkış yapıldı"}
 
-DEV_SIMPLE_PASSWORD = os.getenv("DEV_SIMPLE_PASSWORD", "adminglassescat")
+DEV_SIMPLE_PASSWORD = os.getenv("DEV_SIMPLE_PASSWORD", "adminShadowcat")
 
 @router.post("/simple-login")
 async def simple_login(req: SimpleLoginRequest, response: Response):
@@ -146,7 +146,7 @@ async def simple_login(req: SimpleLoginRequest, response: Response):
 
 @router.post("/dev-login-simple")
 async def dev_login_simple(req: DevLoginRequest, response: Response):
-    """Geliştirici girişi - Şifre: adminglassescat"""
+    """Geliştirici girişi - Şifre: adminShadowcat"""
     from middleware.auth import users, create_session
     password = req.password.strip()
 

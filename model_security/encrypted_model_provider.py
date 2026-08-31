@@ -1,5 +1,5 @@
 """
-Sifreli Model Saglayici — glassescat_core.py entegrasyonu
+Sifreli Model Saglayici — shadowcat_core.py entegrasyonu
 Sifreli modelleri bellekte cozup Ollama'ya yukler.
 Streaming destegi: buyuk dosyalar icin RAM dostu.
 """

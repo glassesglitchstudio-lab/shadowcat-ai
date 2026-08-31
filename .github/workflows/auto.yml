@@ -17,7 +17,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Check Python syntax
-        run: python -m py_compile glassescat_core.py 2>/dev/null || true
+        run: python -m py_compile shadowcat_core.py 2>/dev/null || true
       - name: List changed files
         run: |
           echo "🔁 Synced: $(date)"
@@ -42,8 +42,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: Auto backup commit
         run: |
-          git config user.name "glassescat-bot"
-          git config user.email "bot@glassescat.ai"
+          git config user.name "shadowcat-bot"
+          git config user.email "bot@shadowcat.ai"
           git add -A
           git diff --cached --quiet || git commit -m "auto-backup: $(date +'%Y-%m-%d %H:%M')"
           git push

@@ -57,7 +57,7 @@ class MCPPrompt:
 
 @dataclass
 class MCPServerConfig:
-    name: str = "glassescat-mcp"
+    name: str = "shadowcat-mcp"
     version: str = "1.0.0"
     transport: str = "http"  # http, sse
 

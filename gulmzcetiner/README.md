@@ -48,7 +48,7 @@ ollama run gulmzcetinermax:latest "Merhaba, kendini tanit."
 Model otomatik olarak `model_router.py` tarafindan birincil model olarak kullanilir.
 
 ```python
-from glassescat_core import get_core
+from Shadowcat_core import get_core
 core = get_core()
 result = core.process_message("Python ile bir REST API yaz.")
 print(result["response"])

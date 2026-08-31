@@ -27,7 +27,7 @@ from typing import Dict, List, Optional, Any
 from collections import defaultdict
 from dataclasses import dataclass, field, asdict
 
-logger = logging.getLogger("GlassescatFeedback")
+logger = logging.getLogger("ShadowcatFeedback")
 
 # ─────────────────────────────────────────────────────────────
 # SABİTLER

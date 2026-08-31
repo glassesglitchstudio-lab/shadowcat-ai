@@ -14,7 +14,7 @@
 
 ║    Mimarisi:                                                   ║
 
-║    GlassescatCore                                                  ║
+║    ShadowcatCore                                                  ║
 
 ║     ├── AgentLoop (ReAct)      Düşün + Karar Ver + Uygula  ║
 
@@ -74,7 +74,7 @@ from dataclasses import dataclass, field, asdict
 
 logging.basicConfig(level=logging.INFO)
 
-logger = logging.getLogger("GlassescatCore")
+logger = logging.getLogger("ShadowcatCore")
 
 
 
@@ -250,7 +250,7 @@ class AgentMessage:
 
 
 
-class GlassescatCore:
+class ShadowcatCore:
 
     """
 
@@ -266,7 +266,7 @@ class GlassescatCore:
 
     Kullanım:
 
-        core = GlassescatCore()
+        core = ShadowcatCore()
 
         core.initialize()
 
@@ -470,9 +470,9 @@ class GlassescatCore:
 
                 
 
-                # GlassescatAgent'e özel tool'ları ekle
+                # ShadowcatAgent'e özel tool'ları ekle
 
-                self._register_glassescat_tools()
+                self._register_shadowcat_tools()
 
                 
 
@@ -494,9 +494,9 @@ class GlassescatCore:
 
     
 
-    def _register_glassescat_tools(self):
+    def _register_shadowcat_tools(self):
 
-        """GlassescatAI'ye özel araçları kaydet"""
+        """ShadowcatAI'ye özel araçları kaydet"""
 
         if not self.toolformer:
 
@@ -1126,7 +1126,7 @@ class GlassescatCore:
 
         try:
 
-            from glassescat_state_manager import get_state_manager
+            from shadowcat_state_manager import get_state_manager
 
             self.state_manager = get_state_manager()
 
@@ -1160,7 +1160,7 @@ class GlassescatCore:
 
         try:
 
-            from glassescat_feedback import get_feedback_system
+            from shadowcat_feedback import get_feedback_system
 
             self.feedback = get_feedback_system()
 
@@ -1609,7 +1609,7 @@ class GlassescatCore:
 
         try:
 
-            from glassescat_agent_loop import get_agent_loop
+            from shadowcat_agent_loop import get_agent_loop
 
             agent_loop = get_agent_loop(core=self)
 
@@ -1975,7 +1975,7 @@ class GlassescatCore:
 
         try:
 
-            from glassescat_task_planner import get_task_planner
+            from shadowcat_task_planner import get_task_planner
 
             planner = get_task_planner(core=self)
 
@@ -2227,15 +2227,15 @@ _core_instance = None
 
 
 
-def get_core() -> GlassescatCore:
+def get_core() -> ShadowcatCore:
 
-    """GlassescatCore singleton instance'ını al"""
+    """ShadowcatCore singleton instance'ını al"""
 
     global _core_instance
 
     if _core_instance is None:
 
-        _core_instance = GlassescatCore()
+        _core_instance = ShadowcatCore()
 
         _core_instance.initialize()
 

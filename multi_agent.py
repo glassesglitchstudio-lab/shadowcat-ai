@@ -335,7 +335,7 @@ class MultiAgentEngine:
     async def _agent_memory_search(self, message: str, model: str, abort: asyncio.Event) -> str:
         """Hafıza arama ajanı — Obsidian Memory"""
         try:
-            from glassescat_core import get_core
+            from shadowcat_core import get_core
             core = get_core()
             if core.memory:
                 results = core.memory.recall(message, max_results=5)

@@ -25,7 +25,7 @@ from typing import Dict, List, Optional, Any
 from dataclasses import dataclass, field, asdict
 from enum import Enum
 
-logger = logging.getLogger("GlassescatTaskPlanner")
+logger = logging.getLogger("ShadowcatTaskPlanner")
 
 # ─────────────────────────────────────────────────────────────
 # VERİ SINIFLARI
@@ -125,7 +125,7 @@ class TaskPlanner:
     Her adımda Agent Loop'u kullanır.
     
     Kullanım:
-        planner = TaskPlanner(core=glassescat_core)
+        planner = TaskPlanner(core=shadowcat_core)
         result = planner.execute_task(
             "Chrome'u aç, YouTube'a gir, Mavislime ara"
         )

@@ -2199,7 +2199,7 @@ if __name__ == "__main__":
     """
 
     print("Test metni ekleniyor...")
-    doc_info = engine.add_text(test_text, source="glassescat_tanitim")
+    doc_info = engine.add_text(test_text, source="shadowcat_tanitim")
     print(f"   Eklendi: {doc_info['filename']} ({doc_info['chunk_count']} chunk)")
 
     # Sorgu testi

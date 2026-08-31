@@ -27,7 +27,7 @@ from command_parser import CommandParser, IntentMode
 
 # Flask + SocketIO
 app = Flask(__name__, template_folder='web/templates', static_folder='web/static')
-app.config['SECRET_KEY'] = 'glassescat_secret_2024'
+app.config['SECRET_KEY'] = 'Shadowcat_secret_2024'
 CORS(app, resources={r"/*": {"origins": "*"}})
 socketio = SocketIO(app, cors_allowed_origins="*", async_mode='threading')
 
@@ -353,7 +353,7 @@ def test_page():
 # ==================== ANA ÇALIŞTIRMA ====================
 if __name__ == "__main__":
     print("=" * 60)
-    print("  GLASSESCAT AUTONOMOUS SYSTEM")
+    print("  SHADOWCAT AUTONOMOUS SYSTEM")
     print("  WebSocket ile Sürekli Bağlantı")
     print("=" * 60)
     print()

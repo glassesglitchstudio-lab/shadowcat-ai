@@ -29,7 +29,7 @@ from typing import Dict, List, Optional, Any, Tuple
 from urllib.parse import urljoin, urlparse
 from dataclasses import dataclass, field
 
-logger = logging.getLogger("GlassescatWebAgent")
+logger = logging.getLogger("ShadowcatWebAgent")
 
 # ─────────────────────────────────────────────────────────────
 # İsteğe bağlı bağımlılıklar

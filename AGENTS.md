@@ -2,25 +2,25 @@
 
 ## ZORUNLU: Push & Yayınla Workflow (Unutma!)
 Berkay "push la", "yayınla", "github'a at" dediğinde HER ZAMAN:
-1. `git add glasses_vibe.py gulmzcetiner/Modelfile docs/ web/ main.py .github/workflows/pages.yml && git commit -m "V5_NEXUS_CORE: ..." && git push origin main`
+1. `git add main.py gulmzcetiner/Modelfile docs/ web/ main.py .github/workflows/pages.yml && git commit -m "V5_NEXUS_CORE: ..." && git push origin main`
 2. `cd gulmzcetiner && ollama create glassesglitchstudio/gulmzcetiner:V5_NEXUS_CORE -f Modelfile && ollama push glassesglitchstudio/gulmzcetiner:V5_NEXUS_CORE`
 3. Link göster: GitHub (glasses-cat-ai) + Ollama (V5_NEXUS_CORE) + GitHub Pages (https://glassesglitchstudio-lab.github.io/glasses-cat-ai)
 
 ## ZORUNLU: Oturum Başlangıcı
 Her yeni oturumda BU KOMUTU ÇALIŞTIRARAK başla:
 ```bash
-cd C:\Users\ErCuM\CascadeProjects\shadowcat && python -c "from glassescat_core import get_core; c = get_core(); print(f'Shadowcat Core: {c.get_status()[\"stats\"][\"tools_available\"]} tools, {c.memory.get_memory_count() if c.memory else 0} memory files')"
+cd C:\Users\ErCuM\CascadeProjects\shadowcat && python -c "from shadowcat_core import get_core; c = get_core(); print(f'Shadowcat Core: {c.get_status()[\"stats\"][\"tools_available\"]} tools, {c.memory.get_memory_count() if c.memory else 0} memory files')"
 ```
 
 ## Yeni Mimari (v3.0)
 
 ```
-Shadowcat Core (glassescat_core.py)
-  ├── AgentLoop (glassescat_agent_loop.py)    → ReAct: Düşün + Karar Ver + Uygula
-  ├── TaskPlanner (glassescat_task_planner.py) → Çok adımlı görev planlama
-  ├── StateManager (glassescat_state_manager.py) → Kalıcı durum yönetimi
-  ├── WebAgent (glassescat_web_agent.py)       → Otonom web tarayıcı
-  ├── FeedbackLoop (glassescat_feedback.py)    → Öğrenme ve hata analizi
+Shadowcat Core (shadowcat_core.py)
+  ├── AgentLoop (shadowcat_agent_loop.py)    → ReAct: Düşün + Karar Ver + Uygula
+  ├── TaskPlanner (shadowcat_task_planner.py) → Çok adımlı görev planlama
+  ├── StateManager (shadowcat_state_manager.py) → Kalıcı durum yönetimi
+  ├── WebAgent (shadowcat_web_agent.py)       → Otonom web tarayıcı
+  ├── FeedbackLoop (shadowcat_feedback.py)    → Öğrenme ve hata analizi
   ├── Toolformer (toolformer.py)         → 24 araçlı fonksiyon çağırma
   ├── ObsidianMemory (obsidian_memory.py) → Sınırsız .md hafıza
   └── ModelRouter (model_router.py)      → Akıllı model seçimi
@@ -30,7 +30,7 @@ Shadowcat Core (glassescat_core.py)
 
 ### CLI ile başlatma
 ```bash
-cd C:\Users\ErCuM\CascadeProjects\shadowcat && python glassescat_agent.py
+cd C:\Users\ErCuM\CascadeProjects\shadowcat && python shadowcat_agent.py
 ```
 
 ### Web sunucusu ile başlatma
@@ -40,7 +40,7 @@ cd C:\Users\ErCuM\CascadeProjects\shadowcat && python main.py
 
 ### Python'dan kullanma
 ```python
-from glassescat_core import get_core
+from shadowcat_core import get_core
 core = get_core()
 
 # Tek mesaj
@@ -79,8 +79,8 @@ m.save_knowledge(title, content, category="general")
 ## Hızlı Test
 ```bash
 cd C:\Users\ErCuM\CascadeProjects\shadowcat && python -c "
-from glassescat_core import get_core
-from glassescat_agent_loop import get_agent_loop
+from shadowcat_core import get_core
+from shadowcat_agent_loop import get_agent_loop
 c = get_core()
 loop = get_agent_loop(core=c)
 r = loop.run(user_input='test')
@@ -116,8 +116,8 @@ Bundan sonra VS Code yerine **Orca IDE** (stablyai/orca) kullanılacak. Orca:
 
 #### Claude Feature Set Implementation (2026-07-30)
 **Core v3.1.0** — Style selector, Extended thinking, Project Manager, Message branching, File Upload, Artifacts, Slash commands, Share link, Semantic search
-- **glassescat_core.py**: Added STYLES dict, `set_style()`, `set_personal_preferences()`, `set_extended_thinking()`, `build_custom_system_prompt()`, project CRUD (`create_project`, `list_projects`, `set_active_project`, `add_file_to_project`), message branching (`edit_message`, `switch_branch`, `get_branches`)
-- **glassescat_agent_loop.py**: `run()` accepts `custom_prompt` param, `_build_system_prompt()` appends custom prompt
+- **shadowcat_core.py**: Added STYLES dict, `set_style()`, `set_personal_preferences()`, `set_extended_thinking()`, `build_custom_system_prompt()`, project CRUD (`create_project`, `list_projects`, `set_active_project`, `add_file_to_project`), message branching (`edit_message`, `switch_branch`, `get_branches`)
+- **shadowcat_agent_loop.py**: `run()` accepts `custom_prompt` param, `_build_system_prompt()` appends custom prompt
 - **main.py**: API endpoints for styles (`POST/GET /api/settings/style`), preferences (`POST/GET /api/settings/preferences`), extended thinking (`POST /api/settings/extended-thinking`), projects CRUD (`/api/projects`), message branching (`/api/conversations/*/edit`, branches), file upload (`POST /api/upload` with PDF/image/CSV/code parsing), share link (`POST /api/share`, `GET /share/{id}`)
 - **web/templates/chat.html**: Complete Claude-style UI with artifacts panel, file upload modal, drag & drop, style selector overlay with personal preferences, extended thinking toggle, web search toggle, slash commands menu, message editing/branching, sidebar search, project tab
 - **docs/chat.html**: Synced standalone version for GitHub Pages

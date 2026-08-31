@@ -9,7 +9,7 @@ router = APIRouter()
 def get_bridge():
     try:
         from mcp_bridge import get_mcp_bridge
-        from glassescat_core import get_core
+        from shadowcat_core import get_core
         core = get_core()
         bridge = get_mcp_bridge(core=core)
         return bridge

@@ -24,7 +24,7 @@ class TextToSpeech:
         self.lock = threading.Lock()
         self.cache = {}
         self.max_cache_size = 50
-        self.cache_dir = Path(tempfile.gettempdir()) / 'glassescat_tts'
+        self.cache_dir = Path(tempfile.gettempdir()) / 'shadowcat_tts'
         self.cache_dir.mkdir(exist_ok=True)
         
         self.current_provider = 'gtts'
