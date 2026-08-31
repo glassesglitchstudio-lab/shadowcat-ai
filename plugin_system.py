@@ -14,7 +14,7 @@
 ║                    ███████╗   ██║   ███████║   ██║                        ║
 ║                    ╚══════╝   ╚═╝   ╚══════╝   ╚═╝                        ║
 ║                                                                           ║
-║              NIKO AI / GLASSCAT PLUGIN & EKLENTI SISTEMI                  ║
+║              SHADOWCAT / GLASSCAT PLUGIN & EKLENTI SISTEMI                  ║
 ║                    Berkay Software - Lead Engineer AI                      ║
 ║                         Version 1.0 - SWA 1.6                            ║
 ║                                                                           ║
@@ -2362,7 +2362,7 @@ if __name__ == "__main__":
     # Test / Demo
     # ----------------------------------------------------------------
     print("=" * 60)
-    print("  NIKO AI PLUGIN SISTEMI - Test")
+    print("  SHADOWCAT PLUGIN SISTEMI - Test")
     print("  Berkay Software - Lead Engineer AI")
     print("=" * 60)
 

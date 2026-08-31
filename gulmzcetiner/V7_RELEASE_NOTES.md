@@ -1,6 +1,6 @@
 # V7_HYBRID_TITAN - glassesglitchstudio/gulmzcetiner:V7_HYBRID_TITAN
 
-**Glassesglitch Studio / Niko Software** — Kurucu: Berkay Gülmez
+**Glassesglitch Studio / Shadowcat Software** — Kurucu: Berkay Gülmez
 
 ## V7 HYBRID TITAN (22 Mayis 2026)
 

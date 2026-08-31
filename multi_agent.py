@@ -1,7 +1,7 @@
 """
 ╔═══════════════════════════════════════════════════════════════╗
 ║                                                               ║
-║     NIKO AI — MULTI-AGENT ORKESTRASYON MOTORU                ║
+║     SHADOWCAT — MULTI-AGENT ORKESTRASYON MOTORU                ║
 ║                                                               ║
 ║     Akıllı görev dağılımı + Paralel ajan çalıştırma          ║
 ║     SSE streaming + Abort desteği                            ║
@@ -306,7 +306,7 @@ class MultiAgentEngine:
                 resp = await client.get(
                     "https://api.duckduckgo.com/",
                     params={"q": message, "format": "json", "no_html": 1, "skip_disambig": 1},
-                    headers={"User-Agent": "NikoAI-MultiAgent/2.0"},
+                    headers={"User-Agent": "ShadowcatAI-MultiAgent/2.0"},
                 )
                 if resp.status_code == 200:
                     data = resp.json()

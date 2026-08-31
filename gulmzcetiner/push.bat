@@ -2,7 +2,7 @@
 chcp 65001 >nul
 echo ============================================================
 echo   GULMEZCETINERMAX - OLLAMA LIBRARY PUSH
-echo   Niko Software | CEO: Berkay
+echo   Shadowcat Software | CEO: Berkay
 echo ============================================================
 echo.
 

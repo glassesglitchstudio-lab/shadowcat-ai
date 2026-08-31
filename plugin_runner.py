@@ -806,10 +806,10 @@ class BaseLanguageRunner(ABC):
     def _get_environment(self) -> Dict[str, str]:
         """Plugin sureci icin cevre degiskenlerini hazirlar."""
         env = dict(os.environ)
-        env["NIKO_PLUGIN_DIR"] = str(self._plugin_path.parent)
-        env["NIKO_PLUGIN_FILE"] = str(self._plugin_path)
-        env["NIKO_PLUGIN_LANGUAGE"] = self.language_name
-        env["NIKO_PROTOCOL_VERSION"] = "1.0"
+        env["SHADOWCAT_PLUGIN_DIR"] = str(self._plugin_path.parent)
+        env["SHADOWCAT_PLUGIN_FILE"] = str(self._plugin_path)
+        env["SHADOWCAT_PLUGIN_LANGUAGE"] = self.language_name
+        env["SHADOWCAT_PROTOCOL_VERSION"] = "1.0"
         env["PYTHONUNBUFFERED"] = "1"
         return env
 
@@ -2866,7 +2866,7 @@ async def demo() -> None:
         python plugin_runner.py
     """
     print("=" * 60)
-    print("  NIKO AI COKLU-DIL PLUGIN SISTEMI - Test")
+    print("  SHADOWCAT COKLU-DIL PLUGIN SISTEMI - Test")
     print("  Berkay Software - Lead Engineer AI")
     print("=" * 60)
 

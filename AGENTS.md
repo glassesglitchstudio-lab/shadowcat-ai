@@ -9,7 +9,7 @@ Berkay "push la", "yayınla", "github'a at" dediğinde HER ZAMAN:
 ## ZORUNLU: Oturum Başlangıcı
 Her yeni oturumda BU KOMUTU ÇALIŞTIRARAK başla:
 ```bash
-cd C:\Users\ErCuM\CascadeProjects\niko_ai && python -c "from glassescat_core import get_core; c = get_core(); print(f'Glassescat Core: {c.get_status()[\"stats\"][\"tools_available\"]} tools, {c.memory.get_memory_count() if c.memory else 0} memory files')"
+cd C:\Users\ErCuM\CascadeProjects\shadowcat && python -c "from glassescat_core import get_core; c = get_core(); print(f'Glassescat Core: {c.get_status()[\"stats\"][\"tools_available\"]} tools, {c.memory.get_memory_count() if c.memory else 0} memory files')"
 ```
 
 ## Yeni Mimari (v3.0)
@@ -30,12 +30,12 @@ Glassescat Core (glassescat_core.py)
 
 ### CLI ile başlatma
 ```bash
-cd C:\Users\ErCuM\CascadeProjects\niko_ai && python glassescat_agent.py
+cd C:\Users\ErCuM\CascadeProjects\shadowcat && python glassescat_agent.py
 ```
 
 ### Web sunucusu ile başlatma
 ```bash
-cd C:\Users\ErCuM\CascadeProjects\niko_ai && python main.py
+cd C:\Users\ErCuM\CascadeProjects\shadowcat && python main.py
 ```
 
 ### Python'dan kullanma
@@ -78,7 +78,7 @@ m.save_knowledge(title, content, category="general")
 
 ## Hızlı Test
 ```bash
-cd C:\Users\ErCuM\CascadeProjects\niko_ai && python -c "
+cd C:\Users\ErCuM\CascadeProjects\shadowcat && python -c "
 from glassescat_core import get_core
 from glassescat_agent_loop import get_agent_loop
 c = get_core()
@@ -128,6 +128,6 @@ Bundan sonra VS Code yerine **Orca IDE** (stablyai/orca) kullanılacak. Orca:
 |-------|-------|
 | glitch-code | ✅ Aktif, v0.4.5, provider fix |
 | shadowcat-r1 | ⏸ 761K dataset hazır, Colab Pro+ bekliyor |
-| niko_ai (GlassesCat) | ⏸ V7_HYBRID_TITAN |
+| shadowcat (GlassesCat) | ⏸ V7_HYBRID_TITAN |
 | deenemee | ✅ Portfolyo hazır |
 | jarvis my pc | ⏸ Snapchat entegrasyonu tamam |

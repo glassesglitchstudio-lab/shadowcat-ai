@@ -36,5 +36,5 @@ Model, herkesin kullanımına açık şekilde yapılandırılmıştır. Kodlama,
 
 ---
 
-**Geliştirici**: glassesglitchstudio - GlassesSoftware (Niko Software)
+**Geliştirici**: glassesglitchstudio - GlassesSoftware (Shadowcat Software)
 **Lisans**: Apache License 2.0 (Google Gemma 4 tabanlı)

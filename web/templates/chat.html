@@ -3618,7 +3618,7 @@ Temel Kuralların:
             // Yerel sunucu açık değilse sonraki adımlara geç
         }
 
-        // 2. ÖNCELİK: Yerel FastAPI (niko_ai)
+        // 2. ÖNCELİK: Yerel FastAPI (shadowcat)
         try {
             const apiRes = await fetch(LOCAL_FASTAPI_API, {
                 method: 'POST',
@@ -4533,12 +4533,12 @@ Temel Kuralların:
             }
         } catch(e) {}
 
-        // 2. Yerel FastAPI (niko_ai) Kontrolü
+        // 2. Yerel FastAPI (shadowcat) Kontrolü
         try {
             const fastR = await fetch('http://localhost:8000/api/models');
             if (fastR.ok) {
                 if (b) {
-                    b.textContent = '● 🚀 Niko AI Yerel Motor (Canlı)';
+                    b.textContent = '● 🚀 Shadowcat Yerel Motor (Canlı)';
                     b.className = 'mode-badge live';
                     b.style.color = '#10b981';
                 }

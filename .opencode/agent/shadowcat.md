@@ -53,4 +53,4 @@ for r in results:
 ```
 
 ## PROJE KÖKÜ
-C:\Users\ErCuM\CascadeProjects\niko_ai
+C:\Users\ErCuM\CascadeProjects\shadowcat

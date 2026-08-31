@@ -1,4 +1,4 @@
-# Niko AI (GlassesCat) - Gerekli Bağımlılıklar
+# Shadowcat.AI - Gerekli Bağımlılıklar
 
 # Web Framework
 fastapi>=0.104.0

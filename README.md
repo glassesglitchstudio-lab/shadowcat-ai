@@ -1,4 +1,4 @@
-# Niko AI (GlassesCat)
+# Shadowcat.AI
 
 Ollama tabanlı otonom AI asistanı. FastAPI backend, WebSocket streaming, RAG, task scheduler ve plugin sistemi.
 
@@ -117,7 +117,7 @@ Sunucu `http://localhost:8000` adresinde başlar.
 ## Dizin Yapısı
 
 ```
-niko_ai/
+shadowcat/
 ├── main.py              → FastAPI giriş noktası
 ├── routes/              → API endpoint'leri (22 dosya)
 ├── middleware/           → Auth middleware

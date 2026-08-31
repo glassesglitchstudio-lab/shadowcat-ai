@@ -11,7 +11,7 @@
 - **System Prompt:** Kodlama standartları ve davranış kuralları eklendi
 
 ### Test Sonuçları
-- Kendini tanıtma: Başarılı (Berkay patron referansı, Niko Software)
+- Kendini tanıtma: Başarılı (Berkay patron referansı, Shadowcat Software)
 - Binary Search Tree: Hatısız Python kodu
 - Flask REST API: GET/POST endpoint'leri, hata yönetimi dahil
 

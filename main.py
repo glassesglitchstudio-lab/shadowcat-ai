@@ -4,7 +4,7 @@
 
 ║                                                           ║
 
-║     NIKO AI - WEB SUNUCUSU (FastAPI) ║
+║     SHADOWCAT - WEB SUNUCUSU (FastAPI) ║
 
 ║                                                           ║
 
@@ -754,7 +754,7 @@ async def screen_status():
 
 async def chat(request: ChatRequest):
 
-    """AI sohbet - Niko Core ile gelismis zeka sistemi"""
+    """AI sohbet - Shadowcat Core ile gelismis zeka sistemi"""
 
     try:
 
@@ -968,7 +968,7 @@ async def chat(request: ChatRequest):
 
         
 
-        # YENİ: Niko Core ile işle
+        # YENİ: Shadowcat Core ile işle
 
         response_text = ""
 
@@ -2342,7 +2342,7 @@ async def delete_key(request: Request):
 
 # ═══════════════════════════════════════════════════════════════
 
-# NIKO CORE API ENDPOINTS
+# SHADOWCAT CORE API ENDPOINTS
 
 # ═══════════════════════════════════════════════════════════════
 
@@ -4746,14 +4746,14 @@ def ensure_ollama_running():
 async def startup_event():
     ensure_ollama_running()
 
-# ==================== NIKO CORE BASLATMA ====================
+# ==================== SHADOWCAT CORE BASLATMA ====================
 
 if CORE_AVAILABLE:
     try:
         core = get_core()
-        logger.info(f"Niko Core baslatildi: {core.toolformer.registry.count() if core.toolformer else 0} arac")
+        logger.info(f"Shadowcat Core baslatildi: {core.toolformer.registry.count() if core.toolformer else 0} arac")
     except Exception as e:
-        logger.warning(f"Niko Core baslatilamadi: {e}")
+        logger.warning(f"Shadowcat Core baslatilamadi: {e}")
 
 
 if __name__ == "__main__":

@@ -4,7 +4,7 @@
 
 ║                                                               ║
 
-║          NIKO AI CORE - MERKEZİ ÇEKİRDEK ║
+║          SHADOWCAT CORE - MERKEZİ ÇEKİRDEK ║
 
 ║                                                               ║
 
@@ -244,7 +244,7 @@ class AgentMessage:
 
 # ─────────────────────────────────────────────────────────────
 
-# NIKO AI CORE - ANA ÇEKİRDEK
+# SHADOWCAT CORE - ANA ÇEKİRDEK
 
 # ─────────────────────────────────────────────────────────────
 

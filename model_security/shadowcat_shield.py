@@ -1,10 +1,18 @@
 """
-🛡️ ROVX Shield Core — Autonomous System Protection & Execution Guardrail
+🛡️ Shadowcat Shield Core — Otonom Sistem Koruması & İcra Denetleyicisi
 Elytra-ai | Developer: Berkay
 
-Bu modül; ROVX modelinin Windows üzerinde ürettiği tüm Python kodlarını,
-PowerShell/CMD komutlarını ve dosya işlemlerini 5 aşamalı zırhtan geçirir.
-Tehlikeli veya yıkıcı talepleri onay beklemeden ANINDA REDDEDER.
+Bu modül; Shadowcat ekosisteminin otomasyon modellerinin (ROVX, JARVIS, MaxCode)
+Windows üzerinde ürettiği tüm Python kodlarını, PowerShell/CMD komutlarını ve
+dosya işlemlerini 5 aşamalı zırhtan geçirir. Tehlikeli veya yıkıcı talepleri
+onay beklemeden ANINDA REDDEDER.
+
+TARİHÇE: eski jarvis_shield.py ve rovx_shield.py'nin birleşimi (ikisi de aynı
+kodun kopyasıydı). Tek muadil: model_security/shadowcat_shield.py
+
+BAĞLAMA NOKTASI (beta planı B3/B4): otomasyon modellerinin komut icra katmanı —
+aracın subprocess.run yerine get_shadowcat_shield().execute_powershell_safe()
+kullanması yeterli.
 """
 
 import os
@@ -18,8 +26,7 @@ import subprocess
 from pathlib import Path
 from typing import Dict, List, Optional, Tuple, Any
 
-logger = logging.getLogger("ROVXShield")
-logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("ShadowcatShield")
 
 # ═══════════════════════════════════════════════════════════════════
 # 1. KORUMALI DİZİNLER VE BEYAZ LİSTELER (BLACKLIST / WHITELIST)
@@ -70,8 +77,9 @@ TIER4_BANNED_REGEX = [
     re.compile(r"rmdir\s+/[sq]\s+[a-zA-Z]:\\$", re.IGNORECASE),
 ]
 
-BACKUP_DIR = Path("C:/ROVX_Backups")
-QUARANTINE_DIR = Path("C:/ROVX_Karantina")
+# Not: dizinler import anında DEĞİL, ilk kullanım anında oluşturulur.
+BACKUP_DIR = Path("C:/Shadowcat_Backups")
+QUARANTINE_DIR = Path("C:/Shadowcat_Karantina")
 
 # ═══════════════════════════════════════════════════════════════════
 # 2. STATİK AST VE KOMUT ANALİZ DENETİMİ
@@ -99,6 +107,7 @@ class ASTSecurityVisitor(ast.NodeVisitor):
         self.generic_visit(node)
 
 def analyze_python_ast(code_str: str) -> Tuple[bool, Optional[str]]:
+    """Modelin ürettiği Python kodunu statik olarak denetler."""
     try:
         tree = ast.parse(code_str)
         visitor = ASTSecurityVisitor()
@@ -111,7 +120,7 @@ def analyze_python_ast(code_str: str) -> Tuple[bool, Optional[str]]:
 
 def analyze_command_regex(cmd: str) -> Tuple[bool, Optional[str]]:
     cmd_clean = cmd.strip()
-    
+
     # 1. Tier 4 Yasaklı Komut Kontrolü
     for pat in TIER4_BANNED_REGEX:
         if pat.search(cmd_clean):
@@ -120,7 +129,6 @@ def analyze_command_regex(cmd: str) -> Tuple[bool, Optional[str]]:
     # 2. Korumalı Dizin Müdahale Kontrolü
     for pat in PROTECTED_PATHS:
         if pat.search(cmd_clean):
-            # Eğer silme/yazma komutlarıyla birlikte geçiyorsa
             if any(k in cmd_clean.lower() for k in ("remove-item", "del ", "erase", "rmdir", "move", "takeown", "icacls")):
                 return False, f"Korumalı sistem dizinine müdahale KESİNTİSİZ ENGELLENDİ: {pat.pattern}"
 
@@ -135,29 +143,36 @@ def analyze_command_regex(cmd: str) -> Tuple[bool, Optional[str]]:
 # 3. TIER SINIFLANDIRICI VE İCRA MOTORU
 # ═══════════════════════════════════════════════════════════════════
 
-class ROVXShield:
-    """ROVX Güvenlik Kalkanı ve Otonom İcraat Denetleyicisi."""
+class ShadowcatShield:
+    """Shadowcat Güvenlik Kalkanı ve Otonom İcraat Denetleyicisi."""
 
     def __init__(self):
-        BACKUP_DIR.mkdir(parents=True, exist_ok=True)
-        QUARANTINE_DIR.mkdir(parents=True, exist_ok=True)
+        self._ensure_dirs()
+
+    def _ensure_dirs(self) -> None:
+        """Yedek/karantina dizinlerini ilk kullanımda oluşturur."""
+        try:
+            BACKUP_DIR.mkdir(parents=True, exist_ok=True)
+            QUARANTINE_DIR.mkdir(parents=True, exist_ok=True)
+        except OSError as e:
+            logger.warning(f"Yedek dizinleri oluşturulamadı: {e}")
 
     def classify_tier(self, command_or_code: str) -> int:
         c = command_or_code.lower()
-        
+
         # Tier 4: Yasaklı
         valid, reason = analyze_command_regex(command_or_code)
         if not valid:
             return 4
-            
+
         # Tier 3: Yüksek Risk / Registry / Toplu Dosya
         if "set-itemproperty" in c or "reg add" in c or "reg delete" in c:
             return 3
-            
+
         # Tier 2: Orta Risk / Güç Planı / Servis / Winget
         if "powercfg" in c or "stop-service" in c or "winget" in c or "start-service" in c:
             return 2
-            
+
         # Tier 1: Düşük Risk / Temp / Bilgi / Read
         return 1
 
@@ -168,7 +183,7 @@ class ROVXShield:
             safe_name = re.sub(r"[^a-zA-Z0-9_]", "_", key_path)
             backup_file = BACKUP_DIR / "Registry" / f"{safe_name}_{timestamp}.reg"
             backup_file.parent.mkdir(parents=True, exist_ok=True)
-            
+
             subprocess.run(["reg", "export", key_path, str(backup_file), "/y"], capture_output=True, timeout=10)
             logger.info(f"🛡️ Registry Yedeği Alındı: {backup_file}")
             return True
@@ -181,19 +196,18 @@ class ROVXShield:
         # Katman 1 & 2: Analiz
         valid, reason = analyze_command_regex(command)
         if not valid:
-            logger.error(f"❌ [ROVX SHIELD REJECTED] {reason}")
+            logger.error(f"❌ [SHADOWCAT SHIELD REJECTED] {reason}")
             return {
                 "success": False,
                 "status": "REJECTED_BY_SHIELD",
                 "tier": 4,
-                "error": f"ROVX Shield Protokolü: {reason}. İşlem onay istenmeden doğrudan REDDEDİLDİ."
+                "error": f"Shadowcat Shield Protokolü: {reason}. İşlem onay istenmeden doğrudan REDDEDİLDİ."
             }
 
         tier = self.classify_tier(command)
 
         # Katman 3: Tier 3 için Otomatik Registry Yedeği
         if tier == 3 and "reg" in command.lower():
-            # Komuttan reg anahtarını yakala
             match = re.search(r'(HK[A-Z]{2,4}\\[^\s"]+)', command, re.IGNORECASE)
             if match:
                 self.backup_registry_key(match.group(1))
@@ -231,8 +245,8 @@ class ROVXShield:
 
 _shield_instance = None
 
-def get_rovx_shield() -> ROVXShield:
+def get_shadowcat_shield() -> ShadowcatShield:
     global _shield_instance
     if _shield_instance is None:
-        _shield_instance = ROVXShield()
+        _shield_instance = ShadowcatShield()
     return _shield_instance
