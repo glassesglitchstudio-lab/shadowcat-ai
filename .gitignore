@@ -89,3 +89,4 @@ api_keys.json
 .opencode/package-lock.json
 free-claude-code/
 model-site/
+.venv-gpu/

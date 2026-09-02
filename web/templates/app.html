@@ -1,0 +1,1230 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ShadowCat Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  /* ============ Design tokens (mavi/mor gradient) ============ */
+  :root {
+    --bg-0: #0a0c1a;
+    --bg-1: #0f1226;
+    --bg-2: #141833;
+    --bg-3: #1c2147;
+    --bg-4: #252b5c;
+    --line: rgba(123, 107, 240, 0.12);
+    --line-strong: rgba(123, 107, 240, 0.22);
+    --text-0: #f5f7fa;
+    --text-1: #c4c9d1;
+    --text-2: #8a93a0;
+    --text-3: #5b6470;
+    /* accent: mavi -> mor gradient tonu */
+    --accent: #7B6BF0;
+    --accent-hover: #9d8df5;
+    --accent-2: #A855F7;
+    --accent-blue: #5B8DEF;
+    --accent-dim: rgba(123, 107, 240, 0.18);
+    --accent-line: rgba(123, 107, 240, 0.5);
+    --accent-glow: rgba(123, 107, 240, 0.35);
+    --ok: #4ade80;
+    --ok-bg: rgba(74, 222, 128, 0.08);
+    --ok-line: rgba(74, 222, 128, 0.3);
+    --err: #f87171;
+    --err-bg: rgba(248, 113, 113, 0.08);
+    --err-line: rgba(248, 113, 113, 0.3);
+    --info: #60a5fa;
+    --radius: 10px;
+    --radius-sm: 6px;
+    --radius-lg: 14px;
+    --t: 220ms cubic-bezier(.2, .8, .2, 1);
+    --t-fast: 120ms cubic-bezier(.2, .8, .2, 1);
+    --shadow-card: 0 1px 0 rgba(255, 255, 255, 0.04) inset,
+                   0 12px 32px -16px rgba(0, 0, 0, 0.6),
+                   0 0 0 1px rgba(123, 107, 240, 0.05);
+    --shadow-glow: 0 0 24px -2px var(--accent-glow);
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; height: 100%; }
+  body {
+    font-family: 'Geist', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: var(--bg-0);
+    color: var(--text-1);
+    font-size: 14px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+    overflow: hidden;
+    background-image:
+      radial-gradient(1400px 700px at 90% -20%, rgba(168, 85, 247, 0.18), transparent 60%),
+      radial-gradient(1100px 600px at 5% 110%, rgba(91, 141, 239, 0.16), transparent 60%),
+      radial-gradient(800px 400px at 50% 50%, rgba(123, 107, 240, 0.06), transparent 70%);
+  }
+
+  /* ============ Layout ============ */
+  .app {
+    display: grid;
+    grid-template-columns: 320px 1fr 300px;
+    grid-template-rows: 60px 1fr;
+    height: 100vh;
+  }
+  .topbar { grid-column: 1 / -1; }
+  .sidebar { grid-row: 2; grid-column: 1; }
+  .main { grid-row: 2; grid-column: 2; }
+  .right { grid-row: 2; grid-column: 3; }
+
+  /* ============ Topbar ============ */
+  .topbar {
+    display: flex; align-items: center; gap: 10px;
+    padding: 0 16px;
+    background: var(--bg-1);
+    border-bottom: 1px solid var(--line);
+  }
+  .brand {
+    display: flex; align-items: center; gap: 10px;
+    font-weight: 600; font-size: 14px;
+    color: var(--text-0); letter-spacing: -.01em;
+  }
+  .brand-mark {
+    width: 30px; height: 30px; border-radius: 8px;
+    background: var(--bg-0);
+    box-shadow: 0 0 0 1px var(--line-strong),
+                0 8px 20px -8px rgba(0, 0, 0, 0.5);
+    display: grid; place-items: center;
+    overflow: hidden;
+  }
+  .brand-mark img { display: block; width: 22px; height: 22px; }
+  .brand-text { display: flex; flex-direction: column; line-height: 1.2; }
+  .brand-name { font-size: 14px; font-weight: 600; color: var(--text-0); }
+  .brand-sub  { font-size: 10px; color: var(--text-3); font-family: 'Geist Mono', monospace;
+                letter-spacing: .02em; margin-top: 1px; }
+  .topbar .spacer { flex: 1; }
+
+  .t-select, .t-btn {
+    padding: 7px 11px;
+    background: var(--bg-2);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-sm);
+    color: var(--text-1);
+    font-size: 12.5px;
+    font-family: inherit;
+    text-decoration: none; cursor: pointer;
+    transition: all var(--t);
+    line-height: 1;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .t-select:hover, .t-btn:hover { border-color: rgba(255, 255, 255, 0.28); background: var(--bg-3); color: var(--text-0); }
+  .t-select:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
+  .t-btn.primary {
+    background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent) 50%, var(--accent-2) 100%);
+    color: #fff; border-color: transparent;
+    font-weight: 600;
+    box-shadow: 0 0 0 0 var(--accent-dim);
+    position: relative;
+    overflow: hidden;
+  }
+  .t-btn.primary::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform .6s ease;
+  }
+  .t-btn.primary:hover::before { transform: translateX(100%); }
+  .t-btn.primary:hover {
+    background: linear-gradient(135deg, #6B9DF5 0%, #8D7DF5 50%, #B965F8 100%);
+    box-shadow: 0 0 0 4px var(--accent-dim), var(--shadow-glow);
+  }
+  .t-btn.ghost { background: transparent; border-color: transparent; color: var(--text-2); }
+  .t-btn.ghost:hover { background: var(--bg-2); color: var(--text-1); border-color: transparent; }
+
+  /* ============ Sidebar ============ */
+  .sidebar {
+    background: var(--bg-1);
+    border-right: 1px solid var(--line);
+    display: flex; flex-direction: column;
+    min-height: 0;
+  }
+  .sidebar-tabs {
+    display: flex; padding: 0 8px;
+    border-bottom: 1px solid var(--line);
+    gap: 4px;
+  }
+  .sidebar-tabs .tab {
+    flex: 1; padding: 12px 0; background: transparent; border: 0;
+    color: var(--text-2); font-size: 12px; font-weight: 500;
+    cursor: pointer; border-bottom: 2px solid transparent;
+    font-family: inherit; letter-spacing: -.005em;
+    transition: color var(--t), border-color var(--t);
+    display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+    position: relative;
+  }
+  .sidebar-tabs .tab:hover { color: var(--text-1); }
+  .sidebar-tabs .tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+  .sidebar-tabs .tab.active::after {
+    content: ''; position: absolute; left: 50%; bottom: -2px;
+    transform: translateX(-50%);
+    width: 24px; height: 2px;
+    background: linear-gradient(90deg, var(--accent-blue), var(--accent-2));
+    box-shadow: 0 0 12px var(--accent-glow);
+    border-radius: 2px;
+    animation: tabGlow 2s ease-in-out infinite;
+  }
+  @keyframes tabGlow {
+    0%, 100% { opacity: 1; box-shadow: 0 0 12px var(--accent-glow); }
+    50% { opacity: 0.7; box-shadow: 0 0 18px var(--accent-glow); }
+  }
+  .sidebar-tabs .tab .count {
+    font-size: 10px; padding: 1px 6px; border-radius: 999px;
+    background: var(--bg-3); color: var(--text-2);
+    font-family: 'Geist Mono', monospace; font-weight: 600;
+    transition: all var(--t);
+  }
+  .sidebar-tabs .tab.active .count { background: var(--accent-dim); color: var(--accent); }
+
+  .sidebar-pane { display: none; flex: 1; flex-direction: column; min-height: 0; padding: 12px; overflow-y: auto; }
+  .sidebar-pane.active { display: flex; }
+  .sidebar-search { position: relative; margin-bottom: 10px; }
+  .sidebar-search input {
+    width: 100%; padding: 9px 11px 9px 32px;
+    background: var(--bg-0);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-sm);
+    color: var(--text-0); font-size: 13px;
+    font-family: inherit; outline: none;
+    transition: border-color var(--t), box-shadow var(--t);
+  }
+  .sidebar-search input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-dim), 0 0 16px -4px var(--accent-glow);
+  }
+  .sidebar-search .icon {
+    position: absolute; left: 11px; top: 50%;
+    transform: translateY(-50%); color: var(--text-2); font-size: 12px;
+    pointer-events: none;
+  }
+
+  .filters { display: flex; gap: 6px; margin-bottom: 12px; }
+  .filter-pill {
+    flex: 1; padding: 5px 8px; background: transparent;
+    border: 1px solid var(--line-strong); border-radius: 999px;
+    color: var(--text-2); font-size: 11px; font-weight: 500; cursor: pointer;
+    font-family: inherit;
+    transition: all var(--t);
+  }
+  .filter-pill:hover { color: var(--text-1); border-color: rgba(255, 255, 255, 0.28); }
+  .filter-pill.active {
+    background: var(--accent-dim); color: var(--accent);
+    border-color: var(--accent-line); font-weight: 600;
+  }
+
+  /* ============ Hub kartlari ============ */
+  .list { display: flex; flex-direction: column; gap: 6px; }
+  .hub-card {
+    padding: 10px 12px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    transition: transform var(--t), border-color var(--t), background var(--t), box-shadow var(--t);
+    display: flex; flex-direction: column; gap: 6px;
+    position: relative;
+    overflow: hidden;
+    animation: cardIn .4s cubic-bezier(.2, .8, .2, 1) backwards;
+  }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: none; }
+  }
+  /* Stagger: ilk 30 karta artan gecikme */
+  .hub-card:nth-child(1) { animation-delay: 0ms; }
+  .hub-card:nth-child(2) { animation-delay: 30ms; }
+  .hub-card:nth-child(3) { animation-delay: 60ms; }
+  .hub-card:nth-child(4) { animation-delay: 90ms; }
+  .hub-card:nth-child(5) { animation-delay: 120ms; }
+  .hub-card:nth-child(6) { animation-delay: 150ms; }
+  .hub-card:nth-child(7) { animation-delay: 180ms; }
+  .hub-card:nth-child(8) { animation-delay: 210ms; }
+  .hub-card:nth-child(9) { animation-delay: 240ms; }
+  .hub-card:nth-child(10) { animation-delay: 270ms; }
+  .hub-card:nth-child(n+11) { animation-delay: 300ms; }
+  .hub-card::before {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(115deg, transparent 30%, rgba(123, 107, 240, 0.18) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform .7s ease;
+    pointer-events: none;
+  }
+  .hub-card:hover {
+    border-color: var(--accent-line);
+    background: var(--bg-3);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px -10px rgba(0, 0, 0, 0.6),
+                0 0 0 1px var(--accent-line),
+                0 0 16px -4px var(--accent-glow);
+  }
+  .hub-card:hover::before { transform: translateX(100%); }
+  .hub-card.local {
+    border-left: 2px solid var(--ok);
+    box-shadow: inset 2px 0 8px -2px rgba(74, 222, 128, 0.2);
+  }
+  .hub-card-header {
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;
+  }
+  .hub-card-name {
+    font-family: 'Geist Mono', monospace; font-size: 11.5px;
+    color: var(--text-0); word-break: break-all; line-height: 1.3;
+    font-weight: 500;
+  }
+  .hub-card-actions { display: flex; gap: 4px; flex-shrink: 0; }
+  .hub-card-actions button {
+    padding: 4px 8px; border-radius: 5px;
+    background: var(--bg-3); border: 1px solid var(--line);
+    color: var(--text-2); font-size: 10.5px; font-weight: 500;
+    cursor: pointer; font-family: inherit;
+    transition: all var(--t);
+  }
+  .hub-card-actions button:hover { color: var(--accent); border-color: var(--accent-line); }
+  .hub-card-actions button.primary {
+    background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent) 100%);
+    color: #fff; border-color: transparent;
+    font-weight: 600;
+    box-shadow: 0 0 0 0 var(--accent-dim);
+  }
+  .hub-card-actions button.primary:hover {
+    background: linear-gradient(135deg, #6B9DF5 0%, #8D7DF5 100%);
+    border-color: transparent;
+    box-shadow: 0 0 0 3px var(--accent-dim), 0 0 12px -2px var(--accent-glow);
+  }
+  .hub-card-meta {
+    font-size: 10.5px; color: var(--text-2);
+    font-family: 'Geist Mono', monospace;
+    display: flex; gap: 6px; flex-wrap: wrap; align-items: center;
+  }
+  .badge {
+    display: inline-block; padding: 1px 6px; border-radius: 4px;
+    font-size: 9.5px; font-weight: 600; letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+  .badge.tr   { background: rgba(91, 141, 239, 0.15); color: #6B9DF5; border: 1px solid rgba(91, 141, 239, 0.4); }
+  .badge.gguf { background: var(--accent-dim); color: var(--accent); border: 1px solid var(--accent-line); }
+  .badge.local{ background: var(--bg-3); color: var(--text-2); border: 1px solid var(--line); }
+  .badge.err  { background: var(--err-bg); color: var(--err); border: 1px solid var(--err-line); }
+
+  .empty { color: var(--text-3); font-size: 12px; padding: 28px 16px; text-align: center; line-height: 1.6; }
+  .empty strong { color: var(--text-1); font-weight: 600; display: block; margin-bottom: 4px; }
+
+  .section-title {
+    font-size: 10px; color: var(--text-3);
+    text-transform: uppercase; letter-spacing: .08em;
+    margin: 14px 4px 6px; padding: 0;
+    font-weight: 600;
+    display: flex; justify-content: space-between; align-items: center;
+  }
+
+  /* ============ Main / Chat ============ */
+  .main {
+    display: flex; flex-direction: column;
+    background: var(--bg-0);
+    min-height: 0;
+    border-right: 1px solid var(--line);
+  }
+  .chat {
+    flex: 1; overflow-y: auto; padding: 28px 24px;
+    display: flex; flex-direction: column; gap: 18px;
+  }
+  .chat::-webkit-scrollbar, .sidebar-pane::-webkit-scrollbar, .right::-webkit-scrollbar { width: 10px; }
+  .chat::-webkit-scrollbar-thumb, .sidebar-pane::-webkit-scrollbar-thumb, .right::-webkit-scrollbar-thumb {
+    background: var(--bg-3); border-radius: 999px; border: 2px solid transparent; background-clip: padding-box;
+  }
+  .chat::-webkit-scrollbar-thumb:hover, .sidebar-pane::-webkit-scrollbar-thumb:hover, .right::-webkit-scrollbar-thumb:hover {
+    background: var(--bg-4); background-clip: padding-box; border: 2px solid transparent;
+  }
+  .msg { display: flex; gap: 12px; max-width: 800px; width: 100%;
+         animation: msgIn .35s cubic-bezier(.2, .8, .2, 1) backwards; }
+  @keyframes msgIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: none; }
+  }
+  .msg.user { animation-delay: 0ms; }
+  .msg.assistant { animation-delay: 50ms; }
+  .msg .avatar {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: var(--bg-2); border: 1px solid var(--line);
+    display: grid; place-items: center;
+    flex-shrink: 0; overflow: hidden;
+  }
+  .msg .avatar img { width: 22px; height: 22px; display: block; }
+  .msg.user .avatar {
+    background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent) 50%, var(--accent-2) 100%);
+    color: #fff; border-color: transparent;
+    font-weight: 700;
+    box-shadow: 0 0 0 1px var(--accent-line), 0 0 12px -2px var(--accent-glow);
+  }
+  .msg .body { flex: 1; line-height: 1.6; font-size: 14px; color: var(--text-0); }
+  .msg .body .role {
+    font-size: 10.5px; color: var(--text-3);
+    text-transform: uppercase; letter-spacing: .06em;
+    margin-bottom: 6px; font-weight: 600;
+    font-family: 'Geist Mono', monospace;
+  }
+
+  /* ============ Composer ============ */
+  .composer {
+    border-top: 1px solid var(--line);
+    padding: 16px 24px 18px;
+    background: var(--bg-1);
+  }
+  .composer .row { display: flex; gap: 10px; max-width: 800px; margin: 0 auto; }
+  .composer textarea {
+    flex: 1; min-height: 44px; max-height: 220px;
+    padding: 11px 14px; background: var(--bg-0);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-sm);
+    color: var(--text-0); font-size: 14px; font-family: inherit;
+    outline: none; resize: vertical; line-height: 1.5;
+    transition: border-color var(--t), box-shadow var(--t);
+  }
+  .composer textarea:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-dim);
+  }
+  .composer button {
+    padding: 0 20px;
+    background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent) 50%, var(--accent-2) 100%);
+    background-size: 200% 100%;
+    color: #fff; border: 0; border-radius: var(--radius-sm);
+    font-weight: 600; font-size: 13px;
+    cursor: pointer; font-family: inherit;
+    transition: all var(--t);
+    position: relative; overflow: hidden;
+  }
+  .composer button::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.35) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform .6s ease;
+  }
+  .composer button:hover::after { transform: translateX(100%); }
+  .composer button:hover {
+    background-position: 100% 0;
+    box-shadow: 0 0 0 4px var(--accent-dim), var(--shadow-glow);
+    transform: translateY(-1px);
+  }
+  .composer button:active { transform: translateY(0) scale(.98); }
+  .composer button:disabled {
+    background: var(--bg-3); color: var(--text-3); cursor: not-allowed;
+    box-shadow: none; transform: none;
+  }
+  .composer .hint {
+    font-size: 10.5px; color: var(--text-3); margin-top: 8px;
+    text-align: center; font-family: 'Geist Mono', monospace;
+    letter-spacing: .02em;
+  }
+
+  /* ============ Right panel ============ */
+  .right {
+    background: var(--bg-1);
+    display: flex; flex-direction: column;
+    min-height: 0; overflow-y: auto;
+  }
+  .right .section {
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--line);
+  }
+  .right .section h3 {
+    font-size: 10px; color: var(--text-3);
+    text-transform: uppercase; letter-spacing: .08em;
+    margin: 0 0 10px; font-weight: 600;
+    font-family: 'Geist Mono', monospace;
+  }
+  .model-card {
+    padding: 12px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    display: flex; flex-direction: column; gap: 4px;
+    transition: all var(--t);
+  }
+  .model-card:hover { border-color: var(--line-strong); }
+  .model-card.active {
+    border-color: var(--accent-line);
+    background: linear-gradient(135deg, var(--bg-2) 0%, var(--accent-dim) 100%);
+    box-shadow: 0 0 0 1px var(--accent-line), 0 0 20px -4px var(--accent-glow);
+    animation: modelActivePulse 3s ease-in-out infinite;
+  }
+  @keyframes modelActivePulse {
+    0%, 100% { box-shadow: 0 0 0 1px var(--accent-line), 0 0 20px -4px var(--accent-glow); }
+    50% { box-shadow: 0 0 0 1px var(--accent), 0 0 28px -2px var(--accent-glow); }
+  }
+  .model-card .name {
+    font-family: 'Geist Mono', monospace;
+    font-size: 12px; color: var(--text-0);
+    word-break: break-all; font-weight: 500;
+    line-height: 1.3;
+  }
+  .model-card .size {
+    font-size: 11px; color: var(--text-2);
+    font-family: 'Geist Mono', monospace;
+  }
+  .kv { font-size: 11.5px; color: var(--text-2); line-height: 1.8; font-family: 'Geist Mono', monospace; }
+  .kv div { display: flex; justify-content: space-between; }
+  .kv span:last-child { color: var(--text-0); font-weight: 500; }
+  .kbd {
+    display: inline-block; padding: 1px 6px;
+    background: var(--bg-2); border: 1px solid var(--line-strong);
+    border-radius: 4px;
+    font-family: 'Geist Mono', monospace; font-size: 10.5px;
+    color: var(--text-1); font-weight: 500;
+    margin: 0 2px;
+  }
+
+  /* ============ Indirilenler paneli ============ */
+  .download-list { display: flex; flex-direction: column; gap: 8px; }
+  .download-item {
+    padding: 10px 12px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    font-family: 'Geist Mono', monospace;
+    font-size: 11px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .download-item-head {
+    display: flex; justify-content: space-between; align-items: center; gap: 8px;
+  }
+  .download-name {
+    color: var(--text-0); font-weight: 500;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    flex: 1; min-width: 0;
+  }
+  .download-status {
+    font-size: 9.5px; padding: 1px 6px; border-radius: 4px;
+    text-transform: uppercase; font-weight: 600; letter-spacing: .04em;
+    flex-shrink: 0;
+  }
+  .download-status.queued    { background: var(--bg-3); color: var(--text-2); }
+  .download-status.downloading { background: var(--accent-dim); color: var(--accent); }
+  .download-status.done      { background: var(--ok-bg); color: var(--ok); }
+  .download-status.error     { background: var(--err-bg); color: var(--err); }
+  .progress {
+    height: 4px; background: var(--bg-3); border-radius: 999px;
+    overflow: hidden; position: relative;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--accent-blue), var(--accent), var(--accent-2));
+    background-size: 200% 100%;
+    width: 0%;
+    transition: width .3s ease;
+    animation: shimmer 2s linear infinite;
+    box-shadow: 0 0 8px var(--accent-glow);
+  }
+  @keyframes shimmer {
+    from { background-position: 0% 0; }
+    to { background-position: 200% 0; }
+  }
+  .download-item.done .progress-bar { background: var(--ok); animation: none; box-shadow: 0 0 8px rgba(74, 222, 128, 0.3); }
+  .download-item.error .progress-bar { background: var(--err); animation: none; }
+
+  /* ============ Modal ============ */
+  .modal-backdrop {
+    position: fixed; inset: 0;
+    background: rgba(10, 12, 26, 0.75);
+    backdrop-filter: blur(12px) saturate(180%);
+    -webkit-backdrop-filter: blur(12px) saturate(180%);
+    display: none; align-items: center; justify-content: center;
+    z-index: 200;
+    animation: backdropIn .25s ease;
+  }
+  .modal-backdrop.show { display: flex; }
+  @keyframes backdropIn { from { opacity: 0; backdrop-filter: blur(0); } to { opacity: 1; } }
+  .modal {
+    background: var(--bg-1);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius-lg);
+    max-width: 560px; width: calc(100% - 40px);
+    max-height: 80vh; overflow-y: auto;
+    box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.8),
+                0 0 0 1px rgba(123, 107, 240, 0.12),
+                0 0 60px -20px var(--accent-glow),
+                0 1px 0 rgba(255, 255, 255, 0.04) inset;
+    animation: rise .25s cubic-bezier(.2, .8, .2, 1);
+  }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px) scale(.96); } to { opacity: 1; transform: none; } }
+  .modal-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--line);
+  }
+  .modal-head h2 {
+    margin: 0; font-size: 15px; font-weight: 600;
+    color: var(--text-0); letter-spacing: -.01em;
+  }
+  .modal-close {
+    width: 28px; height: 28px;
+    background: transparent; border: 1px solid var(--line); border-radius: 6px;
+    color: var(--text-2); cursor: pointer; font-size: 14px;
+    display: grid; place-items: center;
+    transition: all var(--t);
+  }
+  .modal-close:hover { color: var(--text-0); border-color: var(--line-strong); }
+  .modal-body { padding: 20px; }
+  .modal-id {
+    font-family: 'Geist Mono', monospace; font-size: 12px;
+    color: var(--text-2); padding: 8px 12px; background: var(--bg-0);
+    border: 1px solid var(--line); border-radius: var(--radius-sm);
+    margin-bottom: 16px; word-break: break-all;
+  }
+  .modal-meta {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px;
+    margin-bottom: 18px;
+  }
+  .modal-meta div {
+    padding: 8px 12px; background: var(--bg-2);
+    border: 1px solid var(--line); border-radius: var(--radius-sm);
+    font-family: 'Geist Mono', monospace; font-size: 11px;
+    color: var(--text-2);
+  }
+  .modal-meta strong { color: var(--text-0); font-weight: 600; display: block; font-size: 10px; text-transform: uppercase; letter-spacing: .04em; margin-bottom: 2px; }
+
+  .file-pick { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+  .file-row {
+    padding: 10px 12px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius-sm);
+    cursor: pointer;
+    display: flex; justify-content: space-between; align-items: center;
+    transition: all var(--t);
+  }
+  .file-row:hover { border-color: var(--accent-line); background: var(--bg-3); }
+  .file-row.selected {
+    border-color: var(--accent); background: var(--accent-dim);
+    box-shadow: 0 0 0 1px var(--accent-line), 0 0 16px -4px var(--accent-glow);
+  }
+  .file-row .fname { font-family: 'Geist Mono', monospace; font-size: 12px; color: var(--text-0); }
+  .file-row .fsize { font-family: 'Geist Mono', monospace; font-size: 11px; color: var(--text-2); }
+
+  .modal-foot {
+    display: flex; justify-content: flex-end; gap: 8px;
+    padding-top: 16px; border-top: 1px solid var(--line); margin-top: 8px;
+  }
+  .modal-foot .btn-primary {
+    padding: 9px 18px;
+    background: linear-gradient(135deg, var(--accent-blue) 0%, var(--accent) 50%, var(--accent-2) 100%);
+    background-size: 200% 100%;
+    color: #fff; border: 0; border-radius: var(--radius-sm);
+    font-weight: 600; font-size: 13px; cursor: pointer; font-family: inherit;
+    transition: all var(--t);
+    position: relative; overflow: hidden;
+  }
+  .modal-foot .btn-primary::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, transparent 30%, rgba(255, 255, 255, 0.3) 50%, transparent 70%);
+    transform: translateX(-100%);
+    transition: transform .6s ease;
+  }
+  .modal-foot .btn-primary:hover::after { transform: translateX(100%); }
+  .modal-foot .btn-primary:hover {
+    background-position: 100% 0;
+    box-shadow: 0 0 0 4px var(--accent-dim), var(--shadow-glow);
+  }
+  .modal-foot .btn-primary:disabled {
+    background: var(--bg-3); color: var(--text-3); cursor: not-allowed; box-shadow: none;
+  }
+  .modal-foot .btn-ghost {
+    padding: 9px 14px; background: transparent; color: var(--text-2);
+    border: 0; border-radius: var(--radius-sm); font-weight: 500; font-size: 13px;
+    cursor: pointer; font-family: inherit;
+  }
+  .modal-foot .btn-ghost:hover { color: var(--text-0); background: var(--bg-2); }
+
+  /* ============ Toast ============ */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    padding: 12px 16px;
+    background: var(--bg-2);
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    font-size: 13px; color: var(--text-0);
+    box-shadow: 0 12px 32px -12px rgba(0, 0, 0, 0.6),
+                0 0 0 1px rgba(123, 107, 240, 0.08);
+    opacity: 0; transform: translateX(20px);
+    transition: all var(--t); z-index: 300;
+    max-width: 360px;
+  }
+  .toast.show { opacity: 1; transform: translateX(0); }
+  .toast.ok  { border-color: var(--ok-line); box-shadow: 0 12px 32px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--ok-line); }
+  .toast.err { border-color: var(--err-line); color: var(--err); box-shadow: 0 12px 32px -12px rgba(0, 0, 0, 0.6), 0 0 0 1px var(--err-line); }
+
+  /* ============ Responsive ============ */
+  @media (max-width: 1100px) {
+    .app { grid-template-columns: 300px 1fr; }
+    .right { display: none; }
+  }
+  @media (max-width: 900px) {
+    .topbar .spacer { flex: 0.6; }
+    .brand-text { display: none; }
+  }
+  @media (max-width: 720px) {
+    .app { grid-template-columns: 1fr; grid-template-rows: 60px auto 1fr; }
+    .sidebar { display: none; }
+    .main { border-right: 0; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark"><img src="/static/logo.svg" alt="ShadowCat" width="22" height="22"></div>
+      <div class="brand-text">
+        <div class="brand-name">ShadowCat</div>
+        <div class="brand-sub">studio.local</div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <a href="/hub/settings" class="t-btn ghost">Ayarlar</a>
+    <select id="backendSelect" class="t-select" title="Backend">
+      <option value="llama.cpp">llama.cpp</option>
+      <option value="ollama">Ollama</option>
+    </select>
+    <select id="modelSelect" class="t-select" title="Aktif model">
+      <option value="">Model se&ccedil;&hellip;</option>
+    </select>
+    <a href="/app?new=1" class="t-btn primary" id="newChatLink">+ Yeni sohbet</a>
+  </header>
+
+  <aside class="sidebar">
+    <div class="sidebar-tabs">
+      <button class="tab active" data-tab="hub">
+        <span>Hub</span><span class="count" id="hubCount">0</span>
+      </button>
+      <button class="tab" data-tab="files">
+        <span>Files</span><span class="count" id="filesCount">0</span>
+      </button>
+    </div>
+
+    <div class="sidebar-pane active" data-pane="hub">
+      <div class="sidebar-search">
+        <span class="icon">&#x1F50D;</span>
+        <input id="q" type="text" placeholder="HuggingFace model ara&hellip;" autocomplete="off">
+      </div>
+      <div class="filters">
+        <button class="filter-pill active" data-filter="all">T&uuml;m</button>
+        <button class="filter-pill" data-filter="tr">TR</button>
+        <button class="filter-pill" data-filter="gguf">GGUF</button>
+      </div>
+      <div class="list" id="hubList">
+        <div class="empty"><strong>HuggingFace'den modeller y&uuml;kleniyor</strong>Birka&ccedil; saniye i&ccedil;inde burada olacak&hellip;</div>
+      </div>
+    </div>
+
+    <div class="sidebar-pane" data-pane="files">
+      <div class="sidebar-search">
+        <span class="icon">&#x1F4C2;</span>
+        <input id="fq" type="text" placeholder="Yerel model filtrele&hellip;" autocomplete="off">
+      </div>
+      <div class="list" id="filesList">
+        <div class="empty"><strong>Yerel modeller</strong>Hen&uuml;z model yok.</div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="chat" id="chat">
+      <div class="msg">
+        <div class="avatar"><img src="/static/logo.svg" alt="ShadowCat" width="22" height="22"></div>
+        <div class="body">
+          <div class="role">ShadowCat</div>
+          <div>Selam! Sol panelden bir model se&ccedil; veya <strong>Hub</strong>'dan HuggingFace &uuml;zerinden GGUF indir, sonra buraya yaz.</div>
+        </div>
+      </div>
+    </div>
+    <div class="composer">
+      <div class="row">
+        <textarea id="prompt" placeholder="Mesaj yaz&hellip; (Enter ile g&ouml;nder, Shift+Enter yeni satır)" rows="1"></textarea>
+        <button id="sendBtn" type="button">G&ouml;nder</button>
+      </div>
+      <div class="hint">
+        <span class="kbd">Enter</span> g&ouml;nder &middot;
+        <span class="kbd">Shift+Enter</span> yeni satır &middot;
+        <span class="kbd">Ctrl+K</span> ara &middot;
+        <span class="kbd">Ctrl+,</span> ayarlar
+      </div>
+    </div>
+  </main>
+
+  <aside class="right">
+    <div class="section">
+      <h3>Aktiv Model</h3>
+      <div class="model-card" id="activeModel">
+        <div class="name">Hen&uuml;z se&ccedil;ilmedi</div>
+        <div class="size">Sol panelden se&ccedil;</div>
+      </div>
+    </div>
+    <div class="section">
+      <h3>Bilgi</h3>
+      <div class="kv">
+        <div><span>Backend</span><span id="infoBackend">-</span></div>
+        <div><span>Model</span><span id="infoModel">-</span></div>
+        <div><span>Mod</span><span>chat</span></div>
+      </div>
+    </div>
+    <div class="section">
+      <h3>İndirilenler</h3>
+      <div class="download-list" id="downloadList">
+        <div class="empty">Hen&uuml;z indirme yok.</div>
+      </div>
+    </div>
+    <div class="section">
+      <h3>Kısayollar</h3>
+      <div class="kv" style="line-height:2">
+        <div><span>Ara</span><span class="kbd">Ctrl+K</span></div>
+        <div><span>Temizle</span><span class="kbd">Ctrl+L</span></div>
+        <div><span>Ayarlar</span><span class="kbd">Ctrl+,</span></div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- ============ Indirme modali ============ -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal" role="dialog" aria-modal="true">
+    <div class="modal-head">
+      <h2 id="modalTitle">Model detayı</h2>
+      <button class="modal-close" id="modalClose" aria-label="Kapat">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="modal-id" id="modalId">repo/id</div>
+      <div class="modal-meta" id="modalMeta"></div>
+      <div id="modalFiles" class="file-pick"></div>
+      <div class="modal-foot">
+        <button class="btn-ghost" id="modalCancel">İptal</button>
+        <button class="btn-primary" id="modalDownload" disabled>&darr; İndir</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function () {
+  // ===== DOM =====
+  var $ = function (id) { return document.getElementById(id); };
+  var chat = $('chat'), hubList = $('hubList'), filesList = $('filesList');
+  var prompt = $('prompt'), sendBtn = $('sendBtn');
+  var modelSelect = $('modelSelect'), backendSelect = $('backendSelect');
+  var activeModel = $('activeModel'), infoBackend = $('infoBackend'), infoModel = $('infoModel');
+  var q = $('q'), fq = $('fq');
+  var toast = $('toast');
+  var hubCount = $('hubCount'), filesCount = $('filesCount');
+  var downloadList = $('downloadList');
+
+  // Modal
+  var modalBackdrop = $('modalBackdrop');
+  var modalTitle = $('modalTitle'), modalId = $('modalId');
+  var modalMeta = $('modalMeta'), modalFiles = $('modalFiles');
+  var modalDownload = $('modalDownload'), modalCancel = $('modalCancel'), modalClose = $('modalClose');
+
+  // ===== State =====
+  var currentModel = null;
+  var currentFilter = 'all';
+  var activeDownloads = {}; // id -> entry
+  var modalState = { model: null, selectedFile: null, detail: null };
+
+  // ===== Helpers =====
+  function notify(msg, kind) {
+    toast.textContent = msg;
+    toast.className = 'toast show ' + (kind || '');
+    clearTimeout(notify._t);
+    notify._t = setTimeout(function () { toast.className = 'toast'; }, 2800);
+  }
+  function esc(s) {
+    return String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+  function fmtSize(mb) {
+    if (mb == null) return '?';
+    if (mb >= 1024) return (mb / 1024).toFixed(2) + ' GB';
+    return mb.toFixed(0) + ' MB';
+  }
+
+  // ===== Tabs =====
+  function activateTab(name) {
+    var tabs = document.querySelectorAll('.sidebar-tabs .tab');
+    for (var i = 0; i < tabs.length; i++) {
+      tabs[i].classList.toggle('active', tabs[i].getAttribute('data-tab') === name);
+    }
+    var panes = document.querySelectorAll('.sidebar-pane');
+    for (var j = 0; j < panes.length; j++) {
+      panes[j].classList.toggle('active', panes[j].getAttribute('data-pane') === name);
+    }
+    if (name === 'files') loadFiles();
+  }
+
+  // ===== Hub =====
+  function loadHub() {
+    hubList.innerHTML = '<div class="empty"><strong>Y&uuml;kleniyor</strong>HuggingFace sorgulanıyor&hellip;</div>';
+    var url = '/hub/search?q=' + encodeURIComponent(q.value || '') + '&limit=24&gguf_only=true';
+    fetch(url).then(function (r) { return r.json(); }).then(function (j) {
+      hubList.innerHTML = '';
+      var models = (j && j.models) || [];
+      // Once yerel modeller
+      return fetch('/hub/local').then(function (r2) { return r2.json(); }).then(function (j2) {
+        var locals = (j2 && j2.models) || [];
+        renderHub(locals, models);
+      });
+    }).catch(function (e) {
+      hubList.innerHTML = '<div class="empty"><strong>Hata</strong>' + esc(e.message) + '</div>';
+    });
+  }
+
+  function renderHub(locals, remotes) {
+    hubList.innerHTML = '';
+    var filteredRemotes = remotes.filter(function (m) {
+      if (currentFilter === 'tr') return m.is_turkish;
+      if (currentFilter === 'gguf') return m.gguf_files && m.gguf_files.length;
+      return true;
+    });
+
+    if (locals.length) {
+      var sec = document.createElement('div');
+      sec.className = 'section-title';
+      sec.innerHTML = '<span>Yerel</span><span>' + locals.length + '</span>';
+      hubList.appendChild(sec);
+      for (var i = 0; i < locals.length; i++) hubList.appendChild(makeLocalCard(locals[i]));
+    }
+
+    if (filteredRemotes.length) {
+      var sec2 = document.createElement('div');
+      sec2.className = 'section-title';
+      sec2.innerHTML = '<span>HuggingFace</span><span>' + filteredRemotes.length + '</span>';
+      hubList.appendChild(sec2);
+      for (var k = 0; k < filteredRemotes.length; k++) {
+        hubList.appendChild(makeHubCard(filteredRemotes[k]));
+      }
+    }
+
+    if (!locals.length && !filteredRemotes.length) {
+      hubList.innerHTML = '<div class="empty"><strong>Sonu&ccedil; yok</strong>Farklı bir arama dene.</div>';
+    }
+    hubCount.textContent = (locals.length + filteredRemotes.length);
+  }
+
+  function makeLocalCard(m) {
+    var el = document.createElement('div');
+    el.className = 'hub-card local';
+    el.innerHTML =
+      '<div class="hub-card-header">' +
+        '<div class="hub-card-name">' + esc(m.name) + '</div>' +
+        '<div class="hub-card-actions">' +
+          '<button class="primary" data-act="select">Se&ccedil;</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="hub-card-meta">' +
+        '<span class="badge local">YEREL</span>' +
+        '<span>' + fmtSize(m.size_mb) + '</span>' +
+        '<span>&middot;</span><span>' + esc(m.parent || 'root') + '</span>' +
+      '</div>';
+    el.querySelector('[data-act=select]').addEventListener('click', function (ev) {
+      ev.stopPropagation();
+      selectModel(m.path, m.name, m.size_mb);
+    });
+    el.addEventListener('click', function () { selectModel(m.path, m.name, m.size_mb); });
+    return el;
+  }
+
+  function makeHubCard(m) {
+    var el = document.createElement('div');
+    el.className = 'hub-card';
+    var badges = '<span class="badge gguf">GGUF</span>';
+    if (m.is_turkish) badges = '<span class="badge tr">TR</span> ' + badges;
+    var ggufCount = (m.gguf_files || []).length;
+    el.innerHTML =
+      '<div class="hub-card-header">' +
+        '<div class="hub-card-name">' + esc(m.id) + '</div>' +
+        '<div class="hub-card-actions">' +
+          '<button data-act="open">&darr; İndir</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="hub-card-meta">' +
+        badges +
+        '<span>' + ggufCount + ' dosya</span>' +
+        '<span>&middot;</span><span>&darr; ' + (m.downloads || 0).toLocaleString() + '</span>' +
+        (m.likes ? '<span>&middot;</span><span>&#x1F44D; ' + m.likes + '</span>' : '') +
+      '</div>';
+    el.querySelector('[data-act=open]').addEventListener('click', function (ev) {
+      ev.stopPropagation();
+      openDownloadModal(m);
+    });
+    el.addEventListener('click', function () { openDownloadModal(m); });
+    return el;
+  }
+
+  // ===== Download modal =====
+  function openDownloadModal(m) {
+    modalState.model = m;
+    modalState.selectedFile = null;
+    modalState.detail = null;
+    modalTitle.textContent = 'İndir: ' + m.id;
+    modalId.textContent = m.id;
+    modalMeta.innerHTML =
+      '<div><strong>İndirme</strong>' + (m.downloads || 0).toLocaleString() + '</div>' +
+      '<div><strong>Beğeni</strong>' + (m.likes || 0) + '</div>';
+    modalFiles.innerHTML = '<div class="empty"><strong>Dosyalar y&uuml;kleniyor</strong>&hellip;</div>';
+    modalDownload.disabled = true;
+    modalBackdrop.classList.add('show');
+
+    fetch('/hub/model/' + encodeURIComponent(m.id))
+      .then(function (r) { return r.json(); })
+      .then(function (d) {
+        modalState.detail = d;
+        renderFilePicker(d.gguf_files || []);
+      })
+      .catch(function (e) {
+        modalFiles.innerHTML = '<div class="empty"><strong>Hata</strong>' + esc(e.message) + '</div>';
+      });
+  }
+
+  function renderFilePicker(files) {
+    modalFiles.innerHTML = '';
+    if (!files.length) {
+      modalFiles.innerHTML = '<div class="empty"><strong>GGUF yok</strong>Bu repo GGUF i&ccedil;ermiyor.</div>';
+      return;
+    }
+    for (var i = 0; i < files.length; i++) {
+      (function (file) {
+        var row = document.createElement('div');
+        row.className = 'file-row';
+        var sizeText = file.size_mb ? fmtSize(file.size_mb) : 'boyut &hellip;';
+        row.innerHTML =
+          '<span class="fname">' + esc(file.name) + '</span>' +
+          '<span class="fsize">' + sizeText + '</span>';
+        row.addEventListener('click', function () {
+          var all = modalFiles.querySelectorAll('.file-row');
+          for (var k = 0; k < all.length; k++) all[k].classList.remove('selected');
+          row.classList.add('selected');
+          modalState.selectedFile = file.name;
+          modalDownload.disabled = false;
+        });
+        modalFiles.appendChild(row);
+      })(files[i]);
+    }
+  }
+
+  function closeModal() {
+    modalBackdrop.classList.remove('show');
+    modalState = { model: null, selectedFile: null, detail: null };
+  }
+
+  function startDownload() {
+    if (!modalState.model || !modalState.selectedFile) return;
+    var modelId = modalState.model.id;
+    var filename = modalState.selectedFile;
+    modalDownload.disabled = true;
+    modalDownload.textContent = 'Başlatılıyor…';
+    fetch('/hub/download', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model_id: modelId, filename: filename })
+    })
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        if (!j.ok) throw new Error(j.error || 'İndirme başlatılamadı');
+        notify('İndirme başladı: ' + filename, 'ok');
+        activeDownloads[j.download_id] = {
+          id: j.download_id, model: modelId, filename: filename,
+          status: 'queued', progress: 0
+        };
+        closeModal();
+        renderDownloads();
+        pollDownloads();
+      })
+      .catch(function (e) {
+        modalDownload.disabled = false;
+        modalDownload.textContent = '↓ İndir';
+        notify('Hata: ' + e.message, 'err');
+      });
+  }
+
+  function pollDownloads() {
+    fetch('/hub/downloads').then(function (r) { return r.json(); }).then(function (j) {
+      var list = (j && j.downloads) || [];
+      var map = {};
+      for (var i = 0; i < list.length; i++) map[list[i].id] = list[i];
+      activeDownloads = map;
+      renderDownloads();
+      var anyActive = list.some(function (d) { return d.status === 'downloading' || d.status === 'queued'; });
+      if (anyActive) setTimeout(pollDownloads, 1500);
+      else loadFiles(); // bitti -> yerel listeyi yenile
+    }).catch(function () { setTimeout(pollDownloads, 3000); });
+  }
+
+  function renderDownloads() {
+    var items = Object.values(activeDownloads);
+    if (!items.length) {
+      downloadList.innerHTML = '<div class="empty">Hen&uuml;z indirme yok.</div>';
+      return;
+    }
+    downloadList.innerHTML = '';
+    items.sort(function (a, b) { return (b.started || 0) - (a.started || 0); });
+    for (var i = 0; i < items.length; i++) {
+      var d = items[i];
+      var row = document.createElement('div');
+      row.className = 'download-item ' + d.status;
+      var pct = Math.max(0, Math.min(100, d.progress || 0));
+      row.innerHTML =
+        '<div class="download-item-head">' +
+          '<div class="download-name" title="' + esc(d.filename || d.model) + '">' + esc(d.filename || d.model) + '</div>' +
+          '<div class="download-status ' + d.status + '">' + d.status + '</div>' +
+        '</div>' +
+        '<div class="progress"><div class="progress-bar" style="width:' + pct + '%"></div></div>';
+      downloadList.appendChild(row);
+    }
+  }
+
+  // ===== Files =====
+  function loadFiles() {
+    filesList.innerHTML = '<div class="empty"><strong>Y&uuml;kleniyor</strong>&hellip;</div>';
+    fetch('/hub/local').then(function (r) { return r.json(); }).then(function (j) {
+      filesList.innerHTML = '';
+      var models = (j && j.models) || [];
+      filesCount.textContent = models.length;
+      if (!models.length) {
+        filesList.innerHTML = '<div class="empty"><strong>Yerel model yok</strong>Hub sekmesinden HuggingFace\'ten GGUF indir.</div>';
+        return;
+      }
+      var total = 0;
+      for (var i = 0; i < models.length; i++) total += (models[i].size_mb || 0);
+      var sec = document.createElement('div');
+      sec.className = 'section-title';
+      sec.innerHTML = '<span>' + models.length + ' model</span><span>' + (total / 1024).toFixed(2) + ' GB</span>';
+      filesList.appendChild(sec);
+      var filterText = (fq.value || '').toLowerCase();
+      var shown = 0;
+      for (var k = 0; k < models.length; k++) {
+        var m = models[k];
+        if (filterText && m.name.toLowerCase().indexOf(filterText) === -1) continue;
+        filesList.appendChild(makeLocalCard(m));
+        shown++;
+      }
+      if (!shown) {
+        var empty = document.createElement('div');
+        empty.className = 'empty';
+        empty.innerHTML = '<strong>Eşleşmedi</strong>"' + esc(fq.value) + '" i&ccedil;in sonu&ccedil; yok.';
+        filesList.appendChild(empty);
+      }
+    }).catch(function (e) {
+      filesList.innerHTML = '<div class="empty"><strong>Hata</strong>' + esc(e.message) + '</div>';
+    });
+  }
+
+  // ===== Model seçimi =====
+  function selectModel(path, name, sizeMb) {
+    currentModel = { path: path, name: name, size_mb: sizeMb };
+    var exists = false;
+    for (var j = 0; j < modelSelect.options.length; j++) {
+      if (modelSelect.options[j].value === path) { exists = true; break; }
+    }
+    if (!exists) {
+      var o = document.createElement('option');
+      o.value = path; o.textContent = name;
+      modelSelect.appendChild(o);
+    }
+    modelSelect.value = path;
+    activeModel.innerHTML =
+      '<div class="name">' + esc(name) + '</div>' +
+      '<div class="size">' + fmtSize(sizeMb) + '</div>';
+    infoModel.textContent = name;
+    notify('Model: ' + name, 'ok');
+  }
+
+  // ===== Chat =====
+  function addMsg(role, text) {
+    var div = document.createElement('div');
+    div.className = 'msg ' + (role === 'user' ? 'user' : 'assistant');
+    var inner = role === 'user'
+      ? '<div class="avatar">B</div>'
+      : '<div class="avatar"><img src="/static/logo.svg" alt="ShadowCat" width="22" height="22"></div>';
+    div.innerHTML =
+      inner +
+      '<div class="body"><div class="role">' + (role === 'user' ? 'Sen' : 'ShadowCat') + '</div>' +
+      '<div>' + esc(text) + '</div></div>';
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+  }
+
+  function send() {
+    var text = (prompt.value || '').trim();
+    if (!text) return;
+    if (!currentModel) { notify('Önce bir model seç.', 'err'); return; }
+    addMsg('user', text);
+    prompt.value = '';
+    notify('Backend henüz bağlanmadı (' + backendSelect.value + ').', 'err');
+  }
+
+  // ===== Event bindings =====
+  var tabs = document.querySelectorAll('.sidebar-tabs .tab');
+  for (var t = 0; t < tabs.length; t++) {
+    tabs[t].addEventListener('click', function () { activateTab(this.getAttribute('data-tab')); });
+  }
+  var pills = document.querySelectorAll('.filter-pill');
+  for (var p = 0; p < pills.length; p++) {
+    pills[p].addEventListener('click', function () {
+      for (var x = 0; x < pills.length; x++) pills[x].classList.remove('active');
+      this.classList.add('active');
+      currentFilter = this.getAttribute('data-filter');
+      loadHub();
+    });
+  }
+  sendBtn.addEventListener('click', send);
+  prompt.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); }
+  });
+  var searchTimer = 0;
+  q.addEventListener('input', function () {
+    clearTimeout(searchTimer);
+    searchTimer = setTimeout(loadHub, 350);
+  });
+  q.addEventListener('keydown', function (e) {
+    if (e.key === 'Enter') { e.preventDefault(); loadHub(); }
+  });
+  fq.addEventListener('input', loadFiles);
+  modelSelect.addEventListener('change', function () {
+    var opt = modelSelect.options[modelSelect.selectedIndex];
+    if (opt && opt.value) {
+      currentModel = { path: opt.value, name: opt.textContent, size_mb: 0 };
+      infoModel.textContent = opt.textContent;
+    }
+  });
+  backendSelect.addEventListener('change', function () {
+    infoBackend.textContent = backendSelect.value;
+  });
+  document.addEventListener('keydown', function (e) {
+    if (e.ctrlKey && e.key === 'k') { e.preventDefault(); q.focus(); }
+    if (e.ctrlKey && e.key === 'l') { e.preventDefault(); chat.innerHTML = ''; }
+    if (e.ctrlKey && e.key === ',') { e.preventDefault(); window.location.href = '/hub/settings'; }
+    if (e.key === 'Escape' && modalBackdrop.classList.contains('show')) closeModal();
+  });
+  modalClose.addEventListener('click', closeModal);
+  modalCancel.addEventListener('click', closeModal);
+  modalBackdrop.addEventListener('click', function (e) {
+    if (e.target === modalBackdrop) closeModal();
+  });
+  modalDownload.addEventListener('click', startDownload);
+
+  // ===== Init =====
+  infoBackend.textContent = backendSelect.value;
+  loadHub();
+  pollDownloads();
+})();
+</script>
+</body>
+</html>

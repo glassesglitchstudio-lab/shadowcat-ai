@@ -1,0 +1,93 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="64" y2="64" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#0f1226"/>
+      <stop offset="1" stop-color="#0a0c1a"/>
+    </linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="64" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5B8DEF"/>
+      <stop offset="0.5" stop-color="#7B6BF0"/>
+      <stop offset="1" stop-color="#A855F7"/>
+    </linearGradient>
+    <linearGradient id="eyes" x1="0" y1="0" x2="64" y2="0" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#5B8DEF"/>
+      <stop offset="1" stop-color="#A855F7"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="32" cy="30" r="20" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7B6BF0" stop-opacity="0.55"/>
+      <stop offset="0.6" stop-color="#5B8DEF" stop-opacity="0.18"/>
+      <stop offset="1" stop-color="#5B8DEF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- arka plan -->
+  <rect x="2" y="2" width="60" height="60" rx="14" fill="url(#bg)"/>
+  <rect x="2" y="2" width="60" height="60" rx="14"
+        fill="none" stroke="rgba(123, 107, 240, 0.3)" stroke-width="1"/>
+
+  <!-- goze parlama (animasyonlu) -->
+  <circle cx="32" cy="30" r="22" fill="url(#glow)">
+    <animate attributeName="r" values="22;26;22" dur="3s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.7;1;0.7" dur="3s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- KEDI KULAKLARI -->
+  <path d="M16 20 L21 12 L26 19 Z" fill="#0f1226" stroke="#5B8DEF" stroke-width="1.2" stroke-linejoin="round" opacity="0.9"/>
+  <path d="M48 20 L43 12 L38 19 Z" fill="#0f1226" stroke="#5B8DEF" stroke-width="1.2" stroke-linejoin="round" opacity="0.9"/>
+  <path d="M19 18 L21.5 14 L24 18 Z" fill="#7B6BF0" opacity="0.5"/>
+  <path d="M45 18 L42.5 14 L40 18 Z" fill="#7B6BF0" opacity="0.5"/>
+
+  <!-- KEDI YUZU -->
+  <path d="M16 22
+           C 16 16, 22 14, 32 14
+           C 42 14, 48 16, 48 22
+           L 48 36
+           C 48 44, 42 48, 32 48
+           C 22 48, 16 44, 16 36 Z"
+        fill="#0f1226" stroke="url(#accent)" stroke-width="1.5" stroke-linejoin="round"/>
+
+  <!-- GOZLUK CERCEVESI -->
+  <circle cx="25" cy="30" r="6" fill="none" stroke="#c4c9d1" stroke-width="1.4"/>
+  <circle cx="39" cy="30" r="6" fill="none" stroke="#c4c9d1" stroke-width="1.4"/>
+  <line x1="31" y1="30" x2="33" y2="30" stroke="#c4c9d1" stroke-width="1.4"/>
+
+  <!-- GLOZLU GOZLER (parlak mavi-mor) -->
+  <g>
+    <circle cx="25" cy="30" r="2.4" fill="url(#eyes)">
+      <animate attributeName="r" values="2.4;2.7;2.4" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="39" cy="30" r="2.4" fill="url(#eyes)">
+      <animate attributeName="r" values="2.4;2.7;2.4" dur="2s" repeatCount="indefinite"/>
+    </circle>
+    <ellipse cx="25" cy="30" rx="0.7" ry="2.0" fill="#0a0c1a"/>
+    <ellipse cx="39" cy="30" rx="0.7" ry="2.0" fill="#0a0c1a"/>
+    <circle cx="24.2" cy="29" r="0.5" fill="#fff" opacity="0.95">
+      <animate attributeName="cx" values="24.2;24.8;24.2" dur="4s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="38.2" cy="29" r="0.5" fill="#fff" opacity="0.95">
+      <animate attributeName="cx" values="38.2;38.8;38.2" dur="4s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- BURUN -->
+  <path d="M31 37 L33 37 L32 38.5 Z" fill="#A855F7"/>
+
+  <!-- AGIZ -->
+  <path d="M32 38.5 L32 40" stroke="#c4c9d1" stroke-width="1" stroke-linecap="round"/>
+  <path d="M32 40 Q 30 41.5 28.5 40.5" stroke="#c4c9d1" stroke-width="1" fill="none" stroke-linecap="round"/>
+  <path d="M32 40 Q 34 41.5 35.5 40.5" stroke="#c4c9d1" stroke-width="1" fill="none" stroke-linecap="round"/>
+
+  <!-- BIYIK ipuclari -->
+  <line x1="14" y1="36" x2="20" y2="36.5" stroke="#5B8DEF" stroke-width="0.7" stroke-linecap="round" opacity="0.5"/>
+  <line x1="14" y1="39" x2="20" y2="38.5" stroke="#5B8DEF" stroke-width="0.7" stroke-linecap="round" opacity="0.5"/>
+  <line x1="50" y1="36" x2="44" y2="36.5" stroke="#5B8DEF" stroke-width="0.7" stroke-linecap="round" opacity="0.5"/>
+  <line x1="50" y1="39" x2="44" y2="38.5" stroke="#5B8DEF" stroke-width="0.7" stroke-linecap="round" opacity="0.5"/>
+
+  <!-- animated sparkle dots -->
+  <circle cx="10" cy="10" r="1.2" fill="#5B8DEF" opacity="0.8">
+    <animate attributeName="opacity" values="0.3;1;0.3" dur="2.5s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="54" cy="54" r="1" fill="#A855F7" opacity="0.7">
+    <animate attributeName="opacity" values="0.2;0.9;0.2" dur="2.5s" begin="0.5s" repeatCount="indefinite"/>
+  </circle>
+</svg>

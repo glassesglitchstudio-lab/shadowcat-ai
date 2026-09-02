@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>ShadowCat Model Hub</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>
+  :root { --bg:#0f1117; --panel:#171a23; --line:#262a36; --text:#e6e9f2;
+          --muted:#8a90a3; --accent:#7c5cff; --tr:#ffb454; --ok:#41cf7c; --err:#ff5c7a; }
+  * { box-sizing:border-box; }
+  body { margin:0; font:14px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+         background:var(--bg); color:var(--text); }
+  header { padding:18px 28px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:18px; }
+  h1 { font-size:18px; margin:0; font-weight:600; }
+  h1 .accent { color:var(--accent); }
+  .sub { color:var(--muted); font-size:12px; }
+  .tabs { display:flex; gap:6px; margin-left:auto; }
+  .tab { background:transparent; border:1px solid var(--line); color:var(--muted);
+         padding:6px 14px; border-radius:6px; cursor:pointer; font:inherit; }
+  .tab.active { background:var(--accent); color:#fff; border-color:var(--accent); }
+  main { padding:24px 28px; max-width:1200px; margin:0 auto; }
+  .searchbar { display:flex; gap:10px; margin-bottom:20px; }
+  .searchbar input { flex:1; background:var(--panel); border:1px solid var(--line); color:var(--text);
+                     padding:10px 14px; border-radius:6px; font:inherit; }
+  .searchbar input:focus { outline:none; border-color:var(--accent); }
+  .searchbar button { background:var(--accent); color:#fff; border:0; padding:10px 22px;
+                       border-radius:6px; cursor:pointer; font:inherit; font-weight:500; }
+  .grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(340px,1fr)); gap:14px; }
+  .card { background:var(--panel); border:1px solid var(--line); border-radius:8px;
+          padding:16px; transition:border-color .15s; }
+  .card:hover { border-color:var(--accent); }
+  .card .id { font-weight:600; font-size:14px; word-break:break-all; margin-bottom:6px; }
+  .badge { display:inline-block; padding:2px 8px; border-radius:4px; font-size:11px;
+           font-weight:500; margin-right:4px; }
+  .badge.tr { background:rgba(255,180,84,.15); color:var(--tr); border:1px solid rgba(255,180,84,.3); }
+  .badge.gguf { background:rgba(124,92,255,.15); color:var(--accent); border:1px solid rgba(124,92,255,.3); }
+  .meta { color:var(--muted); font-size:12px; margin:8px 0; }
+  .files { margin:8px 0; font-size:12px; color:var(--muted); }
+  .files code { color:var(--text); background:rgba(255,255,255,.04); padding:1px 5px; border-radius:3px; }
+  .actions { display:flex; gap:6px; margin-top:10px; }
+  .actions button { flex:1; background:transparent; color:var(--text); border:1px solid var(--line);
+                    padding:7px 10px; border-radius:5px; cursor:pointer; font:inherit; font-size:12px; }
+  .actions button:hover { border-color:var(--accent); color:var(--accent); }
+  .actions button.primary { background:var(--accent); color:#fff; border-color:var(--accent); }
+  .actions button.primary:hover { filter:brightness(1.1); }
+  .empty { text-align:center; color:var(--muted); padding:40px; }
+  .panel-section { display:none; }
+  .panel-section.active { display:block; }
+  .local-row { display:flex; justify-content:space-between; align-items:center; padding:12px;
+                border-bottom:1px solid var(--line); font-size:13px; }
+  .local-row:last-child { border-bottom:0; }
+  .local-row .path { color:var(--muted); font-size:11px; font-family:ui-monospace,monospace; }
+  .toast { position:fixed; bottom:24px; right:24px; background:var(--panel);
+           border:1px solid var(--line); border-left:3px solid var(--accent);
+           padding:12px 18px; border-radius:6px; max-width:380px;
+           box-shadow:0 4px 20px rgba(0,0,0,.4); display:none; }
+  .toast.show { display:block; animation:slidein .2s ease; }
+  .toast.ok { border-left-color:var(--ok); }
+  .toast.err { border-left-color:var(--err); }
+  @keyframes slidein { from { transform:translateY(10px); opacity:0; } to { transform:translateY(0); opacity:1; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>ShadowCat <span class="accent">Model Hub</span></h1>
+  <span class="sub">HuggingFace üzerinden GGUF ara ve indir</span>
+  <div class="tabs">
+    <button class="tab active" data-tab="search">Ara</button>
+    <button class="tab" data-tab="local">Yerel</button>
+  </div>
+</header>
+
+<main>
+  <section class="panel-section active" id="tab-search">
+    <div class="searchbar">
+      <input id="q" placeholder="Model ara (örn: qwen, llama, turkish, 7b)..." autocomplete="off">
+      <button onclick="doSearch()">Ara</button>
+    </div>
+    <div id="results" class="grid"><div class="empty">Aramak için bir şey yaz.</div></div>
+  </section>
+
+  <section class="panel-section" id="tab-local">
+    <h2 style="margin-top:0">Yerel Modeller <span class="sub" id="localCount"></span></h2>
+    <div id="localList"></div>
+  </section>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+let lastSearch = "";
+
+function toast(msg, kind = "ok") {
+  const t = $("#toast");
+  t.textContent = msg;
+  t.className = "toast show " + kind;
+  setTimeout(() => t.className = "toast " + kind, 3500);
+}
+
+function fmt(n) {
+  if (n >= 1e6) return (n/1e6).toFixed(1) + "M";
+  if (n >= 1e3) return (n/1e3).toFixed(1) + "K";
+  return n;
+}
+
+async function doSearch() {
+  const q = $("#q").value.trim();
+  lastSearch = q;
+  const res = $("#results");
+  res.innerHTML = '<div class="empty">Aranıyor...</div>';
+  try {
+    const r = await fetch(`/hub/search?q=${encodeURIComponent(q)}&limit=30&gguf_only=true`);
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.detail || "hata");
+    if (!j.models.length) { res.innerHTML = '<div class="empty">Sonuç yok.</div>'; return; }
+    res.innerHTML = j.models.map(m => `
+      <div class="card">
+        <div class="id">${m.id}</div>
+        <div>${m.is_turkish ? '<span class="badge tr">TR</span>' : ''}<span class="badge gguf">GGUF</span></div>
+        <div class="meta">⬇ ${fmt(m.downloads)} indirme · ❤ ${fmt(m.likes)} · ${m.last_modified ? m.last_modified.slice(0,10) : "—"}</div>
+        ${m.gguf_files.length ? `<div class="files">${m.gguf_files.slice(0,3).map(f => `<code>${f}</code>`).join(" ")}${m.gguf_files.length>3?" +"+ (m.gguf_files.length-3) +" daha":""}</div>` : ""}
+        <div class="actions">
+          <button onclick="downloadModel('${m.id}')">Tüm GGUF'ları indir</button>
+          <button class="primary" onclick="showFiles('${m.id}')">Dosyalar</button>
+        </div>
+      </div>
+    `).join("");
+  } catch (e) {
+    res.innerHTML = `<div class="empty">Hata: ${e.message}</div>`;
+  }
+}
+
+async function showFiles(modelId) {
+  try {
+    const r = await fetch(`/hub/model/${encodeURIComponent(modelId)}`);
+    const j = await r.json();
+    if (!j.gguf_files.length) { toast("GGUF dosyası yok", "err"); return; }
+    const choice = prompt(
+      "İndirmek istediğin dosya numarası:\n\n" +
+      j.gguf_files.map((f,i) => `${i+1}. ${f.name} (${f.size_mb ?? "?"} MB)`).join("\n") +
+      `\n\n0 = tüm GGUF'ları indir`
+    );
+    if (choice === null) return;
+    const idx = parseInt(choice);
+    if (isNaN(idx) || idx < 0 || idx > j.gguf_files.length) { toast("Geçersiz seçim", "err"); return; }
+    const filename = idx === 0 ? null : j.gguf_files[idx-1].name;
+    await downloadModel(modelId, filename);
+  } catch (e) { toast(e.message, "err"); }
+}
+
+async function downloadModel(modelId, filename = null) {
+  toast(`İndirme başlatıldı: ${modelId}${filename ? " / " + filename : ""}`);
+  try {
+    const r = await fetch("/hub/download", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ model_id: modelId, filename })
+    });
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.detail || "hata");
+    toast(`Kuyruğa alındı: ${j.download_id} → ${j.dest}`, "ok");
+  } catch (e) { toast(e.message, "err"); }
+}
+
+async function loadLocal() {
+  const r = await fetch("/hub/local");
+  const j = await r.json();
+  $("#localCount").textContent = j.models.length ? `(${j.models.length} dosya)` : "";
+  $("#localList").innerHTML = j.models.length
+    ? j.models.map(m => `<div class="local-row"><div><div>${m.name}</div><div class="path">${m.path}</div></div><div>${m.size_mb} MB</div></div>`).join("")
+    : '<div class="empty">Henüz yerel model yok.</div>';
+}
+
+// Tabs
+$$(".tab").forEach(btn => btn.addEventListener("click", () => {
+  $$(".tab").forEach(b => b.classList.remove("active"));
+  $$(".panel-section").forEach(p => p.classList.remove("active"));
+  btn.classList.add("active");
+  document.getElementById("tab-" + btn.dataset.tab).classList.add("active");
+  if (btn.dataset.tab === "local") loadLocal();
+}));
+
+// Enter = ara
+$("#q").addEventListener("keydown", e => { if (e.key === "Enter") doSearch(); });
+
+// Baslangic
+doSearch();
+</script>
+</body>
+</html>

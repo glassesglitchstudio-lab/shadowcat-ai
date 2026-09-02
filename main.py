@@ -426,6 +426,26 @@ except Exception as e:
 
     logger.debug(f"Route yükleme hatası: {e}")
 
+# Model Hub (LM Studio benzeri model kesfi/indirme)
+try:
+    from model_hub import router as hub_router
+    app.include_router(hub_router)
+    logger.info("Model Hub (HuggingFace) yüklendi: /hub/*")
+except Exception as e:
+    logger.debug(f"Model Hub yüklenemedi: {e}")
+
+
+@app.get("/hub", response_class=HTMLResponse)
+async def hub_page():
+    """Model Hub web arayuzu."""
+    return FileResponse(os.path.join(BASE_DIR, "web", "templates", "hub.html"))
+
+
+@app.get("/app", response_class=HTMLResponse)
+async def app_page():
+    """ShadowCat Studio: komple LM Studio benzeri arayuz (sidebar + chat)."""
+    return FileResponse(os.path.join(BASE_DIR, "web", "templates", "app.html"))
+
 
 
 # Hibrit Zeka Yapılandırması

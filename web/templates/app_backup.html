@@ -1,0 +1,1078 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>ShadowCat Studio</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Obsidian base, Electric Neon Orange accent - skill kurallari */
+    --bg: #0a0a0b; --bg-2: #111114; --panel: #15151a; --panel-2: #1c1c23;
+    --line: rgba(255,255,255,0.06); --line-2: rgba(255,255,255,0.10);
+    --text: #f0f0f3; --muted: #71717a; --muted-2: #52525b;
+    --accent: #ff6b00; --accent-glow: rgba(255,107,0,0.25);
+    --ok: #10b981; --err: #ef4444; --tr: #fbbf24;
+    --sidebar-w: 340px; --topbar-h: 64px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; }
+  body {
+    font: 14px/1.55 'Outfit', system-ui, -apple-system, sans-serif;
+    background: var(--bg); color: var(--text);
+    font-feature-settings: "ss01", "cv11";
+    -webkit-font-smoothing: antialiased;
+  }
+  code, pre, .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+  /* ---------- Layout (Asymmetric Split-screen) ---------- */
+  .app {
+    display: grid;
+    grid-template-columns: var(--sidebar-w) 1fr;
+    grid-template-rows: var(--topbar-h) 1fr;
+    height: 100vh;
+    transition: grid-template-columns .25s cubic-bezier(.4,0,.2,1);
+  }
+  .app.collapsed { grid-template-columns: 0 1fr; }
+  .app.collapsed .sidebar { transform: translateX(-100%); }
+
+  /* ---------- Topbar ---------- */
+  .topbar {
+    grid-column: 1 / -1; display: flex; align-items: center; gap: 14px;
+    padding: 0 20px; background: var(--bg-2);
+    border-bottom: 1px solid var(--line);
+    position: relative; z-index: 10;
+  }
+  .topbar::after {
+    content: ""; position: absolute; bottom: -1px; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-glow) 30%, var(--accent-glow) 70%, transparent);
+    opacity: .6; pointer-events: none;
+  }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand-mark {
+    width: 28px; height: 28px; border-radius: 6px;
+    background: linear-gradient(135deg, var(--accent), #ff8533);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 14px; color: #0a0a0b;
+    box-shadow: 0 0 20px var(--accent-glow);
+  }
+  .brand-name { font-weight: 600; font-size: 15px; letter-spacing: -.2px; }
+  .brand-tag { color: var(--muted); font-size: 11px; font-family: 'JetBrains Mono', monospace; }
+  .topbar .spacer { flex: 1; }
+  .topbar select, .topbar button {
+    background: var(--panel); color: var(--text);
+    border: 1px solid var(--line-2);
+    padding: 7px 12px; border-radius: 8px;
+    font: 500 13px 'Outfit', sans-serif; cursor: pointer;
+    transition: all .15s;
+  }
+  .topbar select:hover, .topbar button:hover {
+    border-color: var(--accent); color: var(--accent);
+  }
+  .topbar select:focus { outline: none; border-color: var(--accent); }
+  .topbar .toggle {
+    background: transparent; padding: 7px 9px; font-family: 'JetBrains Mono', monospace;
+  }
+  .topbar .new-btn {
+    background: var(--accent); color: #0a0a0b; border-color: var(--accent);
+    font-weight: 600;
+  }
+  .topbar .new-btn:hover { filter: brightness(1.1); color: #0a0a0b; }
+
+  /* ---------- Sidebar ---------- */
+  .sidebar {
+    background: var(--bg-2);
+    border-right: 1px solid var(--line);
+    display: flex; flex-direction: column;
+    transition: transform .25s cubic-bezier(.4,0,.2,1);
+    overflow: hidden;
+  }
+  .sidebar-head { padding: 16px; border-bottom: 1px solid var(--line); }
+  .sidebar-search { position: relative; }
+  .sidebar-search input {
+    width: 100%; background: var(--panel); color: var(--text);
+    border: 1px solid var(--line-2); padding: 10px 14px 10px 36px;
+    border-radius: 8px; font: 14px 'Outfit', sans-serif;
+    transition: border-color .15s;
+  }
+  .sidebar-search input:focus { outline: none; border-color: var(--accent); }
+  .sidebar-search .icon {
+    position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+    color: var(--muted); font-family: 'JetBrains Mono', monospace; font-size: 13px;
+    pointer-events: none;
+  }
+  .sidebar-filters { display: flex; gap: 6px; margin-top: 12px; }
+  .filter-pill {
+    background: transparent; border: 1px solid var(--line-2);
+    color: var(--muted); padding: 4px 12px; border-radius: 999px;
+    font: 500 11px 'Outfit', sans-serif; cursor: pointer;
+    text-transform: uppercase; letter-spacing: .5px;
+    transition: all .15s;
+  }
+  .filter-pill:hover { color: var(--text); border-color: var(--text); }
+  .filter-pill.active {
+    background: var(--accent); color: #0a0a0b; border-color: var(--accent);
+  }
+  .sidebar-list { flex: 1; overflow-y: auto; padding: 12px; }
+  .section-title {
+    color: var(--muted-2); font-size: 10px; text-transform: uppercase;
+    letter-spacing: 1.5px; padding: 12px 8px 8px; font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .model-item {
+    padding: 12px 14px; border-radius: 8px; cursor: pointer;
+    margin-bottom: 6px; border: 1px solid transparent;
+    transition: all .15s;
+    position: relative;
+  }
+  .model-item:hover { background: var(--panel); border-color: var(--line-2); }
+  .model-item.active {
+    background: var(--panel-2);
+    border-color: var(--accent);
+    box-shadow: 0 0 0 1px var(--accent), 0 0 20px var(--accent-glow);
+  }
+  .model-item .name {
+    font-weight: 500; word-break: break-all; font-size: 13px;
+    line-height: 1.35;
+  }
+  .model-item .meta {
+    color: var(--muted); font-size: 11px; margin-top: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .model-item .badges { margin-top: 6px; }
+  .badge {
+    display: inline-block; padding: 2px 7px; border-radius: 4px;
+    font-size: 10px; font-weight: 600; margin-right: 4px;
+    text-transform: uppercase; letter-spacing: .5px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .badge.tr { background: rgba(251,191,36,.12); color: var(--tr); border: 1px solid rgba(251,191,36,.25); }
+  .badge.gguf { background: rgba(255,107,0,.12); color: var(--accent); border: 1px solid rgba(255,107,0,.25); }
+  .badge.local { background: rgba(16,185,129,.12); color: var(--ok); border: 1px solid rgba(16,185,129,.25); }
+  .empty { color: var(--muted); padding: 32px 16px; text-align: center; font-size: 12px; }
+
+  /* ---------- Main / Chat ---------- */
+  .main {
+    display: flex; flex-direction: column; overflow: hidden;
+    background:
+      radial-gradient(ellipse at top right, rgba(255,107,0,.04), transparent 50%),
+      var(--bg);
+  }
+  .chat { flex: 1; overflow-y: auto; padding: 32px 0; }
+  .chat-inner { max-width: 760px; margin: 0 auto; padding: 0 28px; }
+  .msg { margin-bottom: 28px; animation: msgIn .3s cubic-bezier(.16,1,.3,1); }
+  @keyframes msgIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .msg .role {
+    font-size: 10px; color: var(--muted);
+    margin-bottom: 6px; text-transform: uppercase;
+    letter-spacing: 1.5px; font-weight: 600;
+    font-family: 'JetBrains Mono', monospace;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .msg .role::before {
+    content: ""; width: 4px; height: 4px; border-radius: 50%;
+    background: var(--muted);
+  }
+  .msg.user .role::before { background: var(--accent); }
+  .msg.assistant .role { color: var(--accent); }
+  .msg.assistant .role::before { background: var(--accent); box-shadow: 0 0 8px var(--accent); }
+  .msg .bubble {
+    background: var(--panel);
+    padding: 16px 20px; border-radius: 12px;
+    border: 1px solid var(--line);
+    white-space: pre-wrap; word-wrap: break-word;
+    line-height: 1.6;
+    /* Liquid glass effect */
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
+  }
+  .msg.user .bubble { background: var(--panel-2); border-color: var(--line-2); }
+  .msg.assistant .bubble {
+    background: rgba(255,107,0,.03);
+    border-color: rgba(255,107,0,.15);
+  }
+  .msg .bubble code {
+    background: rgba(255,255,255,.06); padding: 2px 6px;
+    border-radius: 4px; font-size: 13px;
+  }
+  .msg .bubble pre {
+    background: #050506; padding: 14px 16px; border-radius: 8px;
+    overflow-x: auto; font-size: 13px;
+    border: 1px solid var(--line);
+    margin: 12px 0;
+  }
+  .msg .bubble pre code { background: transparent; padding: 0; }
+  .msg .bubble strong { color: var(--accent); font-weight: 600; }
+
+  /* ---------- Composer ---------- */
+  .composer {
+    border-top: 1px solid var(--line);
+    padding: 16px 20px 20px;
+    background: var(--bg-2);
+    position: relative;
+  }
+  .composer::before {
+    content: ""; position: absolute; top: -1px; left: 0; right: 0; height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent-glow) 50%, transparent);
+    opacity: .4;
+  }
+  .composer-inner {
+    max-width: 760px; margin: 0 auto;
+    display: flex; gap: 10px; align-items: flex-end;
+  }
+  .composer textarea {
+    flex: 1; background: var(--panel); color: var(--text);
+    border: 1px solid var(--line-2);
+    padding: 12px 16px; border-radius: 10px;
+    font: 14px 'Outfit', sans-serif;
+    resize: none; min-height: 46px; max-height: 220px;
+    transition: border-color .15s;
+  }
+  .composer textarea:focus { outline: none; border-color: var(--accent); }
+  .composer button {
+    background: var(--accent); color: #0a0a0b; border: 0;
+    padding: 0 22px; height: 46px;
+    border-radius: 10px; cursor: pointer;
+    font: 600 14px 'Outfit', sans-serif;
+    transition: all .15s;
+  }
+  .composer button:hover { filter: brightness(1.1); transform: translateY(-1px); }
+  .composer button:active { transform: translateY(1px) scale(.98); }
+  .composer button:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+  .composer .hint {
+    color: var(--muted); font-size: 11px; margin-top: 8px;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: .3px;
+  }
+
+  /* ---------- Toast ---------- */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--panel);
+    border: 1px solid var(--line-2);
+    border-left: 3px solid var(--accent);
+    padding: 12px 18px; border-radius: 8px;
+    max-width: 380px;
+    box-shadow: 0 8px 32px rgba(0,0,0,.5), inset 0 1px 0 rgba(255,255,255,.05);
+    display: none; z-index: 100;
+    font-size: 13px;
+  }
+  .toast.show { display: block; animation: toastIn .25s cubic-bezier(.16,1,.3,1); }
+  .toast.ok { border-left-color: var(--ok); }
+  .toast.err { border-left-color: var(--err); }
+  @keyframes toastIn {
+    from { transform: translateY(12px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  /* ---------- Scrollbar ---------- */
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 768px) {
+    .app { grid-template-columns: 0 1fr; }
+    .sidebar { position: absolute; top: var(--topbar-h); bottom: 0; left: 0;
+               width: var(--sidebar-w); z-index: 50; }
+    .app.mobile-open .sidebar { transform: translateX(0); box-shadow: 8px 0 32px rgba(0,0,0,.5); }
+  }
+
+  /* ---------- Sidebar tabs (Hub / Files) ---------- */
+  .sidebar-tabs {
+    display: flex; border-bottom: 1px solid var(--line);
+    background: var(--bg-2);
+  }
+  .sidebar-tabs .tab {
+    flex: 1; padding: 12px 0; background: transparent; border: 0;
+    color: var(--muted); font-family: 'Outfit', sans-serif;
+    font-size: 12px; font-weight: 500; letter-spacing: .04em;
+    text-transform: uppercase; cursor: pointer;
+    border-bottom: 2px solid transparent; transition: all .15s;
+  }
+  .sidebar-tabs .tab:hover { color: var(--fg); }
+  .sidebar-tabs .tab.active {
+    color: var(--accent); border-bottom-color: var(--accent);
+  }
+  .sidebar-pane { display: flex; flex-direction: column; flex: 1; min-height: 0; }
+
+  /* ---------- Files pane ---------- */
+  .sidebar-section-title {
+    font-size: 13px; font-weight: 600; color: var(--fg);
+    margin-bottom: 4px;
+  }
+  .sidebar-sub {
+    font-size: 10px; color: var(--muted-2);
+    font-family: 'JetBrains Mono', monospace;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    margin-bottom: 12px; opacity: .7;
+  }
+  .sidebar-actions {
+    display: flex; gap: 6px; margin-top: 4px;
+  }
+  .action-btn {
+    flex: 1; padding: 6px 8px; background: transparent;
+    border: 1px solid var(--line); border-radius: 6px;
+    color: var(--muted); font-family: 'Outfit', sans-serif;
+    font-size: 11px; cursor: pointer; transition: all .12s;
+  }
+  .action-btn:hover {
+    border-color: var(--accent); color: var(--accent);
+    background: rgba(255, 107, 0, .04);
+  }
+  .action-btn:active { transform: translateY(1px) scale(.98); }
+
+  /* LM Studio tarzi yerel model karti */
+  .file-card {
+    padding: 12px; border: 1px solid var(--line);
+    border-radius: 8px; margin-bottom: 8px; cursor: pointer;
+    transition: all .15s; background: var(--bg-2);
+  }
+  .file-card:hover {
+    border-color: var(--accent);
+    background: var(--bg-3);
+    transform: translateY(-1px);
+  }
+  .file-card.active {
+    border-color: var(--accent);
+    background: rgba(255, 107, 0, .08);
+  }
+  .file-card .fc-name {
+    font-size: 12px; font-weight: 600; color: var(--fg);
+    margin-bottom: 4px; word-break: break-all;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .file-card .fc-meta {
+    display: flex; gap: 8px; font-size: 10px; color: var(--muted-2);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .file-card .fc-meta span { display: flex; align-items: center; gap: 3px; }
+  .file-card .fc-quant {
+    display: inline-block; padding: 1px 6px; border-radius: 3px;
+    background: rgba(255, 107, 0, .15); color: var(--accent);
+    font-size: 9px; font-weight: 600; letter-spacing: .04em;
+  }
+
+  /* ---------- Topbar settings button ---------- */
+  .icon-btn {
+    width: 32px; height: 32px; background: transparent;
+    border: 1px solid var(--line); border-radius: 6px;
+    color: var(--muted); font-size: 14px; cursor: pointer;
+    transition: all .12s; display: flex; align-items: center; justify-content: center;
+  }
+  .icon-btn:hover {
+    border-color: var(--accent); color: var(--accent);
+  }
+  .icon-btn:active { transform: translateY(1px) scale(.96); }
+
+  /* Topbar'da dar ekranda bazi ogeleri gizle */
+  @media (max-width: 1100px) {
+    .topbar #ctxSelect { display: none; }
+  }
+  @media (max-width: 900px) {
+    .topbar #backendSelect { display: none; }
+  }
+  @media (max-width: 720px) {
+    .topbar #modelSelect { max-width: 120px; }
+  }
+
+  /* ---------- Settings modal ---------- */
+  .modal-back {
+    position: fixed; inset: 0; background: rgba(0,0,0,.65);
+    backdrop-filter: blur(8px); z-index: 100;
+    display: flex; align-items: center; justify-content: center;
+    animation: fadeIn .15s ease;
+  }
+  @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+  .modal {
+    width: 480px; max-width: 92vw;
+    background: var(--bg-1); border: 1px solid var(--line);
+    border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.5);
+    overflow: hidden;
+    animation: slideUp .2s ease;
+  }
+  @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+  .modal-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px; border-bottom: 1px solid var(--line);
+  }
+  .modal-title {
+    font-size: 14px; font-weight: 600; letter-spacing: .02em;
+  }
+  .modal-body { padding: 20px; }
+  .modal-foot {
+    display: flex; gap: 8px; align-items: center;
+    padding: 12px 20px; border-top: 1px solid var(--line);
+    background: var(--bg-2);
+  }
+  .field { display: block; }
+  .field-label {
+    display: block; font-size: 11px; font-weight: 600;
+    color: var(--fg); text-transform: uppercase; letter-spacing: .06em;
+    margin-bottom: 4px;
+  }
+  .field-hint {
+    display: block; font-size: 11px; color: var(--muted);
+    margin-bottom: 10px; line-height: 1.5;
+  }
+  .field .row { display: flex; gap: 6px; }
+  .field input {
+    flex: 1; padding: 8px 10px; background: var(--bg-2);
+    border: 1px solid var(--line); border-radius: 6px;
+    color: var(--fg); font-family: 'JetBrains Mono', monospace;
+    font-size: 12px; outline: none;
+  }
+  .field input:focus { border-color: var(--accent); }
+  .field-meta {
+    margin-top: 6px; font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--muted-2);
+  }
+  .field-meta.ok { color: var(--accent); }
+  .field-meta.err { color: #ff5050; }
+
+  /* Modal footer butonlari - .new-btn cakismasini onle */
+  .modal-foot .btn {
+    padding: 8px 14px; border-radius: 6px; cursor: pointer;
+    font-family: 'Outfit', sans-serif; font-size: 12px; font-weight: 500;
+    letter-spacing: .02em; transition: all .12s;
+    border: 1px solid var(--line);
+    background: transparent; color: var(--muted);
+  }
+  .modal-foot .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .modal-foot .btn:active { transform: translateY(1px) scale(.98); }
+  .modal-foot .btn-primary {
+    background: var(--accent); color: #0a0a0a; border-color: var(--accent);
+    font-weight: 600;
+  }
+  .modal-foot .btn-primary:hover {
+    background: #ff8533; border-color: #ff8533; color: #0a0a0a;
+    box-shadow: 0 0 0 3px rgba(255, 107, 0, .15);
+  }
+  .modal-foot .btn-danger { color: #ff5050; border-color: rgba(255,80,80,.3); }
+  .modal-foot .btn-danger:hover { color: #fff; background: #ff5050; border-color: #ff5050; }
+</style>
+</head>
+<body>
+
+<div class="app" id="app">
+  <!-- Topbar -->
+  <header class="topbar">
+    <button class="toggle" id="toggleBtn" title="Sidebar (Ctrl+B)">≡</button>
+    <div class="brand">
+      <div class="brand-mark">S</div>
+      <div>
+        <div class="brand-name">ShadowCat</div>
+        <div class="brand-tag">studio.local</div>
+      </div>
+    </div>
+    <div class="spacer"></div>
+    <select id="modelSelect" title="Aktif model">
+      <option value="">— model seç —</option>
+    </select>
+    <select id="backendSelect" title="Backend">
+      <option value="auto">AUTO · NPU&gt;GPU&gt;CPU</option>
+      <option value="gpu">GPU</option>
+      <option value="cpu">CPU</option>
+    </select>
+    <select id="ctxSelect" title="Bağlam boyutu">
+      <option value="512">512</option>
+      <option value="1024">1K</option>
+      <option value="2048" selected>2K</option>
+      <option value="4096">4K</option>
+    </select>
+    <button class="icon-btn" id="settingsBtn" title="Ayarlar (Ctrl+,)">⚙</button>
+    <button class="new-btn" id="newChatBtn">+ Yeni</button>
+  </header>
+
+  <!-- Sidebar: Hub + Files (LM Studio tarzi 2 sekme) -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-tabs">
+      <button class="tab active" data-tab="hub">Hub</button>
+      <button class="tab" data-tab="files">Files</button>
+    </div>
+
+    <div class="sidebar-pane" data-pane="hub">
+      <div class="sidebar-head">
+        <div class="sidebar-search">
+          <span class="icon">⌕</span>
+          <input id="q" placeholder="Model ara... (Ctrl+K)" autocomplete="off">
+        </div>
+        <div class="sidebar-filters">
+          <button class="filter-pill active" data-filter="all">Tümü</button>
+          <button class="filter-pill" data-filter="tr">Türkçe</button>
+          <button class="filter-pill" data-filter="gguf">GGUF</button>
+        </div>
+      </div>
+      <div class="sidebar-list" id="results">
+        <div class="empty">Yükleniyor...</div>
+      </div>
+    </div>
+
+    <div class="sidebar-pane" data-pane="files" hidden>
+      <div class="sidebar-head">
+        <div class="sidebar-section-title">Yerel Modeller</div>
+        <div class="sidebar-sub" id="localDirHint">—</div>
+        <div class="sidebar-actions">
+          <button class="action-btn" id="refreshFiles">Yenile</button>
+          <button class="action-btn" id="openHub">+ Hub'dan indir</button>
+        </div>
+      </div>
+      <div class="sidebar-list" id="localModels">
+        <div class="empty">Henüz model yok. Hub sekmesinden GGUF indir veya yolu ayarlardan değiştir.</div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Main: Chat -->
+  <main class="main">
+    <div class="chat" id="chat">
+      <div class="chat-inner" id="chatInner">
+        <div class="empty" style="padding:120px 0">
+          <div style="font-size:18px;font-weight:600;margin-bottom:8px">Yerel LLM stüdyosu</div>
+          <div>Sol panelden bir model seç, sonra bir şey sor.<br>
+          <span style="color:var(--muted-2);font-size:11px;font-family:'JetBrains Mono',monospace">
+            Enter ile gönder · Shift+Enter yeni satır · Ctrl+B sidebar · Ctrl+K arama
+          </span></div>
+        </div>
+      </div>
+    </div>
+    <div class="composer">
+      <div class="composer-inner">
+        <textarea id="prompt" rows="1" placeholder="Bir şey sor..."></textarea>
+        <button id="sendBtn">Gönder</button>
+      </div>
+      <div class="hint" id="hint">model: yok · backend: auto · ctx: 2K</div>
+    </div>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- Settings modal - MINIMAL v3 -->
+<div class="modal-back" id="settingsModal" hidden>
+  <div class="modal" id="settingsBox">
+    <div class="modal-head">
+      <div class="modal-title">Ayarlar</div>
+      <button class="icon-btn" id="closeSettingsX" type="button">X</button>
+    </div>
+    <div class="modal-body">
+      <label class="field">
+        <span class="field-label">Model dizini</span>
+        <span class="field-hint">GGUF dosyalarinin bulundugu klasor. Istedigin yolu yaz (C:\, D:\, USB).</span>
+        <div class="row">
+          <input id="modelsDirInput" type="text" placeholder="orn. C:\Users\Ben\Models" spellcheck="false">
+        </div>
+        <div class="field-meta" id="modelsDirMeta">-</div>
+      </label>
+    </div>
+    <div class="modal-foot">
+      <button class="btn btn-danger" id="resetDirBtn" type="button">Varsayilana don</button>
+      <div class="spacer" style="flex:1"></div>
+      <button class="btn" id="cancelSettings" type="button">Iptal</button>
+      <button class="btn btn-primary" id="saveSettings" type="button">Kaydet</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = s => document.querySelector(s);
+const $$ = s => document.querySelectorAll(s);
+let currentModel = null;
+let busy = false;
+let activeFilter = "all";
+
+function toast(msg, kind = "ok") {
+  const t = $("#toast");
+  t.textContent = msg;
+  t.className = "toast show " + kind;
+  clearTimeout(t._t);
+  t._t = setTimeout(() => t.className = "toast", 3500);
+}
+
+function fmt(n) {
+  if (n >= 1e6) return (n/1e6).toFixed(1) + "M";
+  if (n >= 1e3) return (n/1e3).toFixed(1) + "K";
+  return String(n);
+}
+
+function escape(s) {
+  return (s || "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+}
+
+function renderMarkdownLite(s) {
+  s = escape(s);
+  s = s.replace(/```(\w*)\n?([\s\S]*?)```/g, (m, lang, c) => `<pre><code class="language-${lang}">${c.trim()}</code></pre>`);
+  s = s.replace(/`([^`]+)`/g, "<code>$1</code>");
+  s = s.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+  return s;
+}
+
+// ---------- Sidebar tabs ----------
+function activateTab(name) {
+  document.querySelectorAll(".sidebar-tabs .tab").forEach(t => t.classList.toggle("active", t.dataset.tab === name));
+  document.querySelectorAll(".sidebar-pane").forEach(p => p.hidden = p.dataset.pane !== name);
+  if (name === "files") loadLocalModels();
+}
+
+// ---------- Files pane (yerel modeller) ----------
+async function loadLocalModels() {
+  const list = $("#localModels");
+  const hint = $("#localDirHint");
+  list.innerHTML = '<div class="empty">Yukleniyor...</div>';
+  try {
+    const r = await fetch("/hub/local");
+    const j = await r.json();
+    list.innerHTML = "";
+    if (!j.models || !j.models.length) {
+      hint.textContent = "—";
+      const e = document.createElement("div");
+      e.className = "empty";
+      e.textContent = "Henuz model yok. Hub sekmesinden GGUF indir veya yolu ayarlardan degistir.";
+      list.appendChild(e);
+      return;
+    }
+    // toplam boyut
+    const total = j.models.reduce((a, m) => a + (m.size_mb || 0), 0);
+    hint.textContent = `${j.models.length} model · ${(total/1024).toFixed(2)} GB`;
+
+    j.models.forEach(m => {
+      const card = document.createElement("div");
+      card.className = "file-card";
+      card.dataset.modelPath = m.path;
+      // quant tipi dosya adindan cikar (Q4_K_M, Q8_0, vs.)
+      const quant = (m.name.match(/(Q\d+(_[A-Z]+)?(_\d+)?)/i) || [,"unknown"])[1].toUpperCase();
+      card.innerHTML = `
+        <div class="fc-name">${escape(m.name)}</div>
+        <div class="fc-meta">
+          <span class="fc-quant">${escape(quant)}</span>
+          <span>${(m.size_mb/1024).toFixed(2)} GB</span>
+          <span>${escape(m.parent)}</span>
+        </div>
+      `;
+      card.onclick = () => selectModel(m.path, m.name, card);
+      list.appendChild(card);
+    });
+  } catch (e) {
+    list.innerHTML = `<div class="empty">Hata: ${escape(e.message)}</div>`;
+  }
+}
+
+async function searchModels(q = "") {
+  const r = await fetch(`/hub/search?q=${encodeURIComponent(q)}&limit=30&gguf_only=true`);
+  return (await r.json()).models || [];
+}
+
+function applyFilter(models) {
+  if (activeFilter === "tr") return models.filter(m => m.is_turkish);
+  if (activeFilter === "gguf") return models.filter(m => m.gguf_files.length);
+  return models;
+}
+
+async function doSearch() {
+  $("#results").querySelectorAll(".section-title, .empty").forEach(e => e.remove());
+  $("#results").querySelectorAll(".model-item, .local-section").forEach(e => e.remove());
+  // Yerel modeller ustte goster (Hub icinde)
+  await loadLocalIntoHub();
+  const q = $("#q").value.trim();
+  const all = await searchModels(q);
+  const filtered = applyFilter(all);
+  const list = $("#results");
+
+  if (!filtered.length) {
+    const e = document.createElement("div");
+    e.className = "empty"; e.textContent = "Sonuc yok.";
+    list.appendChild(e); return;
+  }
+
+  const sec = document.createElement("div");
+  sec.innerHTML = `<div class="section-title">HuggingFace · ${filtered.length}</div>`;
+  filtered.forEach(m => {
+    const el = document.createElement("div");
+    el.className = "model-item";
+    el.dataset.modelId = m.id;
+    el.innerHTML = `
+      <div class="name mono">${escape(m.id)}</div>
+      <div class="meta">↓ ${fmt(m.downloads)} · ❤ ${fmt(m.likes)}</div>
+      <div class="badges">
+        ${m.is_turkish ? '<span class="badge tr">TR</span>' : ''}
+        ${m.gguf_files.length ? `<span class="badge gguf">${m.gguf_files.length} GGUF</span>` : ''}
+      </div>
+    `;
+    el.onclick = () => onModelClick(m, el);
+    sec.appendChild(el);
+  });
+  list.appendChild(sec);
+}
+
+// Hub'in basinda yerel modelleri goster (LM Studio tarzi "My Models" + "Hub" ayrimi)
+async function loadLocalIntoHub() {
+  const list = $("#results");
+  let j;
+  try {
+    const r = await fetch("/hub/local");
+    j = await r.json();
+  } catch { return; }
+  if (!j.models || !j.models.length) return;
+  const sec = document.createElement("div");
+  sec.className = "local-section";
+  sec.innerHTML = `<div class="section-title">Yerel · ${j.models.length}</div>`;
+  j.models.forEach(m => {
+    const el = document.createElement("div");
+    el.className = "model-item";
+    el.dataset.modelPath = m.path;
+    el.innerHTML = `
+      <div class="name mono">${escape(m.name)}</div>
+      <div class="meta">${(m.size_mb/1024).toFixed(2)} GB · ${escape(m.parent)}</div>
+      <div class="badges"><span class="badge local">yerel</span></div>
+    `;
+    el.onclick = () => selectModel(m.path, m.name, el);
+    sec.appendChild(el);
+  });
+  list.prepend(sec);
+}
+
+async function onModelClick(m, el) {
+  if (m.gguf_files.length === 0) { toast("Bu modelde GGUF yok", "err"); return; }
+  if (m.gguf_files.length === 1) { downloadModel(m.id, m.gguf_files[0]); return; }
+  const choice = prompt(
+    "İndirilecek dosya:\n\n" +
+    m.gguf_files.map((f, i) => `${i+1}. ${f}`).join("\n") +
+    `\n\n0 = tüm GGUF'ları indir`
+  );
+  if (choice === null) return;
+  const idx = parseInt(choice);
+  if (isNaN(idx) || idx < 0 || idx > m.gguf_files.length) { toast("Geçersiz", "err"); return; }
+  downloadModel(m.id, idx === 0 ? null : m.gguf_files[idx-1]);
+}
+
+async function downloadModel(modelId, filename) {
+  toast(`İndirme başladı: ${modelId}`);
+  try {
+    const r = await fetch("/hub/download", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ model_id: modelId, filename })
+    });
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.detail || "hata");
+    toast(`Sıraya alındı: ${j.download_id}`, "ok");
+  } catch (e) { toast(e.message, "err"); }
+}
+
+function selectModel(path, name, el) {
+  $$(".model-item, .file-card").forEach(x => x.classList.remove("active"));
+  el.classList.add("active");
+  currentModel = { path, name };
+  const sel = $("#modelSelect");
+  if (![...sel.options].some(o => o.value === path)) {
+    const o = document.createElement("option");
+    o.value = path; o.textContent = name;
+    sel.appendChild(o);
+  }
+  sel.value = path;
+  updateHint();
+  toast(`Model: ${name}`, "ok");
+}
+
+function updateHint() {
+  const m = currentModel ? currentModel.name : "yok";
+  const b = $("#backendSelect").value.toUpperCase();
+  const c = $("#ctxSelect").value + "K";
+  $("#hint").textContent = `model: ${m} · backend: ${b} · ctx: ${c}`;
+}
+
+// ---------- Chat ----------
+function appendMsg(role, text) {
+  const empty = $("#chatInner .empty");
+  if (empty) empty.remove();
+  const wrap = document.createElement("div");
+  wrap.className = "msg " + role;
+  wrap.innerHTML = `
+    <div class="role">${role === "user" ? "Sen" : "ShadowCat"}</div>
+    <div class="bubble">${renderMarkdownLite(text)}</div>
+  `;
+  $("#chatInner").appendChild(wrap);
+  $("#chat").scrollTop = $("#chat").scrollHeight;
+  return wrap;
+}
+
+function appendStream(role) {
+  const wrap = appendMsg(role, "");
+  const bubble = wrap.querySelector(".bubble");
+  return { wrap, bubble,
+           set(t) { bubble.innerHTML = renderMarkdownLite(t); $("#chat").scrollTop = $("#chat").scrollHeight; } };
+}
+
+async function send() {
+  if (busy) return;
+  const prompt = $("#prompt").value.trim();
+  if (!prompt) return;
+  if (!currentModel) { toast("Önce bir model seç", "err"); return; }
+
+  busy = true; $("#sendBtn").disabled = true;
+  appendMsg("user", prompt);
+  $("#prompt").value = ""; $("#prompt").style.height = "auto";
+
+  const stream = appendStream("assistant");
+  stream.set("Düşünüyor...");
+
+  try {
+    const r = await fetch("/api/generate", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model_path: currentModel.path,
+        prompt, backend: $("#backendSelect").value,
+        ctx: parseInt($("#ctxSelect").value), stream: false
+      })
+    });
+    if (!r.ok) {
+      const t = await r.text();
+      stream.set("Backend henüz bağlı değil.\n\nModel: " + currentModel.name +
+                 "\nSunucu: " + t.slice(0, 200) +
+                 "\n\nSonraki: /api/generate → llama.cpp veya Ollama.");
+      return;
+    }
+    const j = await r.json();
+    stream.set(j.response || j.text || "(boş yanıt)");
+  } catch (e) {
+    stream.set("Hata: " + e.message);
+  } finally {
+    busy = false; $("#sendBtn").disabled = false;
+  }
+}
+
+// ---------- Events ----------
+$$(".sidebar-tabs .tab").forEach(t => t.onclick = () => activateTab(t.dataset.tab));
+$("#refreshFiles").onclick = loadLocalModels;
+$("#openHub").onclick = () => activateTab("hub");
+
+// ---------- Settings modal (minimal v3) ----------
+function _settings_bind() {
+  // Butonlari sadece bir kez bagla, mod her acildiginda yeniden baglamaya gerek yok
+  const btnSave = document.getElementById("saveSettings");
+  const btnCancel = document.getElementById("cancelSettings");
+  const btnClose = document.getElementById("closeSettingsX");
+  const btnReset = document.getElementById("resetDirBtn");
+
+  if (btnSave && !btnSave._bound) {
+    btnSave.addEventListener("click", function () {
+      _settings_save();
+    });
+    btnSave._bound = true;
+  }
+  if (btnCancel && !btnCancel._bound) {
+    btnCancel.addEventListener("click", function () {
+      document.getElementById("settingsModal").hidden = true;
+    });
+    btnCancel._bound = true;
+  }
+  if (btnClose && !btnClose._bound) {
+    btnClose.addEventListener("click", function () {
+      document.getElementById("settingsModal").hidden = true;
+    });
+    btnClose._bound = true;
+  }
+  if (btnReset && !btnReset._bound) {
+    btnReset.addEventListener("click", async function () {
+      if (!confirm("Varsayilan dizine donmek istedigine emin misin?")) return;
+      try {
+        const r = await fetch("/hub/settings");
+        const j = await r.json();
+        document.getElementById("modelsDirInput").value = j.default_dir;
+        _settings_save();
+      } catch (e) {
+        console.error("reset hatasi", e);
+        alert("Hata: " + e.message);
+      }
+    });
+    btnReset._bound = true;
+  }
+
+  // Backdrop'a tiklayinca kapat (sadece backdrop, icerige tiklama kapanmasin)
+  const back = document.getElementById("settingsModal");
+  if (back && !back._bound) {
+    back.addEventListener("click", function (e) {
+      if (e.target === back) back.hidden = true;
+    });
+    back._bound = true;
+  }
+}
+
+async function _settings_open() {
+  const back = document.getElementById("settingsModal");
+  const inp = document.getElementById("modelsDirInput");
+  const meta = document.getElementById("modelsDirMeta");
+  if (!back || !inp || !meta) {
+    alert("Modal elemani bulunamadi. Sayfayi yenile.");
+    return;
+  }
+  _settings_bind();
+  back.hidden = false;
+  meta.textContent = "Yukleniyor...";
+  meta.className = "field-meta";
+  try {
+    const r = await fetch("/hub/settings");
+    const j = await r.json();
+    inp.value = j.models_dir || "";
+    if (j.models_dir_exists) {
+      meta.textContent = "OK - " + j.models_dir;
+      meta.className = "field-meta ok";
+    } else {
+      meta.textContent = "Klasor yok, olusturulacak";
+      meta.className = "field-meta";
+    }
+  } catch (e) {
+    meta.textContent = "Hata: " + e.message;
+    meta.className = "field-meta err";
+  }
+  setTimeout(function () { inp.focus(); }, 50);
+}
+
+async function _settings_save() {
+  const inp = document.getElementById("modelsDirInput");
+  const meta = document.getElementById("modelsDirMeta");
+  const back = document.getElementById("settingsModal");
+  if (!inp) { alert("input yok"); return; }
+  const val = (inp.value || "").trim();
+  if (!val) {
+    meta.textContent = "Bos olamaz";
+    meta.className = "field-meta err";
+    return;
+  }
+  meta.textContent = "Kaydediliyor...";
+  meta.className = "field-meta";
+  try {
+    const r = await fetch("/hub/settings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ models_dir: val })
+    });
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.detail || "hata");
+    meta.textContent = "Kaydedildi: " + j.models_dir;
+    meta.className = "field-meta ok";
+    // Once kapat, sonra yenile
+    back.hidden = true;
+    // Files sekmesini aninda guncelle
+    try { await _settings_refresh_local(); } catch (e) { console.error(e); }
+    // Hub sekmesini de guncelle (ust kisma Yerel bolumu ekleniyor)
+    try { await doSearch(); } catch (e) { console.error(e); }
+  } catch (e) {
+    meta.textContent = "Hata: " + e.message;
+    meta.className = "field-meta err";
+  }
+}
+
+async function _settings_refresh_local() {
+  const list = document.getElementById("localModels");
+  const hint = document.getElementById("localDirHint");
+  if (!list) return;
+  list.innerHTML = '<div class="empty">Yukleniyor...</div>';
+  try {
+    const r = await fetch("/hub/local");
+    const j = await r.json();
+    list.innerHTML = "";
+    if (!j.models || !j.models.length) {
+      if (hint) hint.textContent = "-";
+      const e = document.createElement("div");
+      e.className = "empty";
+      e.textContent = "Henuz model yok.";
+      list.appendChild(e);
+      return;
+    }
+    const total = j.models.reduce(function (a, m) { return a + (m.size_mb || 0); }, 0);
+    if (hint) hint.textContent = j.models.length + " model - " + (total/1024).toFixed(2) + " GB";
+    j.models.forEach(function (m) {
+      const card = document.createElement("div");
+      card.className = "file-card";
+      card.dataset.modelPath = m.path;
+      const quant = (m.name.match(/(Q\d+(_[A-Z]+)?(_\d+)?)/i) || [,"?"])[1].toUpperCase();
+      card.innerHTML =
+        '<div class="fc-name">' + escape(m.name) + '</div>' +
+        '<div class="fc-meta">' +
+          '<span class="fc-quant">' + escape(quant) + '</span>' +
+          '<span>' + (m.size_mb/1024).toFixed(2) + ' GB</span>' +
+          '<span>' + escape(m.parent) + '</span>' +
+        '</div>';
+      card.onclick = function () {
+        selectModel(m.path, m.name, card);
+      };
+      list.appendChild(card);
+    });
+  } catch (e) {
+    list.innerHTML = '<div class="empty">Hata: ' + escape(e.message) + '</div>';
+  }
+}
+
+$("#settingsBtn").onclick = function () { window.location.href = "/hub/settings"; };
+$("#resetDirBtn").onclick = async function () {
+  if (!confirm("Varsayilan dizine donmek istedigine emin misin?")) return;
+  // Bos gondermek yerine env-default'i temsilen DEFAULTS_PATH kullansin:
+  // Backend'e "reset" sinyali gondermek icin bos models_dir yerine default'u tekrar yaz
+  try {
+    const r = await fetch("/hub/settings");
+    const j = await r.json();
+    $("#modelsDirInput").value = j.default_dir;
+    saveSettings();
+  } catch (e) { toast(e.message, "err"); }
+};
+$("#settingsModal").onclick = function (e) {
+  if (e.target.id === "settingsModal") $("#settingsModal").hidden = true;
+};
+
+$("#searchBtn") && ($("#searchBtn").onclick = doSearch);
+$("#q").addEventListener("keydown", e => { if (e.key === "Enter") doSearch(); });
+$$(".filter-pill").forEach(b => b.onclick = () => {
+  $$(".filter-pill").forEach(x => x.classList.remove("active"));
+  b.classList.add("active");
+  activeFilter = b.dataset.filter;
+  doSearch();
+});
+$("#modelSelect").onchange = e => {
+  if (!e.target.value) return;
+  currentModel = { path: e.target.value, name: e.target.options[e.target.selectedIndex].text };
+  updateHint();
+};
+$("#backendSelect").onchange = updateHint;
+$("#ctxSelect").onchange = updateHint;
+$("#sendBtn").onclick = send;
+$("#prompt").addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); }
+});
+$("#newChatBtn").onclick = () => {
+  $("#chatInner").innerHTML = '<div class="empty" style="padding:120px 0"><div style="font-size:18px;font-weight:600;margin-bottom:8px">Yeni sohbet</div></div>';
+};
+$("#toggleBtn").onclick = () => {
+  const app = $("#app");
+  if (window.innerWidth <= 768) app.classList.toggle("mobile-open");
+  else app.classList.toggle("collapsed");
+};
+
+document.addEventListener("keydown", e => {
+  if (e.ctrlKey && e.key === "b") {
+    e.preventDefault();
+    const app = $("#app");
+    if (window.innerWidth <= 768) app.classList.toggle("mobile-open");
+    else app.classList.toggle("collapsed");
+  }
+  if (e.ctrlKey && e.key === "k") { e.preventDefault(); $("#q").focus(); }
+  if (e.ctrlKey && e.key === ",") { e.preventDefault(); window.location.href = "/hub/settings"; }
+  if (e.key === "Escape" && !$("#settingsModal").hidden) $("#settingsModal").hidden = true;
+});
+
+$("#prompt").addEventListener("input", e => {
+  e.target.style.height = "auto";
+  e.target.style.height = Math.min(e.target.scrollHeight, 220) + "px";
+});
+
+doSearch();
+updateHint();
+</script>
+</body>
+</html>

@@ -1,0 +1,82 @@
+{
+  "matmul_fp16_1024": {
+    "ms": 0.086,
+    "tflops": 25.04
+  },
+  "matmul_fp16_2048": {
+    "ms": 0.652,
+    "tflops": 26.35
+  },
+  "matmul_fp16_3072": {
+    "ms": 2.25,
+    "tflops": 25.77
+  },
+  "matmul_fp16_4096": {
+    "ms": 5.385,
+    "tflops": 25.52
+  },
+  "matmul_fp16_5120": {
+    "ms": 10.412,
+    "tflops": 25.78
+  },
+  "h2d_100MB": {
+    "ms": 18.6,
+    "gbs": 5.3
+  },
+  "h2d_500MB": {
+    "ms": 103.1,
+    "gbs": 4.7
+  },
+  "h2d_1000MB": {
+    "ms": 300.4,
+    "gbs": 3.3
+  },
+  "h2d_3000MB": {
+    "ms": 998.0,
+    "gbs": 2.9
+  },
+  "h2d_6000MB": {
+    "ms": 3154.6,
+    "gbs": 1.9
+  },
+  "layer_512_float16": {
+    "ms_per_layer": 1.76,
+    "ms_36layers": 63.3,
+    "est_tps": 15.8
+  },
+  "layer_512_bfloat16": {
+    "ms_per_layer": 1.69,
+    "ms_36layers": 60.7,
+    "est_tps": 16.5
+  },
+  "layer_1024_float16": {
+    "ms_per_layer": 3.46,
+    "ms_36layers": 124.7,
+    "est_tps": 8.0
+  },
+  "layer_1024_bfloat16": {
+    "ms_per_layer": 3.48,
+    "ms_36layers": 125.4,
+    "est_tps": 8.0
+  },
+  "layer_2048_float16": {
+    "ms_per_layer": 7.72,
+    "ms_36layers": 277.8,
+    "est_tps": 3.6
+  },
+  "layer_2048_bfloat16": {
+    "ms_per_layer": 7.72,
+    "ms_36layers": 278.1,
+    "est_tps": 3.6
+  },
+  "layer_4096_float16": {
+    "ms_per_layer": 18.9,
+    "ms_36layers": 680.3,
+    "est_tps": 1.5
+  },
+  "layer_4096_bfloat16": {
+    "ms_per_layer": 18.58,
+    "ms_36layers": 668.8,
+    "est_tps": 1.5
+  }
+}
