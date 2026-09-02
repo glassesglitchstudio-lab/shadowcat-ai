@@ -78,5 +78,35 @@
     "ms_per_layer": 18.58,
     "ms_36layers": 668.8,
     "est_tps": 1.5
-  }
+  },
+  "oturumlar": [
+    {
+      "tarih": "2026-09-02 21:11",
+      "benchmark_gunu": "03.09.2026",
+      "gpu": {
+        "ad": "NVIDIA GeForce RTX 5050 Laptop GPU",
+        "sm": "sm_120",
+        "vram_gb": 8.0,
+        "matmul_tflops_fp16": 24.82,
+        "matmul_tflops_fp32": 8.24,
+        "bant_h2d_gbs": 6.53,
+        "bant_d2h_gbs": 3.85
+      }
+    },
+    {
+      "tarih": "2026-09-02 21:16",
+      "benchmark_gunu": "03.09.2026",
+      "ollama_testleri": {
+        "model": "gulmezcetiner-max-plus:latest (3B, q8_0, 3.4 GB)",
+        "B2_gpu_toksn": 79.76,
+        "B2_gpu_dağılım": "100% GPU (ollama ps doğruladı)",
+        "B1_cpu_toksn": 87.8,
+        "B1_yontem": "CUDA_VISIBLE_DEVICES='' ile zorlanmis saf CPU",
+        "prompt_eval_gpu": "756.8 tok/s",
+        "prompt_eval_cpu": "2587.7 tok/s",
+        "bulgu": "3B kucuk model icin CPU > GPU (79.8 vs 87.8) — sm_120 Blackwell kernel olgunlugu + kucuk model bant genisligi bagimliligi. ADK (arka ucu secme) ozelliginin gercek degeri burada goruldu.",
+        "not": "On calisma: kisa orneklem (20-57 token). Uzun kosumla teyit edilmeli."
+      }
+    }
+  ]
 }
