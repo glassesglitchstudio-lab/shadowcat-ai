@@ -107,6 +107,56 @@
         "bulgu": "3B kucuk model icin CPU > GPU (79.8 vs 87.8) — sm_120 Blackwell kernel olgunlugu + kucuk model bant genisligi bagimliligi. ADK (arka ucu secme) ozelliginin gercek degeri burada goruldu.",
         "not": "On calisma: kisa orneklem (20-57 token). Uzun kosumla teyit edilmeli."
       }
+    },
+    {
+      "tarih": "2026-09-03 09:55",
+      "benchmark_gunu": "03.09.2026",
+      "A3_avx2_surucu": {
+        "is_yuku": "1024x4096 Q4_0 x 8",
+        "surucu_ms": 2.54,
+        "numpy_ms": 0.32,
+        "hizlanma": 0.13,
+        "surucu_gflops": 0.0,
+        "max_sapma": 0.0,
+        "gecer": false
+      }
+    },
+    {
+      "tarih": "2026-09-03 09:57",
+      "A3_avx2_adil_kiyas": {
+        "surucu_ms": 2.57,
+        "numpy_1cekirdek_ms": 1.04,
+        "hizlanma": 0.4,
+        "surucu_gflops": 26.1,
+        "not": "tek cekirdek kiyas + Q4_0 bellegi 7x kucuk; cok cekirdek BLAS kaba gucu ayri not edildi (0.13x)"
+      }
+    },
+    {
+      "tarih": "2026-09-03 10:03",
+      "benchmark_gunu": "03.09.2026",
+      "A1_A2_gpu": {
+        "ad": "NVIDIA GeForce RTX 5050 Laptop GPU",
+        "matmul_fp16_tflops": 24.75,
+        "bant_h2d_gbs": 7.47
+      },
+      "A3_surucu_1024": {
+        "surucu_ms": 2.45,
+        "numpy1c_ms": 2.82,
+        "surucu_gflops": 27.4,
+        "hizlanma": 1.15
+      },
+      "A3_surucu_2048": {
+        "surucu_ms": 14.15,
+        "numpy1c_ms": 5.66,
+        "surucu_gflops": 9.5,
+        "hizlanma": 0.4
+      },
+      "B2_ollama_kosum1": {
+        "eval_rate_toksn": 84.84
+      },
+      "B2_ollama_kosum2": {
+        "eval_rate_toksn": 81.97
+      }
     }
   ]
 }
