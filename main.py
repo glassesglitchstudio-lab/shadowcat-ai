@@ -465,7 +465,7 @@ async def hub_page():
 @app.get("/app", response_class=HTMLResponse)
 async def app_page():
     """ShadowCat Studio: komple LM Studio benzeri arayuz (sidebar + chat)."""
-    return FileResponse(os.path.join(BASE_DIR, "web", "templates", "app.html"))
+    return FileResponse(os.path.join(BASE_DIR, "web", "templates", "app.html"), headers={"Cache-Control": "no-cache, no-store, must-revalidate"})
 
 
 
@@ -735,7 +735,9 @@ async def root(request: Request):
 
             name="chat.html",
 
-            context={"request": request}
+            context={"request": request},
+
+            headers={"Cache-Control": "no-cache, no-store, must-revalidate"}
 
         )
 

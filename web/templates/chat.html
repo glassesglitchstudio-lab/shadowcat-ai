@@ -4776,7 +4776,11 @@ Temel Kuralların:
         typer.flush();
 
         if (!full || !full.trim()) {
-            full = "**[👑 ShadowCat-R1 14B]**: Ben **Elytra-ai** tarafından özel olarak eğitilmiş **ShadowCat-R1 14B Amiral Gemisi** yapay zeka modeliyim! 7/24 kesintisiz hizmetinizdeyim. 🐱⚡";
+            // Akis bos döndüyse kanitlanmis non-stream yolu bir kez daha dene
+            try { full = await callChat(msg); } catch (e) { full = ''; }
+            if (!full || !full.trim()) {
+                full = "[Hata] Yerel sunucu yanit vermedi. 'sunucu.bat' ile baslatip tekrar deneyin.";
+            }
         }
 
         ct.innerHTML = format(full);
