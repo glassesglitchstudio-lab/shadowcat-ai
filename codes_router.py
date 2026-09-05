@@ -59,7 +59,7 @@ TIER_LABELS = {
     "CODES_EXPERT": "CodeS Expert",
     "CODES": "CodeS (otomatik)",
     "MAXCODE": "MaxCode",
-    "MAXP": "🐾 Max+ (Yerli)",
+    "MAXP": "Max+ (Yerli)",
     "R1_14B": "🧠 DeepSeek-R1 14B",
     "CODER_14B": "💻 Qwen-Coder 14B",
 }
