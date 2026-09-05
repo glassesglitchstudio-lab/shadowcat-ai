@@ -12,12 +12,13 @@ INFO:ShadowcatCore:==================================================
 INFO:ShadowcatCore:  GLASSCAT AI v4.0.0 BAŞLATILIYOR...
 INFO:ShadowcatCore:==================================================
 INFO:nexus_memory:Nexus Memory SQLite + FTS5 tabloları hazır.
-INFO:ShadowcatCore:  Nexus Hafıza Engine: 95 kayıt (SQLite FTS5)
+INFO:nexus_memory:Nexus Memory: 1 Obsidian .md notu başarıyla veritabanına aktarıldı.
+INFO:ShadowcatCore:  Nexus Hafıza Engine: 96 kayıt (SQLite FTS5)
 INFO:ShadowcatCore:  Toolformer: 24 araç, 8 kategori
 INFO:ShadowcatCore:  Model Router: aktif
 INFO:ShadowcatCore:  Model Security: 2 şifreli model bulundu
 INFO:ShadowcatStateManager:State Manager: C:\Users\ErCuM\CascadeProjects\shadowcat\storage\state
-INFO:ShadowcatCore:  State Manager: yüklendi (37 komut)
+INFO:ShadowcatCore:  State Manager: yüklendi (41 komut)
 INFO:ShadowcatFeedback:Feedback System: başlatıldı
 INFO:ShadowcatCore:  Feedback Loop: aktif
 INFO:task_scheduler:0 görev yüklendi
@@ -38,82 +39,28 @@ INFO:ShadowcatCore:  MCP Bridge: 37 tool, 0 dış sunucu
 INFO:ShadowcatCore:  Shadowcat Core v4.0.0 hazır!
 INFO:ShadowcatCore:==================================================
 INFO:__main__:Shadowcat Core baslatildi: 37 arac
-INFO:__main__:[Ollama] Ollama servisi zaten calisiyor (port 11434).
 INFO:MCPBridge:MCP Server başlatıldı: http://127.0.0.1:8766/mcp
  * Serving Flask app 'MCP_shadowcat-mcp'
  * Debug mode: off
 INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
  * Running on http://127.0.0.1:8766
 INFO:werkzeug:[33mPress CTRL+C to quit[0m
-INFO:     Started server process [21100]
+INFO:__main__:[Ollama] Ollama servisi kapali, otomatik baslatiliyor...
+INFO:__main__:[Ollama] Ollama 'serve' arka planda basariyla baslatildi.
+INFO:     Started server process [8764]
 INFO:     Waiting for application startup.
 INFO:__main__:[Ollama] Ollama servisi zaten calisiyor (port 11434).
 INFO:     Application startup complete.
 INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
-INFO:     127.0.0.1:50841 - "GET /hub HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50843 - "GET /app HTTP/1.1" 200 OK
-INFO:     127.0.0.1:50845 - "GET / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:49829 - "GET /hub HTTP/1.1" 200 OK
-INFO:     127.0.0.1:60404 - "GET /favicon.ico HTTP/1.1" 200 OK
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/agent-harnesses "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models?filter=gguf&sort=downloads&limit=90 "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/unsloth/Qwen3-Coder-30B-A3B-Instruct-GGUF/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/unsloth/Qwen3.8-27B-GGUF/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/ornith-ai/Ornith-1.0-9B-GGUF/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/ornith-ai/Ornith-1.0-35B-GGUF/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/mixedbread-ai/mxbai-embed-large-v1/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/ornith-ai/Ornith-1.5-9B-GGUF/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/HauhauCS/Gemma-4-E4B-Uncensored-HauhauCS-Aggressive/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/ornith-ai/Ornith-1.5-35B-A3B-GGUF/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/lmstudio-community/Qwen3.8-27B-GGUF/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/JonathanColetti/Qwen3.8-27B-Uncensored-GGUF/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/DavidAU/Qwen3.6-27B-Fable-Fusion-711-Uncensored-Heretic-NM-DAU-NEO-MAX-MTP-GGUF/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/antirez/deepseek-v4-gguf/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/HauhauCS/Qwen3.6-35B-A3B-Uncensored-HauhauCS-Aggressive/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/handy-computer/nemotron-3.5-asr-streaming-0.6b-gguf/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/huihui-ai/Huihui-Qwen3.8-27B-abliterated-GGUF/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/mudler/Laguna-XS-2.1-APEX-GGUF/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/audio-cpp/audio.cpp-gguf/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/handy-computer/parakeet-unified-en-0.6b-gguf/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/unsloth/Qwen3.5-9B-GGUF/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/nvidia/parakeet-ctc-1.1b/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/mudler/ced-gguf/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/unsloth/Qwen3-30B-A3B-Thinking-2507-GGUF/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/HauhauCS/Qwen3.8-27B-Uncensored-HauhauCS-Aggressive-MTP-GGUF/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/unsloth/Qwen3.6-35B-A3B-GGUF/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/unsloth/gemma-4-12B-it-qat-GGUF/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/0bserverx/Qwen3.8-27B-Heretic-Abliterated-Uncensored-GGUF/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/unsloth/Qwen3.6-27B-GGUF/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/unsloth/Inkling-Small-GGUF/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/Abiray/MiniMax-H3-GGUF/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/mudler/KAT-Coder-V2.5-Dev-APEX-GGUF/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
-INFO:     127.0.0.1:49829 - "GET /hub/search?q=&limit=30&gguf_only=true HTTP/1.1" 200 OK
-INFO:     127.0.0.1:64032 - "POST /hub/download HTTP/1.1" 200 OK
-C:\Users\ErCuM\AppData\Roaming\Python\Python314\site-packages\huggingface_hub\utils\_validators.py:205: UserWarning: The `local_dir_use_symlinks` argument is deprecated and ignored in `snapshot_download`. Downloading to a local directory does not use symlinks anymore.
-  warnings.warn(
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/unsloth/Qwen3.6-27B-GGUF/revision/main "HTTP/1.1 200 OK"
-INFO:httpx:HTTP Request: GET https://huggingface.co/api/models/unsloth/Qwen3.6-27B-GGUF/tree/82d411acf4a06cfb8d9b073a5211bf410bfc29bf?recursive=true&expand=false "HTTP/1.1 200 OK"
-Fetching 27 files:   0%|          | 0/27 [00:00<?, ?it/s]C:\Users\ErCuM\AppData\Roaming\Python\Python314\site-packages\huggingface_hub\file_download.py:744: UserWarning: Not enough free disk space to download the file. The expected file size is: 17252.24 MB. The target location H:\Drive'ım\Models\unsloth_Qwen3.6-27B-GGUF\.cache\huggingface\download only has 12535.83 MB free disk space.
-  warnings.warn(
-C:\Users\ErCuM\AppData\Roaming\Python\Python314\site-packages\huggingface_hub\file_download.py:744: UserWarning: Not enough free disk space to download the file. The expected file size is: 17252.24 MB. The target location H:\Drive'ım\Models\unsloth_Qwen3.6-27B-GGUF only has 12535.83 MB free disk space.
-  warnings.warn(
-C:\Users\ErCuM\AppData\Roaming\Python\Python314\site-packages\huggingface_hub\file_download.py:744: UserWarning: Not enough free disk space to download the file. The expected file size is: 15440.01 MB. The target location H:\Drive'ım\Models\unsloth_Qwen3.6-27B-GGUF\.cache\huggingface\download only has 12535.83 MB free disk space.
-  warnings.warn(
-C:\Users\ErCuM\AppData\Roaming\Python\Python314\site-packages\huggingface_hub\file_download.py:744: UserWarning: Not enough free disk space to download the file. The expected file size is: 15791.28 MB. The target location H:\Drive'ım\Models\unsloth_Qwen3.6-27B-GGUF\.cache\huggingface\download only has 12535.83 MB free disk space.
-  warnings.warn(
-C:\Users\ErCuM\AppData\Roaming\Python\Python314\site-packages\huggingface_hub\file_download.py:744: UserWarning: Not enough free disk space to download the file. The expected file size is: 15440.01 MB. The target location H:\Drive'ım\Models\unsloth_Qwen3.6-27B-GGUF only has 12535.83 MB free disk space.
-  warnings.warn(
-C:\Users\ErCuM\AppData\Roaming\Python\Python314\site-packages\huggingface_hub\file_download.py:744: UserWarning: Not enough free disk space to download the file. The expected file size is: 15791.28 MB. The target location H:\Drive'ım\Models\unsloth_Qwen3.6-27B-GGUF only has 12535.83 MB free disk space.
-  warnings.warn(
-C:\Users\ErCuM\AppData\Roaming\Python\Python314\site-packages\huggingface_hub\file_download.py:744: UserWarning: Not enough free disk space to download the file. The expected file size is: 13586.22 MB. The target location H:\Drive'ım\Models\unsloth_Qwen3.6-27B-GGUF\.cache\huggingface\download only has 12535.83 MB free disk space.
-  warnings.warn(
-C:\Users\ErCuM\AppData\Roaming\Python\Python314\site-packages\huggingface_hub\file_download.py:744: UserWarning: Not enough free disk space to download the file. The expected file size is: 13586.22 MB. The target location H:\Drive'ım\Models\unsloth_Qwen3.6-27B-GGUF only has 12535.83 MB free disk space.
-  warnings.warn(
-C:\Users\ErCuM\AppData\Roaming\Python\Python314\site-packages\huggingface_hub\file_download.py:744: UserWarning: Not enough free disk space to download the file. The expected file size is: 16071.77 MB. The target location H:\Drive'ım\Models\unsloth_Qwen3.6-27B-GGUF\.cache\huggingface\download only has 12535.83 MB free disk space.
-  warnings.warn(
-C:\Users\ErCuM\AppData\Roaming\Python\Python314\site-packages\huggingface_hub\file_download.py:744: UserWarning: Not enough free disk space to download the file. The expected file size is: 16071.77 MB. The target location H:\Drive'ım\Models\unsloth_Qwen3.6-27B-GGUF only has 12535.83 MB free disk space.
-  warnings.warn(
-C:\Users\ErCuM\AppData\Roaming\Python\Python314\site-packages\huggingface_hub\file_download.py:744: UserWarning: Not enough free disk space to download the file. The expected file size is: 50004.50 MB. The target location H:\Drive'ım\Models\unsloth_Qwen3.6-27B-GGUF\.cache\huggingface\download\BF16 only has 12535.83 MB free disk space.
-  warnings.warn(
-C:\Users\ErCuM\AppData\Roaming\Python\Python314\site-packages\huggingface_hub\file_download.py:744: UserWarning: Not enough free disk space to download the file. The expected file size is: 50004.50 MB. The target location H:\Drive'ım\Models\unsloth_Qwen3.6-27B-GGUF\BF16 only has 12535.83 MB free disk space.
-  warnings.warn(
+INFO:     127.0.0.1:59316 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:59316 - "GET /api/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50901 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56384 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60901 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60901 - "GET /api/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53148 - "POST /api/chat HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:53148 - "POST /api/chat/ HTTP/1.1" 200 OK
+INFO:XOpusRouter:[X_OPUS STREAM] gulmezcetiner-max-plus:latest (code)
+INFO:     127.0.0.1:58747 - "POST /api/chat HTTP/1.1" 307 Temporary Redirect
+INFO:     127.0.0.1:58747 - "POST /api/chat/ HTTP/1.1" 200 OK
+INFO:XOpusRouter:[X_OPUS STREAM] gulmezcetiner-max-plus:latest (code)
