@@ -90,3 +90,4 @@ api_keys.json
 free-claude-code/
 model-site/
 .venv-gpu/
+server_log.txt

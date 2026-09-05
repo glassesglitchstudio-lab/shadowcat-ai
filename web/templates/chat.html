@@ -3747,6 +3747,11 @@ Temel Kuralların:
         }
 
         // 3. ÖNCELİK: Canlı Zeka Motoru (DeepSeek-R1 / DeepSeek-V3)
+        const _gm = gonderilecekModel();
+        const _yerelTier = (_gm === "MAXP" || _gm === "R1_14B" || _gm === "CODER_14B" || _gm.indexOf("CODES") === 0);
+        if (_yerelTier) {
+            return "[Yerel Sunucu Kapali] Shadowcat sunucusuna ulasilamadi. sunucu.bat ile baslat - secili model yereldir, bulut kullanilmaz.";
+        }
         if (window.puter && window.puter.ai) {
             const messages = [
                 { role: 'system', content: STUDIO_SYSTEM_PROMPT },
@@ -3774,6 +3779,12 @@ Temel Kuralların:
                 body: JSON.stringify({message: msg, model: gonderilecekModel(), stream: true})
             });
             if (apiRes.ok && apiRes.body) {
+                    const _ct = (apiRes.headers.get("content-type") || "");
+                    if (_ct.indexOf("application/json") !== -1) {
+                        const _d = await apiRes.json();
+                        const _reply = _d.response || _d.reply || "";
+                        if (_reply) { if (onToken) onToken(_reply); return _reply; }
+                    }
                 const reader = apiRes.body.getReader();
                 const decoder = new TextDecoder('utf-8');
                 let fullText = '';
@@ -3851,6 +3862,11 @@ Temel Kuralların:
         }
 
         // 2. ÖNCELİK: Canlı Zeka Motoru
+        const _gm = gonderilecekModel();
+        const _yerelTier = (_gm === "MAXP" || _gm === "R1_14B" || _gm === "CODER_14B" || _gm.indexOf("CODES") === 0);
+        if (_yerelTier) {
+            return "[Yerel Sunucu Kapali] Shadowcat sunucusuna ulasilamadi. sunucu.bat ile baslat - secili model yereldir, bulut kullanilmaz.";
+        }
         if (window.puter && window.puter.ai) {
             const messages = [
                 { role: 'system', content: STUDIO_SYSTEM_PROMPT },
