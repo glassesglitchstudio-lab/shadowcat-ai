@@ -2973,8 +2973,11 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
     function renderProjects() {
         const el = document.getElementById('projList');
         if (!el) return;
-        el.innerHTML = '';
-        renderProjectListItems(sampleDemoProjects);
+        el.innerHTML = ''
+            + '<div style="padding:26px 14px;text-align:center;border:1px dashed #d6d3ce;border-radius:10px;margin:12px 12px 0">'
+            + '<div style="font-weight:700;color:#1e1b4b;font-size:.85rem;margin-bottom:6px">Projeler - Yakında</div>'
+            + '<div style="font-size:.75rem;color:#888;line-height:1.5">Stüdyo projeleri Alpha sonrası aktif olacak. Şimdilik sohbetlerine Sohbetler sekmesinden devam edebilirsin.</div>'
+            + '</div>';
     }
 
     function renderProjectListItems(projects) {
