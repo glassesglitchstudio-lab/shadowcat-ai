@@ -629,6 +629,60 @@
         "hepsi_gecer": false,
         "kabul_kriteri": ">1.5x numpy tek-çekirdek"
       }
+    },
+    {
+      "tarih": "2026-09-05 13:28",
+      "benchmark_gunu": "03.09.2026",
+      "A1_A2_gpu": {
+        "ad": "NVIDIA GeForce RTX 5050 Laptop GPU",
+        "matmul_fp16_tflops": 25.54,
+        "bant_h2d_gbs": 7.09
+      },
+      "A3_surucu_1024": {
+        "surucu_ms": 3.81,
+        "numpy1c_ms": 1.05,
+        "surucu_gflops": 17.6,
+        "hizlanma": 0.27
+      },
+      "A3_surucu_2048": {
+        "surucu_ms": 5.59,
+        "numpy1c_ms": 5.91,
+        "surucu_gflops": 24.0,
+        "hizlanma": 1.06
+      },
+      "B2_ollama_kosum1": {
+        "eval_rate_toksn": 84.11
+      },
+      "B2_ollama_kosum2": {
+        "eval_rate_toksn": 83.95
+      }
+    },
+    {
+      "tarih": "2026-09-05 13:29",
+      "benchmark_gunu": "03.09.2026",
+      "A1_A2_gpu": {
+        "ad": "NVIDIA GeForce RTX 5050 Laptop GPU",
+        "matmul_fp16_tflops": 25.89,
+        "bant_h2d_gbs": 8.19
+      },
+      "A3_surucu_1024": {
+        "surucu_ms": 1.43,
+        "numpy1c_ms": 1.13,
+        "surucu_gflops": 47.0,
+        "hizlanma": 0.79
+      },
+      "A3_surucu_2048": {
+        "surucu_ms": 2.86,
+        "numpy1c_ms": 3.12,
+        "surucu_gflops": 46.9,
+        "hizlanma": 1.09
+      },
+      "B2_ollama_kosum1": {
+        "eval_rate_toksn": 84.94
+      },
+      "B2_ollama_kosum2": {
+        "eval_rate_toksn": 83.74
+      }
     }
   ]
 }
