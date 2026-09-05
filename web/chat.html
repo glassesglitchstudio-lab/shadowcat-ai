@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Shadowcat Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-0: #0a0a0f;
+  --bg-1: #11111a;
+  --bg-2: #181822;
+  --bg-3: #20202e;
+  --line: #25253a;
+  --line-2: #30304a;
+  --ink-0: #f5f5fa;
+  --ink-1: #b8b6cc;
+  --ink-2: #75738c;
+  --ink-3: #45435a;
+  --acc-g: #10b981;
+  --acc-c: #06b6d4;
+  --acc-y: #fbbf24;
+  --acc-r: #ff4d6d;
+  --acc-o: #ff6b00;
+  --grad: linear-gradient(135deg, #10b981 0%, #06b6d4 50%, #06b6d4 100%);
+  --grad-soft: linear-gradient(135deg, rgba(16,185,129,0.12) 0%, rgba(6,182,212,0.12) 100%);
+  --glass: rgba(24, 24, 34, 0.6);
+  --glass-border: rgba(16, 185, 129, 0.18);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100vh; overflow: hidden; }
+body {
+  font-family: 'Outfit', system-ui, -apple-system, sans-serif;
+  background: var(--bg-0);
+  color: var(--ink-0);
+  -webkit-font-smoothing: antialiased;
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  grid-template-rows: 100vh;
+}
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+/* SIDEBAR */
+aside {
+  background: var(--bg-1);
+  border-right: 1px solid var(--line);
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.brand {
+  display: flex; align-items: center; gap: 10px;
+  padding: 18px; border-bottom: 1px solid var(--line);
+  font-weight: 700; font-size: 16px; letter-spacing: -0.01em;
+}
+.brand-mark {
+  width: 28px; height: 28px; border-radius: 7px;
+  display: flex; align-items: center; justify-content: center;
+  object-fit: cover;
+}
+.brand-sub { font-size: 10px; color: var(--ink-3); font-weight: 500; font-family: 'JetBrains Mono', monospace; margin-left: auto; letter-spacing: 0.05em; }
+
+.new-btn {
+  margin: 14px 14px 8px; padding: 10px 12px;
+  background: var(--grad); color: #0a0a0f; border: none; border-radius: 8px;
+  font-family: 'Outfit'; font-size: 13px; font-weight: 700; cursor: pointer;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+  transition: transform 0.12s;
+}
+.new-btn:hover { transform: translateY(-1px); }
+.new-btn:active { transform: translateY(1px) scale(0.98); }
+
+.sec {
+  padding: 14px 18px 6px;
+  font-family: 'JetBrains Mono', monospace; font-size: 10px;
+  color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.12em;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.sec .ic { color: var(--ink-2); cursor: pointer; }
+
+.model-list { padding: 0 10px; flex: 1; overflow-y: auto; }
+.model-btn {
+  width: 100%; text-align: left; background: transparent; border: 1px solid transparent;
+  padding: 9px 10px; border-radius: 8px; cursor: pointer;
+  display: flex; align-items: center; gap: 10px; color: var(--ink-1);
+  font-family: 'Outfit'; font-size: 13px; transition: all 0.15s; margin-bottom: 2px;
+}
+.model-btn:hover { background: var(--bg-2); color: var(--ink-0); }
+.model-btn.active { background: var(--bg-2); border-color: var(--acc-g); color: var(--ink-0); }
+.model-dot {
+  width: 6px; height: 6px; border-radius: 50%; background: var(--ink-3); flex-shrink: 0;
+}
+.model-btn.active .model-dot { background: var(--acc-g); box-shadow: 0 0 6px var(--acc-g); }
+.model-info { flex: 1; min-width: 0; }
+.model-info .n { font-weight: 600; font-size: 13px; }
+.model-info .p {
+  font-size: 10px; color: var(--ink-2); font-family: 'JetBrains Mono', monospace;
+  margin-top: 1px;
+}
+.tag {
+  font-family: 'JetBrains Mono', monospace; font-size: 9px; padding: 1px 5px;
+  border-radius: 3px; background: var(--bg-3); color: var(--ink-2);
+  text-transform: uppercase; letter-spacing: 0.05em;
+}
+.tag.v { background: rgba(16,185,129,0.15); color: var(--acc-g); }
+.tag.lock { background: rgba(255,77,109,0.15); color: var(--acc-r); }
+
+.history { padding: 0 10px 12px; flex-shrink: 0; max-height: 28%; overflow-y: auto; }
+.hist-item {
+  padding: 8px 10px; border-radius: 6px; cursor: pointer;
+  font-size: 12px; color: var(--ink-1); display: flex; flex-direction: column; gap: 2px;
+  transition: background 0.15s;
+}
+.hist-item:hover { background: var(--bg-2); }
+.hist-item .t { color: var(--ink-0); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 12px; }
+.hist-item .m { font-size: 10px; color: var(--ink-3); font-family: 'JetBrains Mono', monospace; }
+
+.userbox {
+  padding: 12px 16px; border-top: 1px solid var(--line);
+  display: flex; align-items: center; gap: 10px;
+  font-size: 12px; color: var(--ink-1); background: var(--bg-1);
+}
+.avatar {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: var(--grad); display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 11px; color: #0a0a0f; flex-shrink: 0;
+}
+.userbox .u { font-weight: 600; color: var(--ink-0); font-size: 12px; }
+.userbox .m { font-size: 10px; color: var(--ink-3); font-family: 'JetBrains Mono', monospace; }
+.userbox .ic { margin-left: auto; color: var(--ink-2); cursor: pointer; }
+
+/* MAIN */
+main { display: flex; flex-direction: column; overflow: hidden; position: relative; }
+.topbar {
+  height: 52px; padding: 0 20px; border-bottom: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: space-between;
+  background: rgba(10, 10, 15, 0.7); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  flex-shrink: 0;
+}
+.crumb { display: flex; align-items: center; gap: 8px; font-size: 13px; color: var(--ink-1); }
+.crumb .s { color: var(--ink-3); }
+.crumb .m { color: var(--ink-0); font-weight: 600; }
+.crumb .live {
+  display: inline-flex; align-items: center; gap: 5px; font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; color: var(--acc-g); background: rgba(16,185,129,0.1);
+  border: 1px solid rgba(16,185,129,0.3); padding: 3px 8px; border-radius: 10px;
+  margin-left: 6px;
+}
+.crumb .live::before { content: ''; width: 5px; height: 5px; border-radius: 50%; background: var(--acc-g); animation: pulse 2s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+.topbar-actions { display: flex; gap: 4px; }
+.icon-btn {
+  width: 30px; height: 30px; border-radius: 6px; background: transparent;
+  border: 1px solid var(--line); color: var(--ink-1); cursor: pointer;
+  display: flex; align-items: center; justify-content: center; font-size: 13px;
+  transition: all 0.15s;
+}
+.icon-btn:hover { border-color: var(--ink-1); color: var(--ink-0); }
+
+.chat-wrap { flex: 1; overflow-y: auto; padding: 28px 0 16px; }
+.chat { max-width: 760px; margin: 0 auto; padding: 0 24px; display: flex; flex-direction: column; gap: 20px; }
+
+.welcome {
+  text-align: center; padding: 36px 20px;
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+}
+.welcome-icon {
+  width: 60px; height: 60px; border-radius: 16px; background: var(--grad);
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 800; font-size: 26px; color: #0a0a0f; font-family: 'JetBrains Mono', monospace;
+  margin-bottom: 2px;
+}
+.welcome h1 { font-size: 26px; font-weight: 800; letter-spacing: -0.02em; }
+.welcome p { color: var(--ink-1); font-size: 14px; max-width: 440px; }
+
+.suggest { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; max-width: 560px; margin-top: 6px; }
+.sug {
+  background: var(--glass); border: 1px solid var(--glass-border);
+  border-radius: 10px; padding: 12px 14px; text-align: left; cursor: pointer;
+  backdrop-filter: blur(12px); transition: all 0.15s;
+  font-family: 'Outfit'; color: var(--ink-1); font-size: 13px;
+}
+.sug:hover { border-color: var(--acc-g); color: var(--ink-0); transform: translateY(-1px); }
+.sug .lbl { font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 4px; }
+
+.msg { display: flex; gap: 12px; }
+.msg .av {
+  width: 30px; height: 30px; border-radius: 8px; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-weight: 700; font-size: 11px;
+}
+.msg.user .av { background: var(--bg-2); color: var(--ink-1); border: 1px solid var(--line); }
+.msg.assistant .av { background: var(--grad); color: #0a0a0f; }
+.msg-body { flex: 1; min-width: 0; }
+.msg-meta { display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px; font-size: 12px; }
+.msg-meta .who { font-weight: 600; color: var(--ink-0); }
+.msg-meta .mod { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-3); }
+.msg-meta .time { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-3); margin-left: auto; }
+.msg-text { font-size: 14px; line-height: 1.65; color: var(--ink-0); word-wrap: break-word; }
+.msg-text p { margin-bottom: 10px; }
+.msg-text p:last-child { margin-bottom: 0; }
+.msg-text code { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; background: var(--bg-2); padding: 1px 6px; border-radius: 4px; border: 1px solid var(--line); }
+.msg-text pre { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; background: var(--bg-1); padding: 12px; border-radius: 8px; margin: 8px 0; border: 1px solid var(--line); overflow-x: auto; }
+.msg-text pre code { background: transparent; padding: 0; border: none; }
+.msg-actions { display: flex; gap: 4px; margin-top: 8px; opacity: 0.5; transition: opacity 0.15s; }
+.msg:hover .msg-actions { opacity: 1; }
+.msg-act { background: transparent; border: 1px solid var(--line); border-radius: 5px; padding: 3px 8px; font-size: 10px; color: var(--ink-2); cursor: pointer; font-family: 'JetBrains Mono', monospace; transition: all 0.15s; }
+.msg-act:hover { border-color: var(--ink-1); color: var(--ink-0); }
+
+.typing { display: inline-flex; gap: 4px; }
+.typing span { width: 6px; height: 6px; border-radius: 50%; background: var(--ink-2); animation: blink 1.4s infinite both; }
+.typing span:nth-child(2) { animation-delay: 0.2s; }
+.typing span:nth-child(3) { animation-delay: 0.4s; }
+@keyframes blink { 0%, 60%, 100% { opacity: 0.3; } 30% { opacity: 1; } }
+
+.composer-wrap { padding: 12px 24px 18px; flex-shrink: 0; background: linear-gradient(180deg, transparent 0%, var(--bg-0) 30%); }
+.composer { max-width: 760px; margin: 0 auto; background: var(--bg-2); border: 1px solid var(--line-2); border-radius: 14px; padding: 12px 14px; transition: border-color 0.2s, box-shadow 0.2s; }
+.composer:focus-within { border-color: var(--acc-g); box-shadow: 0 0 0 3px rgba(16,185,129,0.1); }
+.composer-row { display: flex; align-items: flex-end; gap: 8px; }
+.composer-input { flex: 1; background: transparent; border: none; outline: none; color: var(--ink-0); font-family: 'Outfit'; font-size: 14px; line-height: 1.5; resize: none; min-height: 24px; max-height: 200px; padding: 6px 4px; }
+.composer-input::placeholder { color: var(--ink-3); }
+.cbtn { width: 32px; height: 32px; border-radius: 8px; background: transparent; border: 1px solid var(--line); color: var(--ink-1); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; transition: all 0.15s; }
+.cbtn:hover { border-color: var(--ink-1); color: var(--ink-0); }
+.cbtn.send { background: var(--acc-g); border-color: var(--acc-g); color: #0a0a0f; font-weight: 700; font-size: 16px; }
+.cbtn.send:hover { background: var(--acc-c); border-color: var(--acc-c); }
+.cbtn.send:disabled { background: var(--bg-3); border-color: var(--bg-3); color: var(--ink-3); cursor: not-allowed; }
+
+.composer-meta { display: flex; justify-content: space-between; align-items: center; margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line); font-size: 10px; color: var(--ink-3); font-family: 'JetBrains Mono', monospace; }
+.indicators { display: flex; gap: 12px; }
+.indicators .ok { color: var(--acc-g); }
+
+@media (max-width: 880px) {
+  body { grid-template-columns: 64px 1fr; }
+  aside { width: 64px; }
+  .brand span:not(.brand-mark) { display: none; }
+  .model-btn { justify-content: center; padding: 8px; }
+  .model-info, .model-tags, .sec .lbl, .history, .userbox .u, .userbox .m, .userbox .ic, .new-btn span { display: none; }
+  .sec { justify-content: center; }
+  .sec .ic { display: block; }
+  .suggest { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<aside>
+  <div class="brand">
+    <img class="brand-mark" src="static/glassescat-logo.png" alt="Shadowcat" />
+    <span>Shadowcat</span>
+    <span class="brand-sub">v0.9</span>
+  </div>
+
+  <button class="new-btn"><span>+ Yeni sohbet</span></button>
+
+  <div class="sec">
+    <div><span class="ic">▤</span> Modeller</div>
+    <span class="ic">⚙</span>
+  </div>
+  <div class="model-list" id="modelList"></div>
+
+  <div class="sec">
+    <div><span class="ic">◷</span> Geçmiş</div>
+    <span class="ic">⌕</span>
+  </div>
+  <div class="history" id="history">
+    <div class="hist-item"><div class="t">CodeS · debounce hatası</div><div class="m">2 dk · 14B</div></div>
+    <div class="hist-item"><div class="t">Atlas · günaydın pattern</div><div class="m">12 dk · 3B</div></div>
+    <div class="hist-item"><div class="t">NeoS · integral çözümü</div><div class="m">1 sa · 30B</div></div>
+    <div class="hist-item"><div class="t">Sphynx · dünkü proje</div><div class="m">3 sa · 7B</div></div>
+    <div class="hist-item"><div class="t">Lynx · tek satır</div><div class="m">dün · 1.5B</div></div>
+  </div>
+
+  <div class="userbox">
+    <div class="avatar">EP</div>
+    <div style="flex:1; min-width:0;">
+      <div class="u">ErCuM</div>
+      <div class="m">patron@shadowcat</div>
+    </div>
+    <span class="ic">⚙</span>
+  </div>
+</aside>
+
+<main>
+  <div class="topbar">
+    <div class="crumb">
+      <span class="s">studio.local /</span>
+      <span class="m" id="currentModel">Atlas</span>
+      <span class="live">Elytra ready</span>
+    </div>
+    <div class="topbar-actions">
+      <button class="icon-btn" title="Yeni sohbet">+</button>
+      <button class="icon-btn" title="Ayarlar">⚙</button>
+    </div>
+  </div>
+
+  <div class="chat-wrap" id="chatWrap">
+    <div class="chat" id="chat">
+      <div class="welcome">
+        <img class="welcome-icon" src="static/glassescat-logo.png" alt="Shadowcat" />
+        <h1>Shadowcat Studio</h1>
+        <p>10 model, tek arayüz. Açık kaynak LLM, yazılımsal NPU, sıfır server.</p>
+        <div class="suggest" id="suggestions"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="composer-wrap">
+    <div class="composer">
+      <div class="composer-row">
+        <button class="cbtn" title="Dosya ekle">+</button>
+        <textarea class="composer-input" id="input" rows="1" placeholder="Bir şey sor, kod yaz, ya da düşün..."></textarea>
+        <div class="composer-tools" style="display:flex; gap:4px;">
+          <button class="cbtn" title="Düşünce modu">∇</button>
+          <button class="cbtn send" id="sendBtn" title="Gönder">↑</button>
+        </div>
+      </div>
+      <div class="composer-meta">
+        <div class="indicators">
+          <span class="ok">● Elytra 106 GFLOPS</span>
+          <span>2.96× numpy</span>
+          <span>Q4_0 · AVX2+VNNI</span>
+        </div>
+        <div>Enter ↵ gönder · Shift+Enter yeni satır</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+const MODELS = [
+  { id: 'atlas', name: 'Atlas', params: '3B', type: 'Asistan' },
+  { id: 'codes', name: 'CodeS', params: '14B', type: 'Kod' },
+  { id: 'neos', name: 'NeoS', params: '30B', type: 'Muhakeme' },
+  { id: 'lynx', name: 'Lynx', params: '1.5B', type: 'Hız' },
+  { id: 'sphynx', name: 'Sphynx', params: '7B', type: 'Hafıza' },
+  { id: 'aegis', name: 'Aegis', params: '7B', type: 'Güvenlik' },
+  { id: 'skys', name: 'SkyS-Maker', params: '7B', type: 'Görsel' },
+  { id: 'echo', name: 'Echo', params: '3B', type: 'Ses' },
+  { id: 'maxcode', name: 'MaxCode', params: '24B', type: 'Admin', lock: true },
+  { id: 'maxplus', name: 'Max+', params: '7B', type: 'Router' },
+];
+const SUGGESTIONS = [
+  { lbl: 'Kod', text: 'React useEffect sonsuz döngü hatası nasıl çözülür?' },
+  { lbl: 'Matematik', text: 'x²+5x+6=0 denkleminin köklerini adım adım çöz.' },
+  { lbl: 'Yazım', text: 'Kısa bir Türkçe hikâye yaz, İstanbul sokaklarında.' },
+  { lbl: 'Bilgi', text: 'GGUF dosya formatı nedir, nasıl çalışır?' },
+];
+let currentModel = MODELS[0];
+const list = document.getElementById('modelList');
+MODELS.forEach(m => {
+  const btn = document.createElement('button');
+  btn.className = 'model-btn' + (m.id === currentModel.id ? ' active' : '');
+  const tag = m.lock ? '<span class="tag lock">lock</span>' : '<span class="tag v">ok</span>';
+  btn.innerHTML = `<div class="model-dot"></div><div class="model-info"><div class="n">${m.name}</div><div class="p">${m.type} · ${m.params}</div></div><div class="model-tags">${tag}</div>`;
+  btn.onclick = () => {
+    document.querySelectorAll('.model-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentModel = m;
+    document.getElementById('currentModel').textContent = m.name;
+  };
+  list.appendChild(btn);
+});
+const sg = document.getElementById('suggestions');
+SUGGESTIONS.forEach(s => {
+  const b = document.createElement('button');
+  b.className = 'sug';
+  b.innerHTML = `<div class="lbl">${s.lbl}</div><div>${s.text}</div>`;
+  b.onclick = () => { document.getElementById('input').value = s.text; document.getElementById('input').focus(); };
+  sg.appendChild(b);
+});
+const input = document.getElementById('input');
+const sendBtn = document.getElementById('sendBtn');
+const chat = document.getElementById('chat');
+function autoResize() { input.style.height = 'auto'; input.style.height = Math.min(input.scrollHeight, 200) + 'px'; }
+input.addEventListener('input', autoResize);
+input.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); send(); } });
+sendBtn.onclick = send;
+function now() { return new Date().toLocaleTimeString('tr-TR', { hour: '2-digit', minute: '2-digit' }); }
+function removeWelcome() { const w = chat.querySelector('.welcome'); if (w) w.remove(); }
+function addMsg(role, text) {
+  removeWelcome();
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  const av = role === 'user' ? 'EP' : currentModel.name[0];
+  const who = role === 'user' ? 'ErCuM' : currentModel.name;
+  const meta = role === 'user' ? '' : `${currentModel.params} · ${currentModel.type}`;
+  const txt = text.split('\n').map(l => `<p>${l}</p>`).join('');
+  div.innerHTML = `<div class="av">${av}</div><div class="msg-body"><div class="msg-meta"><span class="who">${who}</span>${meta ? `<span class="mod">${meta}</span>` : ''}<span class="time">${now()}</span></div><div class="msg-text">${txt}</div>${role === 'assistant' ? `<div class="msg-actions"><button class="msg-act">kopyala</button><button class="msg-act">tekrar</button><button class="msg-act">sesli</button></div>` : ''}</div>`;
+  chat.appendChild(div);
+  chatWrap.scrollTop = chatWrap.scrollHeight;
+}
+function send() {
+  const text = input.value.trim();
+  if (!text) return;
+  addMsg('user', text);
+  input.value = ''; input.style.height = 'auto';
+  const ph = document.createElement('div');
+  ph.className = 'msg assistant';
+  ph.innerHTML = `<div class="av">${currentModel.name[0]}</div><div class="msg-body"><div class="msg-meta"><span class="who">${currentModel.name}</span><span class="mod">${currentModel.params} · düşünüyor</span><span class="time">${now()}</span></div><div class="msg-text"><div class="typing"><span></span><span></span><span></span></div></div></div>`;
+  chat.appendChild(ph); chatWrap.scrollTop = chatWrap.scrollHeight;
+  setTimeout(() => {
+    ph.remove();
+    let reply = '';
+    if (currentModel.id === 'codes') reply = 'Sorunun nedeni: useEffect bağımlılık dizisi boş olsa bile cleanup gerekli.\n\n```js\nuseEffect(() => {\n  const id = setInterval(tick, 1000);\n  return () => clearInterval(id);\n}, []);\n```\nBu kalıp unmount olduğunda interval\'i temizler.';
+    else if (currentModel.id === 'neos') reply = 'Adım adım:\n\n1) Diskriminant: Δ = b²−4ac = 25−24 = 1\n2) Kök 1: x = (−5+1)/2 = −2\n3) Kök 2: x = (−5−1)/2 = −3\n\nDoğrulama: (−2)·(−3) = 6 ✓, (−2)+(−3) = −5 ✓';
+    else if (currentModel.id === 'lynx') reply = 'Anladım.';
+    else reply = 'Bu konuda yardımcı olabilirim. Hangi yönüyle ilgileniyorsun?\n\n- Hızlı cevap\n- Detaylı analiz\n- Kod örneği\n- Türkçe/İngilizce kaynak';
+    addMsg('assistant', reply);
+  }, 1000 + Math.random() * 800);
+}
+autoResize(); input.focus();
+</script>
+
+</body>
+</html>

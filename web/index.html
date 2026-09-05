@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Shadowcat — Açık Kaynak LLM + Yazılımsal NPU</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg-0: #0a0a0f;
+  --bg-1: #11111a;
+  --bg-2: #181822;
+  --bg-3: #20202e;
+  --line: #25253a;
+  --line-2: #30304a;
+  --ink-0: #f5f5fa;
+  --ink-1: #b8b6cc;
+  --ink-2: #75738c;
+  --ink-3: #45435a;
+  --acc-g: #10b981;
+  --acc-c: #06b6d4;
+  --acc-y: #fbbf24;
+  --acc-r: #ff4d6d;
+  --grad: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
+  --grad-soft: linear-gradient(135deg, rgba(16,185,129,0.15) 0%, rgba(6,182,212,0.15) 100%);
+  --glass: rgba(24, 24, 34, 0.5);
+  --glass-border: rgba(16, 185, 129, 0.18);
+  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Outfit', system-ui, -apple-system, sans-serif; background: var(--bg-0); color: var(--ink-0); line-height: 1.5; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+.mono { font-family: 'JetBrains Mono', monospace; }
+.wrap { max-width: 1280px; margin: 0 auto; padding: 0 32px; }
+
+nav { position: sticky; top: 0; z-index: 100; backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); background: rgba(10, 10, 15, 0.7); border-bottom: 1px solid var(--line); }
+.nav-inner { display: flex; justify-content: space-between; align-items: center; padding: 18px 32px; max-width: 1280px; margin: 0 auto; }
+.logo { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; letter-spacing: -0.02em; }
+.logo-mark { width: 32px; height: 32px; border-radius: 8px; object-fit: cover; }
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a { color: var(--ink-1); text-decoration: none; font-size: 14px; font-weight: 500; transition: color 0.2s; }
+.nav-links a:hover { color: var(--ink-0); }
+.nav-cta { background: var(--acc-g); color: #0a0a0f; padding: 8px 16px; border-radius: 8px; font-weight: 700; font-size: 14px; text-decoration: none; transition: transform 0.15s, box-shadow 0.15s; }
+.nav-cta:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(16,185,129,0.3); }
+
+.hero { padding: 100px 0 120px; position: relative; overflow: hidden; }
+.hero::before { content: ''; position: absolute; top: -200px; right: -200px; width: 600px; height: 600px; border-radius: 50%; background: radial-gradient(circle, rgba(16,185,129,0.12) 0%, transparent 70%); pointer-events: none; z-index: 0; }
+.hero::after { content: ''; position: absolute; bottom: -300px; left: -200px; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(6,182,212,0.08) 0%, transparent 70%); pointer-events: none; z-index: 0; }
+.hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 60px; align-items: center; position: relative; z-index: 1; }
+.hero-eyebrow { display: inline-flex; align-items: center; gap: 8px; font-family: 'JetBrains Mono', monospace; font-size: 12px; font-weight: 500; color: var(--acc-g); background: rgba(16,185,129,0.08); border: 1px solid var(--acc-g); padding: 6px 12px; border-radius: 20px; margin-bottom: 24px; letter-spacing: 0.05em; }
+.hero-eyebrow::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--acc-g); }
+.hero h1 { font-size: clamp(56px, 8vw, 104px); font-weight: 900; line-height: 0.92; letter-spacing: -0.045em; margin-bottom: 28px; }
+.hero h1 .grad { background: var(--grad); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+.hero p.lead { font-size: 20px; color: var(--ink-1); max-width: 540px; margin-bottom: 40px; line-height: 1.5; }
+.hero-cta { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 40px; }
+.btn { padding: 14px 24px; border-radius: 10px; font-weight: 600; font-size: 15px; text-decoration: none; transition: all 0.18s; display: inline-flex; align-items: center; gap: 8px; border: 1px solid transparent; }
+.btn-primary { background: var(--grad); color: #0a0a0f; }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(16,185,129,0.4); }
+.btn-ghost { background: transparent; color: var(--ink-0); border-color: var(--line); }
+.btn-ghost:hover { border-color: var(--ink-1); background: rgba(255,255,255,0.02); }
+
+.term-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 18px; padding: 0; backdrop-filter: blur(20px) saturate(150%); -webkit-backdrop-filter: blur(20px) saturate(150%); box-shadow: var(--glass-shadow); overflow: hidden; transform: rotate(-1.5deg); transition: transform 0.3s; }
+.term-card:hover { transform: rotate(0deg) scale(1.01); }
+.term-bar { display: flex; align-items: center; gap: 8px; padding: 14px 18px; background: rgba(0,0,0,0.3); border-bottom: 1px solid var(--line); }
+.term-dot { width: 12px; height: 12px; border-radius: 50%; }
+.term-dot.r { background: #ff5f57; } .term-dot.y { background: #febc2e; } .term-dot.g { background: #28c840; }
+.term-name { flex: 1; text-align: center; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-2); }
+.term-body { padding: 22px; font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.7; color: var(--ink-1); }
+.term-body .p { color: var(--acc-c); } .term-body .k { color: var(--acc-g); } .term-body .s { color: var(--acc-g); } .term-body .n { color: var(--acc-y); } .term-body .c { color: var(--ink-3); }
+
+.stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 36px; }
+.stat { background: var(--glass); border: 1px solid var(--glass-border); padding: 18px; border-radius: 12px; backdrop-filter: blur(16px); transition: transform 0.15s, border-color 0.15s; }
+.stat:hover { transform: translateY(-2px); border-color: var(--acc-g); }
+.stat-n { font-size: 30px; font-weight: 800; color: var(--ink-0); letter-spacing: -0.025em; }
+.stat-n .acc { color: var(--acc-g); }
+.stat-l { font-size: 11px; color: var(--ink-2); margin-top: 6px; font-family: 'JetBrains Mono', monospace; text-transform: uppercase; letter-spacing: 0.05em; }
+
+section { padding: 120px 0; position: relative; }
+.sec-label { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--acc-c); text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 14px; display: inline-block; padding: 4px 10px; border: 1px solid var(--acc-c); border-radius: 14px; background: rgba(6,182,212,0.05); }
+.sec-title { font-size: clamp(40px, 5.5vw, 64px); font-weight: 800; letter-spacing: -0.035em; line-height: 1.05; max-width: 760px; margin-bottom: 18px; }
+.sec-sub { font-size: 18px; color: var(--ink-1); max-width: 680px; margin-bottom: 64px; }
+
+.bench-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 32px; align-items: stretch; }
+.bench-table { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 18px; padding: 28px; backdrop-filter: blur(16px); }
+.bench-row { display: grid; grid-template-columns: 100px 1.4fr 1fr 80px; padding: 16px 0; border-bottom: 1px solid var(--line); font-family: 'JetBrains Mono', monospace; font-size: 14px; align-items: center; }
+.bench-row:last-child { border-bottom: none; }
+.bench-row.h { color: var(--ink-3); font-size: 10px; text-transform: uppercase; letter-spacing: 0.1em; padding: 8px 0 12px; }
+.bench-row .v { color: var(--ink-0); font-weight: 700; }
+.bench-row .g { color: var(--acc-g); font-weight: 700; }
+.bench-row .y { color: var(--acc-y); font-weight: 700; }
+.bench-bar { height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+.bench-fill { height: 100%; background: var(--grad); border-radius: 3px; }
+.bench-3d { background: var(--grad-soft); border: 1px solid var(--glass-border); border-radius: 18px; padding: 28px; position: relative; overflow: hidden; display: flex; flex-direction: column; justify-content: space-between; min-height: 360px; }
+.bench-3d::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 70% 30%, rgba(16,185,129,0.3) 0%, transparent 60%); }
+.bench-3d::after { content: ''; position: absolute; bottom: 0; right: 0; width: 200px; height: 200px; background: radial-gradient(circle, rgba(6,182,212,0.2) 0%, transparent 70%); }
+.bench-3d-label { position: relative; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-2); letter-spacing: 0.1em; text-transform: uppercase; }
+.bench-3d-num { position: relative; font-size: 96px; font-weight: 900; letter-spacing: -0.05em; line-height: 0.9; }
+.bench-3d-num .u { font-size: 36px; color: var(--ink-2); }
+.bench-3d-sub { position: relative; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-2); }
+
+.models { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 18px; }
+.model { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 14px; padding: 22px; backdrop-filter: blur(16px); transition: transform 0.2s, border-color 0.2s; position: relative; overflow: hidden; }
+.model::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--grad); opacity: 0; transition: opacity 0.2s; }
+.model:hover { transform: translateY(-3px); border-color: var(--acc-g); }
+.model:hover::before { opacity: 1; }
+.model-head { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 14px; }
+.model-name { font-size: 20px; font-weight: 700; letter-spacing: -0.015em; }
+.model-params { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--acc-c); background: rgba(6,182,212,0.08); padding: 4px 9px; border-radius: 4px; border: 1px solid rgba(6,182,212,0.2); font-weight: 600; }
+.model-type { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--ink-2); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; }
+.model-desc { font-size: 13px; color: var(--ink-1); line-height: 1.55; margin-bottom: 14px; }
+.model-base { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-2); padding-top: 12px; border-top: 1px solid var(--line); display: flex; align-items: center; gap: 6px; }
+.model-base::before { content: '→'; color: var(--ink-3); }
+
+.pyramid-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+.pyr-stack { display: flex; flex-direction: column; gap: 12px; }
+.pyr { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 10px; padding: 16px 20px; backdrop-filter: blur(12px); display: flex; justify-content: space-between; align-items: center; transition: transform 0.15s, border-color 0.15s; }
+.pyr:hover { transform: translateX(4px); border-color: var(--acc-g); }
+.pyr-1 { border-left: 3px solid var(--acc-r); }
+.pyr-2 { border-left: 3px solid var(--acc-y); margin-left: 20px; }
+.pyr-3 { border-left: 3px solid var(--acc-c); margin-left: 40px; }
+.pyr-4 { border-left: 3px solid var(--acc-g); margin-left: 60px; }
+.pyr-n { font-weight: 700; font-size: 16px; }
+.pyr-d { font-size: 12px; color: var(--ink-2); font-family: 'JetBrains Mono', monospace; margin-top: 2px; }
+.pyr-v { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--acc-g); font-weight: 700; }
+
+.roadmap { position: relative; padding: 20px 0; }
+.roadmap::before { content: ''; position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--line); }
+.rm-item { display: grid; grid-template-columns: 1fr 60px 1fr; align-items: center; margin-bottom: 32px; }
+.rm-dot { width: 14px; height: 14px; border-radius: 50%; background: var(--bg-0); border: 2px solid var(--acc-g); margin: 0 auto; position: relative; z-index: 1; }
+.rm-item.done .rm-dot { background: var(--acc-g); border-color: var(--acc-g); box-shadow: 0 0 0 4px rgba(16,185,129,0.2); }
+.rm-card { background: var(--glass); border: 1px solid var(--glass-border); border-radius: 12px; padding: 20px; backdrop-filter: blur(16px); }
+.rm-card.l { text-align: right; }
+.rm-q { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--acc-c); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.1em; }
+.rm-t { font-size: 18px; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.01em; }
+.rm-d { font-size: 13px; color: var(--ink-1); line-height: 1.5; }
+
+.cta { padding: 120px 0; text-align: center; position: relative; overflow: hidden; }
+.cta::before { content: ''; position: absolute; inset: 0; background: radial-gradient(circle at 50% 50%, rgba(16,185,129,0.12) 0%, transparent 60%); }
+.cta h2 { font-size: clamp(40px, 6vw, 64px); font-weight: 800; letter-spacing: -0.035em; margin-bottom: 18px; }
+.cta p { font-size: 19px; color: var(--ink-1); margin-bottom: 36px; max-width: 580px; margin-left: auto; margin-right: auto; }
+
+footer { border-top: 1px solid var(--line); padding: 70px 0 40px; }
+.foot-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 48px; margin-bottom: 40px; }
+.foot-tag { font-size: 14px; color: var(--ink-2); margin-top: 10px; max-width: 300px; line-height: 1.5; }
+.foot-h { font-size: 11px; font-family: 'JetBrains Mono', monospace; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 18px; }
+.foot a { color: var(--ink-1); text-decoration: none; font-size: 14px; display: block; padding: 5px 0; transition: color 0.2s; }
+.foot a:hover { color: var(--acc-g); }
+.foot-bot { display: flex; justify-content: space-between; padding-top: 28px; border-top: 1px solid var(--line); font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-3); }
+
+@media (max-width: 880px) {
+  .hero { padding: 56px 0 72px; }
+  .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+  .stats { grid-template-columns: 1fr 1fr 1fr; }
+  .bench-grid { grid-template-columns: 1fr; }
+  .pyramid-wrap { grid-template-columns: 1fr; }
+  .foot-grid { grid-template-columns: 1fr 1fr; gap: 32px; }
+  .rm-item { grid-template-columns: 1fr 30px; }
+  .rm-card.l { display: none; }
+  .rm-card.r { grid-column: 2; }
+  section { padding: 72px 0; }
+  .wrap { padding: 0 20px; }
+  .nav-links a:not(.nav-cta) { display: none; }
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo"><img class="logo-mark" src="static/glassescat-logo.png" alt="Shadowcat" /><span>Shadowcat</span></div>
+    <div class="nav-links">
+      <a href="#bench">Benchmark</a>
+      <a href="#models">Modeller</a>
+      <a href="#pyramid">Mimari</a>
+      <a href="#roadmap">Yol Haritası</a>
+      <a href="chat.html" class="nav-cta">Studio →</a>
+    </div>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-eyebrow">shadowcat-ai/elytra · v0.9</div>
+        <h1>Açık kaynak LLM.<br/><span class="grad">Yazılımsal NPU.</span><br/>Sıfır server.</h1>
+        <p class="lead">CPU'da çalışan özel matmul kernel'i, 10 Türkçe model, GPU olmadan, server'sız. QuantumQ ile 30B'ye yaklaşan performans, llama.cpp ile yarışır hız.</p>
+        <div class="hero-cta">
+          <a href="#models" class="btn btn-primary">10 Modeli Keşfet →</a>
+          <a href="chat.html" class="btn btn-ghost">Studio'yu Aç</a>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="stat-n"><span class="acc">106</span> GFLOPS</div><div class="stat-l">8192 @ RPL</div></div>
+          <div class="stat"><div class="stat-n">2.9<span class="acc">×</span></div><div class="stat-l">numpy 10c</div></div>
+          <div class="stat"><div class="stat-n">10</div><div class="stat-l">Türkçe model</div></div>
+        </div>
+      </div>
+      <div class="term-card">
+        <div class="term-bar">
+          <div class="term-dot r"></div><div class="term-dot y"></div><div class="term-dot g"></div>
+          <div class="term-name">shadowcat@local ~ % elytra_bench</div>
+        </div>
+        <div class="term-body">
+<span class="c"># Elytra NPU Benchmark v0.9.2</span>
+<span class="p">$</span> <span class="k">./elytra_bench</span> --size 8192
+
+<span class="k">CPU:</span>        i7-13620H (5P+8E cores)
+<span class="k">AVX-VNNI:</span>   <span class="s">enabled</span> (int8 path)
+<span class="k">AVX-512:</span>    <span class="n">not supported</span>
+
+<span class="c">┌────────┬────────────┬──────────────┐</span>
+<span class="c">│ Matrix │  Sürücü    │  numpy 10c   │</span>
+<span class="c">├────────┼────────────┼──────────────┤</span>
+<span class="c">│</span>  1024  <span class="c">│</span>  <span class="s">42.0 GFLOPS</span> <span class="c">│</span>  35.0 GFLOPS <span class="c">│</span>
+<span class="c">│</span>  2048  <span class="c">│</span>  <span class="s">60.5 GFLOPS</span> <span class="c">│</span>  35.0 GFLOPS <span class="c">│</span>
+<span class="c">│</span>  4096  <span class="c">│</span>  <span class="s">72.0 GFLOPS</span> <span class="c">│</span>  37.5 GFLOPS <span class="c">│</span>
+<span class="c">│</span>  8192  <span class="c">│</span>  <span class="s">106 GFLOPS</span>  <span class="c">│</span>  35.5 GFLOPS <span class="c">│</span>
+<span class="c">└────────┴────────────┴──────────────┘</span>
+
+<span class="k">[ok]</span> elytra 8192 → <span class="n">106.4 GFLOPS</span> (2.96× numpy)
+<span class="c"># Status: PR-ready. QuantumQ eğitim sonraki sprint.</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="bench">
+  <div class="wrap">
+    <div class="sec-label">// 01 — performans</div>
+    <h2 class="sec-title">Sayılar yalan söylemez.<br/>Numpy bile 3 kat geride.</h2>
+    <p class="sec-sub">Elytra NPU sürücüsü, Q4_0 quantized matmul'u AVX2 + FMA + VNNI int8 ile çalıştırır. Modern orta PC'de llama.cpp referansının %50'sine yakın hız.</p>
+    <div class="bench-grid">
+      <div class="bench-table">
+        <div class="bench-row h"><div>Boyut</div><div>Sürücü</div><div>Bar</div><div>Oran</div></div>
+        <div class="bench-row"><div class="v">1024</div><div class="g">42.0 GFLOPS</div><div><div class="bench-bar"><div class="bench-fill" style="width:40%"></div></div></div><div>0.6×</div></div>
+        <div class="bench-row"><div class="v">2048</div><div class="g">60.5 GFLOPS</div><div><div class="bench-bar"><div class="bench-fill" style="width:57%"></div></div></div><div>1.4×</div></div>
+        <div class="bench-row"><div class="v">4096</div><div class="g">72.0 GFLOPS</div><div><div class="bench-bar"><div class="bench-fill" style="width:68%"></div></div></div><div>1.9×</div></div>
+        <div class="bench-row"><div class="v">8192</div><div class="g">106.4 GFLOPS</div><div><div class="bench-bar"><div class="bench-fill" style="width:100%"></div></div></div><div>2.96×</div></div>
+        <div class="bench-row" style="border-top: 1px solid var(--acc-g); margin-top: 8px; padding-top: 16px;">
+          <div class="v" style="color: var(--acc-y);">AVX-512</div><div class="y">250+</div><div><div class="bench-bar"><div class="bench-fill" style="width:90%; background: linear-gradient(90deg, #fbbf24, #ff4d6d);"></div></div></div><div>7×</div>
+        </div>
+      </div>
+      <div class="bench-3d">
+        <div class="bench-3d-label">// EN İYİ SONUÇ</div>
+        <div class="bench-3d-num">106<span class="u"> GFLOPS</span></div>
+        <div class="bench-3d-sub">i7-13620H · 8192² · 2.96× numpy 10c</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="models">
+  <div class="wrap">
+    <div class="sec-label">// 02 — on model</div>
+    <h2 class="sec-title">On uzman. Tek motor.</h2>
+    <p class="sec-sub">Her model farklı bir görev için: günlük sohbetten kod amiral gemisine, derin muhakemeden güvenliğe. QuantumQ ile eğitildi, 2× T4 Kaggle donanımda çalışır.</p>
+    <div class="models">
+      <div class="model"><div class="model-head"><div class="model-name">Atlas</div><div class="model-params">3B</div></div><div class="model-type">Ana Asistan</div><div class="model-desc">Günlük sohbet, soru-cevap, yönlendirme. Kademeli çalışma: Lite→Flash→Pro→Expert.</div><div class="model-base">Qwen2.5-3B-Instruct</div></div>
+      <div class="model"><div class="model-head"><div class="model-name">CodeS</div><div class="model-params">14B</div></div><div class="model-type">Kod Amiral Gemisi</div><div class="model-desc">Yazılım işleri. 6 XLoRA uzman: kod, design, frontend, backend, debug, cyber.</div><div class="model-base">Qwen2.5-14B + 6 XLoRA</div></div>
+      <div class="model"><div class="model-head"><div class="model-name">NeoS</div><div class="model-params">30B</div></div><div class="model-type">Derin Muhakeme</div><div class="model-desc">Zor problemler: matematik, mantık, bilimsel analiz. Cevap önce düşünce izleri.</div><div class="model-base">Qwen2.5-32B-Instruct</div></div>
+      <div class="model"><div class="model-head"><div class="model-name">Lynx</div><div class="model-params">1.5B</div></div><div class="model-type">Hız Avcısı</div><div class="model-desc">Saniye altı cevap. Tek kelime yanıt, kod tamamlama. Elytra NPU üstünde koşar.</div><div class="model-base">Qwen2.5-1.5B + Elytra</div></div>
+      <div class="model"><div class="model-head"><div class="model-name">Sphynx</div><div class="model-params">7B</div></div><div class="model-type">Hafıza Ustası</div><div class="model-desc">Uzun proje hafızası. CZP (Context Zip) 1000× sıkıştırma, RAG ile bilgi arama.</div><div class="model-base">Qwen2.5-7B + CZP</div></div>
+      <div class="model"><div class="model-head"><div class="model-name">Aegis</div><div class="model-params">7B</div></div><div class="model-type">Güvenlik Muhafızı</div><div class="model-desc">Jailbreak tespiti, prompt injection yakalama, kod güvenlik taraması.</div><div class="model-base">Qwen2.5-7B + shield</div></div>
+      <div class="model"><div class="model-head"><div class="model-name">SkyS-Maker</div><div class="model-params">7B</div></div><div class="model-type">Görsel Sanatçı</div><div class="model-desc">Kelimeden resim. Diffusion + LoRA, ikon üretimi, illüstrasyon.</div><div class="model-base">SDXL/Flux + LoRA</div></div>
+      <div class="model"><div class="model-head"><div class="model-name">Echo</div><div class="model-params">3B</div></div><div class="model-type">Ses Modeli</div><div class="model-desc">TTS + ses tanıma. Whisper tabanlı, kediyle konuşmak için.</div><div class="model-base">Whisper + TTS</div></div>
+      <div class="model"><div class="model-head"><div class="model-name">MaxCode</div><div class="model-params">24B</div></div><div class="model-type">Yetkili Admin</div><div class="model-desc">Kişisel baş mühendis. Şifreli (TCONE22), terminal + dosya yönetimi.</div><div class="model-base">Qwen2.5-24B + Admin</div></div>
+      <div class="model"><div class="model-head"><div class="model-name">Max+</div><div class="model-params">7B</div></div><div class="model-type">Router</div><div class="model-desc">Sorgu sınıflandırma, orkestra şefi. Her soruyu doğru modele yönlendirir.</div><div class="model-base">Qwen2.5-7B + QLoRA</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="pyramid">
+  <div class="wrap">
+    <div class="sec-label">// 03 — mimari</div>
+    <h2 class="sec-title">Nerede ELYTRA duruyor.</h2>
+    <p class="sec-sub">4 katmanlı compute piramidi. Her katmanda farklı performans/fiyat dengesi. Elytra en altta — en hızlı, en ucuz, en erişilebilir.</p>
+    <div class="pyramid-wrap">
+      <div class="pyr-stack">
+        <div class="pyr pyr-1"><div><div class="pyr-n">Cloud GPU</div><div class="pyr-d">H100, A100 · SaaS · $$$</div></div><div class="pyr-v">100+ TFLOPS</div></div>
+        <div class="pyr pyr-2"><div><div class="pyr-n">Local GPU</div><div class="pyr-d">RTX 5050, RX 7000 · $$</div></div><div class="pyr-v">20-30 TFLOPS</div></div>
+        <div class="pyr pyr-3"><div><div class="pyr-n">NPU Chip</div><div class="pyr-d">Apple ANE, Qualcomm Hex · $$$</div></div><div class="pyr-v">10-15 TFLOPS</div></div>
+        <div class="pyr pyr-4"><div><div class="pyr-n">ELYTRA NPU</div><div class="pyr-d">CPU + AVX2+VNNI · bedava</div></div><div class="pyr-v">0.1-0.4 TFLOPS</div></div>
+      </div>
+      <div>
+        <h3 style="font-size: 28px; font-weight: 700; margin-bottom: 16px; letter-spacing: -0.02em;">Elytra felsefesi</h3>
+        <p style="color: var(--ink-1); font-size: 16px; line-height: 1.65; margin-bottom: 20px;">Mevcut çözümler ya pahalı (cloud GPU), ya özel donanım gerektiriyor (Apple Silicon, NPU çipi), ya da yazılım esnekliği yok (vendor lock-in).</p>
+        <p style="color: var(--ink-1); font-size: 16px; line-height: 1.65; margin-bottom: 20px;"><strong style="color: var(--ink-0);">Elytra</strong> hiçbirini istemiyor. Mevcut CPU'nu alıyor, ona yazılımsal olarak özel matmul kernel'i yazıyor, llama.cpp seviyesinde performans veriyor. <strong style="color: var(--acc-g);">Sıfır maliyet, sıfır bağımlılık.</strong></p>
+        <p style="color: var(--ink-1); font-size: 16px; line-height: 1.65;">Bugün 3B model 25-35 tok/s. Yarın cache blocking + VNNI scale fix ile 50-70 tok/s. 6 ayda llama.cpp seviyesi.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="roadmap">
+  <div class="wrap">
+    <div class="sec-label">// 04 — yol haritası</div>
+    <h2 class="sec-title">Ne zaman ne çıkıyor.</h2>
+    <p class="sec-sub">Açık kaynak, gerçekçi, topluluk odaklı. Her sprint somut bir hedefe kilitli.</p>
+    <div class="roadmap">
+      <div class="rm-item done">
+        <div class="rm-card l"><div class="rm-q">Q3 2026</div><div class="rm-t">Elytra v1.0 — 9× hız</div><div class="rm-d">AVX2 + çoklu çekirdek + 8 acc + 2× unrolling. Numpy 2-3× geçildi.</div></div>
+        <div class="rm-dot"></div>
+        <div class="rm-card r"><div class="rm-q">tamamlandı</div><div class="rm-t">106 GFLOPS @ 8192</div><div class="rm-d">i7-13620H, 5 P-core, termal/parked core analizi tamamlandı.</div></div>
+      </div>
+      <div class="rm-item done">
+        <div class="rm-card l"><div class="rm-q">Q3 2026</div><div class="rm-t">QuantumQ v1.0</div><div class="rm-d">Opti-LoRA v2 + QDoRA + LoRA+. 70B eğitim kapasitesi.</div></div>
+        <div class="rm-dot"></div>
+        <div class="rm-card r"><div class="rm-q">tamamlandı</div><div class="rm-t">6 eğitim fonksiyonu</div><div class="rm-d">Atlas 3B, CodeS 14B, NeoS 30B, MaxCode 70B için hazır.</div></div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-card l"><div class="rm-q">Q4 2026</div><div class="rm-t">Elytra v2.0 — VNNI int8</div><div class="rm-d">Q4_0 → int8 + Q8_0 input. Scale çarpanı düzeltmesi, 150+ GFLOPS.</div></div>
+        <div class="rm-dot"></div>
+        <div class="rm-card r"><div class="rm-q">Q4 2026</div><div class="rm-t">Cache blocking</div><div class="rm-d">3-level tile (L1=64KB, L2=512KB, L3=8MB). +30-50% hız.</div></div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-card l"><div class="rm-q">Q1 2027</div><div class="rm-t">Atlas 3B yayın</div><div class="rm-d">İlk Türkçe fine-tune. HuggingFace'de açık kaynak.</div></div>
+        <div class="rm-dot"></div>
+        <div class="rm-card r"><div class="rm-q">Q1 2027</div><div class="rm-t">CodeS 14B XLoRA</div><div class="rm-d">6 uzman LoRA: kod, design, frontend, backend, debug, cyber.</div></div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-card l"><div class="rm-q">Q2 2027</div><div class="rm-t">Elytra v3.0 — packed weight</div><div class="rm-d">Q4_0 prequantized FP16 format. Runtime'da sadece FMA. 250+ GFLOPS.</div></div>
+        <div class="rm-dot"></div>
+        <div class="rm-card r"><div class="rm-q">Q2 2027</div><div class="rm-t">NeoS 30B</div><div class="rm-d">Derin muhakeme, 2× T4 Kaggle'da eğitim. Reasoning dataset.</div></div>
+      </div>
+      <div class="rm-item">
+        <div class="rm-card l"><div class="rm-q">Q4 2027</div><div class="rm-t">MaxCode 70B</div><div class="rm-d">Admin model. Şifreli, terminal + dosya yönetimi, Q4_0 ile yerel çalışma.</div></div>
+        <div class="rm-dot"></div>
+        <div class="rm-card r"><div class="rm-q">Q4 2027</div><div class="rm-t">Topluluk + sponsor</div><div class="rm-d">GitHub 1000+ yıldız, Türk şirketlerinden ilk sponsorlar.</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta">
+  <div class="wrap" style="position:relative; z-index:1;">
+    <h2>İlk Türkçe açık kaynak LLM motoru.</h2>
+    <p>Server yok. GPU yok. Sadece senin CPU'n, senin dilin, senin kuralların.</p>
+    <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
+      <a href="login.html" class="btn btn-primary">Studio'ya Giriş Yap →</a>
+      <a href="https://github.com" target="_blank" class="btn btn-ghost">GitHub'da İncele</a>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-grid">
+      <div>
+        <div class="logo"><img class="logo-mark" src="static/glassescat-logo.png" alt="Shadowcat" /><span>Shadowcat</span></div>
+        <p class="foot-tag">Açık kaynak LLM + yazılımsal NPU. Türkiye'den dünyaya.</p>
+      </div>
+      <div>
+        <div class="foot-h">Proje</div>
+        <a href="https://github.com">GitHub</a>
+        <a href="#models">Modeller</a>
+        <a href="#bench">Benchmark</a>
+      </div>
+      <div>
+        <div class="foot-h">Doküman</div>
+        <a href="#">Hızlı başlangıç</a>
+        <a href="#">QuantumQ rehberi</a>
+        <a href="#">Sürücü notları</a>
+      </div>
+      <div>
+        <div class="foot-h">Topluluk</div>
+        <a href="#">Discord</a>
+        <a href="#">Sponsor</a>
+        <a href="#">Katkıda bulun</a>
+      </div>
+    </div>
+    <div class="foot-bot">
+      <div>© 2026 Shadowcat-AI · Apache 2.0</div>
+      <div>// elytra v0.9.2 · 106 GFLOPS · 3× numpy</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>

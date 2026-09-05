@@ -201,6 +201,434 @@
       "B2_ollama_kosum2": {
         "eval_rate_toksn": 86.89
       }
+    },
+    {
+      "tarih": "2026-09-03 10:54",
+      "benchmark_gunu": "03.09.2026 (kernel 6.1 — AVX-512)",
+      "surucu_versiyonu": "6.1.0",
+      "A3_avx2_surucu": {
+        "detaylar": [
+          {
+            "is_yuku": "1024x4096 Q4_0 x 8",
+            "M": 1024,
+            "K": 4096,
+            "N": 8,
+            "surucu_ms": 2.585,
+            "numpy_ms": 0.348,
+            "hizlanma": 0.135,
+            "surucu_gflops": 0.03,
+            "numpy_gflops": 0.19,
+            "max_sapma": 3e-05,
+            "gecer": false
+          },
+          {
+            "is_yuku": "1024x8192 Q4_0 x 8",
+            "M": 1024,
+            "K": 8192,
+            "N": 8,
+            "surucu_ms": 5.071,
+            "numpy_ms": 0.83,
+            "hizlanma": 0.164,
+            "surucu_gflops": 0.03,
+            "numpy_gflops": 0.16,
+            "max_sapma": 5e-05,
+            "gecer": false
+          },
+          {
+            "is_yuku": "2048x4096 Q4_0 x 8",
+            "M": 2048,
+            "K": 4096,
+            "N": 8,
+            "surucu_ms": 5.0,
+            "numpy_ms": 0.757,
+            "hizlanma": 0.151,
+            "surucu_gflops": 0.03,
+            "numpy_gflops": 0.18,
+            "max_sapma": 3e-05,
+            "gecer": false
+          },
+          {
+            "is_yuku": "2048x8192 Q4_0 x 8",
+            "M": 2048,
+            "K": 8192,
+            "N": 8,
+            "surucu_ms": 10.502,
+            "numpy_ms": 2.409,
+            "hizlanma": 0.229,
+            "surucu_gflops": 0.03,
+            "numpy_gflops": 0.11,
+            "max_sapma": 5e-05,
+            "gecer": false
+          },
+          {
+            "is_yuku": "4096x4096 Q4_0 x 8",
+            "M": 4096,
+            "K": 4096,
+            "N": 8,
+            "surucu_ms": 10.184,
+            "numpy_ms": 2.563,
+            "hizlanma": 0.252,
+            "surucu_gflops": 0.03,
+            "numpy_gflops": 0.1,
+            "max_sapma": 5e-05,
+            "gecer": false
+          },
+          {
+            "is_yuku": "4096x8192 Q4_0 x 8",
+            "M": 4096,
+            "K": 8192,
+            "N": 8,
+            "surucu_ms": 20.699,
+            "numpy_ms": 5.075,
+            "hizlanma": 0.245,
+            "surucu_gflops": 0.03,
+            "numpy_gflops": 0.11,
+            "max_sapma": 5e-05,
+            "gecer": false
+          },
+          {
+            "is_yuku": "512x4096 Q4_0 x 8",
+            "M": 512,
+            "K": 4096,
+            "N": 8,
+            "surucu_ms": 1.252,
+            "numpy_ms": 0.176,
+            "hizlanma": 0.141,
+            "surucu_gflops": 0.03,
+            "numpy_gflops": 0.19,
+            "max_sapma": 3e-05,
+            "gecer": false
+          }
+        ],
+        "hepsi_gecer": false,
+        "kabul_kriteri": ">1.5x numpy tek-çekirdek"
+      }
+    },
+    {
+      "tarih": "2026-09-03 10:55",
+      "benchmark_gunu": "03.09.2026 (kernel 6.1 — AVX-512)",
+      "surucu_versiyonu": "6.1.0",
+      "A3_avx2_surucu": {
+        "detaylar": [
+          {
+            "is_yuku": "1024x4096 Q4_0 x 8",
+            "M": 1024,
+            "K": 4096,
+            "N": 8,
+            "surucu_ms": 2.523,
+            "numpy_ms": 0.36,
+            "hizlanma": 0.143,
+            "surucu_gflops": 26.6,
+            "numpy_gflops": 186.47,
+            "max_sapma": 3e-05,
+            "gecer": false
+          },
+          {
+            "is_yuku": "1024x8192 Q4_0 x 8",
+            "M": 1024,
+            "K": 8192,
+            "N": 8,
+            "surucu_ms": 5.17,
+            "numpy_ms": 0.932,
+            "hizlanma": 0.18,
+            "surucu_gflops": 25.96,
+            "numpy_gflops": 143.99,
+            "max_sapma": 5e-05,
+            "gecer": false
+          },
+          {
+            "is_yuku": "2048x4096 Q4_0 x 8",
+            "M": 2048,
+            "K": 4096,
+            "N": 8,
+            "surucu_ms": 5.138,
+            "numpy_ms": 1.757,
+            "hizlanma": 0.342,
+            "surucu_gflops": 26.12,
+            "numpy_gflops": 76.39,
+            "max_sapma": 3e-05,
+            "gecer": false
+          },
+          {
+            "is_yuku": "2048x8192 Q4_0 x 8",
+            "M": 2048,
+            "K": 8192,
+            "N": 8,
+            "surucu_ms": 10.576,
+            "numpy_ms": 2.567,
+            "hizlanma": 0.243,
+            "surucu_gflops": 25.38,
+            "numpy_gflops": 104.57,
+            "max_sapma": 5e-05,
+            "gecer": false
+          },
+          {
+            "is_yuku": "4096x4096 Q4_0 x 8",
+            "M": 4096,
+            "K": 4096,
+            "N": 8,
+            "surucu_ms": 10.533,
+            "numpy_ms": 2.802,
+            "hizlanma": 0.266,
+            "surucu_gflops": 25.49,
+            "numpy_gflops": 95.8,
+            "max_sapma": 5e-05,
+            "gecer": false
+          },
+          {
+            "is_yuku": "4096x8192 Q4_0 x 8",
+            "M": 4096,
+            "K": 8192,
+            "N": 8,
+            "surucu_ms": 20.372,
+            "numpy_ms": 5.151,
+            "hizlanma": 0.253,
+            "surucu_gflops": 26.35,
+            "numpy_gflops": 104.22,
+            "max_sapma": 5e-05,
+            "gecer": false
+          },
+          {
+            "is_yuku": "512x4096 Q4_0 x 8",
+            "M": 512,
+            "K": 4096,
+            "N": 8,
+            "surucu_ms": 1.247,
+            "numpy_ms": 0.177,
+            "hizlanma": 0.142,
+            "surucu_gflops": 26.9,
+            "numpy_gflops": 189.79,
+            "max_sapma": 3e-05,
+            "gecer": false
+          }
+        ],
+        "hepsi_gecer": false,
+        "kabul_kriteri": ">1.5x numpy tek-çekirdek"
+      }
+    },
+    {
+      "tarih": "2026-09-03 11:45",
+      "benchmark_gunu": "03.09.2026 (kernel 6.1 — AVX-512)",
+      "surucu_versiyonu": "6.1.0",
+      "A3_avx2_surucu": {
+        "detaylar": [],
+        "hepsi_gecer": false,
+        "kabul_kriteri": ">1.5x numpy tek-çekirdek"
+      }
+    },
+    {
+      "tarih": "2026-09-03 11:47",
+      "benchmark_gunu": "03.09.2026 (kernel 6.1 — AVX-512)",
+      "surucu_versiyonu": "6.1.0",
+      "A3_avx2_surucu": {
+        "detaylar": [],
+        "hepsi_gecer": false,
+        "kabul_kriteri": ">1.5x numpy tek-çekirdek"
+      }
+    },
+    {
+      "tarih": "2026-09-03 11:50",
+      "benchmark_gunu": "03.09.2026 (kernel 6.1 — AVX-512)",
+      "surucu_versiyonu": "6.1.0",
+      "A3_avx2_surucu": {
+        "detaylar": [
+          {
+            "is_yuku": "1024x4096 Q4_0 x 8",
+            "M": 1024,
+            "K": 4096,
+            "N": 8,
+            "surucu_ms": 2.755,
+            "numpy_ms": 0.314,
+            "hizlanma": 0.114,
+            "surucu_gflops": 24.36,
+            "numpy_gflops": 213.79,
+            "max_sapma": 3e-05,
+            "gecer": false
+          },
+          {
+            "is_yuku": "1024x8192 Q4_0 x 8",
+            "M": 1024,
+            "K": 8192,
+            "N": 8,
+            "surucu_ms": 5.609,
+            "numpy_ms": 1.059,
+            "hizlanma": 0.189,
+            "surucu_gflops": 23.93,
+            "numpy_gflops": 126.69,
+            "max_sapma": 5e-05,
+            "gecer": false
+          },
+          {
+            "is_yuku": "2048x4096 Q4_0 x 8",
+            "M": 2048,
+            "K": 4096,
+            "N": 8,
+            "surucu_ms": 5.657,
+            "numpy_ms": 0.999,
+            "hizlanma": 0.177,
+            "surucu_gflops": 23.73,
+            "numpy_gflops": 134.33,
+            "max_sapma": 3e-05,
+            "gecer": false
+          },
+          {
+            "is_yuku": "2048x8192 Q4_0 x 8",
+            "M": 2048,
+            "K": 8192,
+            "N": 8,
+            "surucu_ms": 11.008,
+            "numpy_ms": 2.368,
+            "hizlanma": 0.215,
+            "surucu_gflops": 24.39,
+            "numpy_gflops": 113.38,
+            "max_sapma": 5e-05,
+            "gecer": false
+          },
+          {
+            "is_yuku": "4096x4096 Q4_0 x 8",
+            "M": 4096,
+            "K": 4096,
+            "N": 8,
+            "surucu_ms": 11.275,
+            "numpy_ms": 2.538,
+            "hizlanma": 0.225,
+            "surucu_gflops": 23.81,
+            "numpy_gflops": 105.76,
+            "max_sapma": 5e-05,
+            "gecer": false
+          },
+          {
+            "is_yuku": "4096x8192 Q4_0 x 8",
+            "M": 4096,
+            "K": 8192,
+            "N": 8,
+            "surucu_ms": 22.168,
+            "numpy_ms": 5.234,
+            "hizlanma": 0.236,
+            "surucu_gflops": 24.22,
+            "numpy_gflops": 102.58,
+            "max_sapma": 5e-05,
+            "gecer": false
+          },
+          {
+            "is_yuku": "512x4096 Q4_0 x 8",
+            "M": 512,
+            "K": 4096,
+            "N": 8,
+            "surucu_ms": 1.355,
+            "numpy_ms": 0.18,
+            "hizlanma": 0.133,
+            "surucu_gflops": 24.76,
+            "numpy_gflops": 186.0,
+            "max_sapma": 3e-05,
+            "gecer": false
+          }
+        ],
+        "hepsi_gecer": false,
+        "kabul_kriteri": ">1.5x numpy tek-çekirdek"
+      }
+    },
+    {
+      "tarih": "2026-09-03 11:51",
+      "benchmark_gunu": "03.09.2026 (kernel 6.1 — AVX-512)",
+      "surucu_versiyonu": "6.1.0",
+      "A3_avx2_surucu": {
+        "detaylar": [
+          {
+            "is_yuku": "1024x4096 Q4_0 x 8",
+            "M": 1024,
+            "K": 4096,
+            "N": 8,
+            "surucu_ms": 2.746,
+            "numpy_ms": 0.36,
+            "hizlanma": 0.131,
+            "surucu_gflops": 24.43,
+            "numpy_gflops": 186.26,
+            "max_sapma": 3e-05,
+            "gecer": false
+          },
+          {
+            "is_yuku": "1024x8192 Q4_0 x 8",
+            "M": 1024,
+            "K": 8192,
+            "N": 8,
+            "surucu_ms": 5.797,
+            "numpy_ms": 1.018,
+            "hizlanma": 0.176,
+            "surucu_gflops": 23.15,
+            "numpy_gflops": 131.79,
+            "max_sapma": 5e-05,
+            "gecer": false
+          },
+          {
+            "is_yuku": "2048x4096 Q4_0 x 8",
+            "M": 2048,
+            "K": 4096,
+            "N": 8,
+            "surucu_ms": 5.823,
+            "numpy_ms": 0.925,
+            "hizlanma": 0.159,
+            "surucu_gflops": 23.05,
+            "numpy_gflops": 145.16,
+            "max_sapma": 3e-05,
+            "gecer": false
+          },
+          {
+            "is_yuku": "2048x8192 Q4_0 x 8",
+            "M": 2048,
+            "K": 8192,
+            "N": 8,
+            "surucu_ms": 11.261,
+            "numpy_ms": 2.488,
+            "hizlanma": 0.221,
+            "surucu_gflops": 23.84,
+            "numpy_gflops": 107.9,
+            "max_sapma": 5e-05,
+            "gecer": false
+          },
+          {
+            "is_yuku": "4096x4096 Q4_0 x 8",
+            "M": 4096,
+            "K": 4096,
+            "N": 8,
+            "surucu_ms": 11.683,
+            "numpy_ms": 2.753,
+            "hizlanma": 0.236,
+            "surucu_gflops": 22.98,
+            "numpy_gflops": 97.5,
+            "max_sapma": 5e-05,
+            "gecer": false
+          },
+          {
+            "is_yuku": "4096x8192 Q4_0 x 8",
+            "M": 4096,
+            "K": 8192,
+            "N": 8,
+            "surucu_ms": 22.918,
+            "numpy_ms": 5.324,
+            "hizlanma": 0.232,
+            "surucu_gflops": 23.43,
+            "numpy_gflops": 100.83,
+            "max_sapma": 5e-05,
+            "gecer": false
+          },
+          {
+            "is_yuku": "512x4096 Q4_0 x 8",
+            "M": 512,
+            "K": 4096,
+            "N": 8,
+            "surucu_ms": 1.332,
+            "numpy_ms": 0.185,
+            "hizlanma": 0.139,
+            "surucu_gflops": 25.18,
+            "numpy_gflops": 181.08,
+            "max_sapma": 3e-05,
+            "gecer": false
+          }
+        ],
+        "hepsi_gecer": false,
+        "kabul_kriteri": ">1.5x numpy tek-çekirdek"
+      }
     }
   ]
 }
