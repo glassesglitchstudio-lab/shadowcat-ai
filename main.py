@@ -58,6 +58,27 @@ import os
 
 from typing import Optional, Dict, Any, List
 
+# 🔇 Küresel pencere perdesi (CMD kabusu fix'i): tüm subprocess çağrıları konsol açmaz
+import subprocess as _sub
+if os.name == "nt":
+    _CREATE_NO_WINDOW = 0x08000000
+    _sub_orig_run = _sub.run
+    _sub_orig_popen_init = _sub.Popen.__init__
+
+    def _gizle(kwargs):
+        if not kwargs.get("creationflags"):
+            kwargs["creationflags"] = _CREATE_NO_WINDOW
+        return kwargs
+
+    def _patched_run(*args, **kwargs):
+        return _sub_orig_run(*args, **_gizle(kwargs))
+
+    def _patched_popen_init(self, *args, **kwargs):
+        _sub_orig_popen_init(self, *args, **_gizle(kwargs))
+
+    _sub.run = _patched_run
+    _sub.Popen.__init__ = _patched_popen_init
+
 import json
 
 import re
