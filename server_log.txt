@@ -42,7 +42,7 @@ INFO:__main__:[Ollama] Ollama servisi zaten calisiyor (port 11434).
 INFO:MCPBridge:MCP Server başlatıldı: http://127.0.0.1:8766/mcp
  * Serving Flask app 'MCP_shadowcat-mcp'
  * Debug mode: off
-INFO:     Started server process [11824]
+INFO:     Started server process [6404]
 INFO:     Waiting for application startup.
 INFO:__main__:[Ollama] Ollama servisi zaten calisiyor (port 11434).
 INFO:     Application startup complete.
@@ -50,6 +50,6 @@ INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
 INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
  * Running on http://127.0.0.1:8766
 INFO:werkzeug:[33mPress CTRL+C to quit[0m
-INFO:     127.0.0.1:60791 - "GET / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57057 - "GET / HTTP/1.1" 200 OK
-INFO:     127.0.0.1:57057 - "GET /api/models HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49598 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54681 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54681 - "GET /api/models HTTP/1.1" 200 OK
