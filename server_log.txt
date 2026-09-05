@@ -1,0 +1,55 @@
+INFO:__main__:Modüler route'lar yüklendi
+INFO:__main__:Model Hub (HuggingFace) yüklendi: /hub/*
+C:\Users\ErCuM\CascadeProjects\shadowcat\main.py:4893: DeprecationWarning: 
+        on_event is deprecated, use lifespan event handlers instead.
+
+        Read more about it in the
+        [FastAPI docs for Lifespan Events](https://fastapi.tiangolo.com/advanced/events/).
+        
+  @app.on_event("startup")
+INFO:ShadowcatCore:Shadowcat Core instance oluşturuldu
+INFO:ShadowcatCore:==================================================
+INFO:ShadowcatCore:  GLASSCAT AI v4.0.0 BAŞLATILIYOR...
+INFO:ShadowcatCore:==================================================
+INFO:nexus_memory:Nexus Memory SQLite + FTS5 tabloları hazır.
+INFO:ShadowcatCore:  Nexus Hafıza Engine: 96 kayıt (SQLite FTS5)
+INFO:ShadowcatCore:  Toolformer: 24 araç, 8 kategori
+INFO:ShadowcatCore:  Model Router: aktif
+INFO:ShadowcatCore:  Model Security: 2 şifreli model bulundu
+INFO:ShadowcatStateManager:State Manager: C:\Users\ErCuM\CascadeProjects\shadowcat\storage\state
+INFO:ShadowcatCore:  State Manager: yüklendi (41 komut)
+INFO:ShadowcatFeedback:Feedback System: başlatıldı
+INFO:ShadowcatCore:  Feedback Loop: aktif
+INFO:task_scheduler:0 görev yüklendi
+INFO:task_scheduler:Görev zamanlayıcı başlatıldı
+INFO:ShadowcatCore:  Task Scheduler: başlatıldı (0 görev)
+INFO:UltraAgent:  Swarm Multi-Agent sistemi hazir
+INFO:UltraAgent:  Self-Healing motoru hazir
+INFO:UltraAgent:  Web & API Otonomisi hazir
+INFO:UltraAgent:  Dosya Sistemi Otonomisi hazir
+INFO:UltraAgent:  Zamanlayici motoru hazir
+INFO:UltraAgent:  Hafiza Yoneticisi: hazir
+INFO:UltraAgent:Ultra_Agent Engine baslatildi - 9 protokol aktif
+INFO:UltraAgent:  Ultra_Agent araclari kaydedildi (13 yeni arac)
+INFO:ShadowcatCore:  Ultra_Agent Engine: 9 protokol aktif
+INFO:MCPBridge:MCP: 37 tool yüklendi
+INFO:MCPBridge:MCP Bridge: shadowcat-mcp v1.0.0 aktif
+INFO:ShadowcatCore:  MCP Bridge: 37 tool, 0 dış sunucu
+INFO:ShadowcatCore:  Shadowcat Core v4.0.0 hazır!
+INFO:ShadowcatCore:==================================================
+INFO:__main__:Shadowcat Core baslatildi: 37 arac
+INFO:__main__:[Ollama] Ollama servisi zaten calisiyor (port 11434).
+INFO:MCPBridge:MCP Server başlatıldı: http://127.0.0.1:8766/mcp
+ * Serving Flask app 'MCP_shadowcat-mcp'
+ * Debug mode: off
+INFO:     Started server process [11824]
+INFO:     Waiting for application startup.
+INFO:__main__:[Ollama] Ollama servisi zaten calisiyor (port 11434).
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://0.0.0.0:8000 (Press CTRL+C to quit)
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:8766
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+INFO:     127.0.0.1:60791 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57057 - "GET / HTTP/1.1" 200 OK
+INFO:     127.0.0.1:57057 - "GET /api/models HTTP/1.1" 200 OK

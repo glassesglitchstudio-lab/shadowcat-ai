@@ -664,18 +664,27 @@
                 <span id="modelName">💻 CodeS</span>
                 <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
                 <div id="modelDropdown" class="model-dropdown">
-                    <div style="padding:6px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">KOD — CODES</div>
-                    <div class="model-opt active" onclick="selectModel('CODES')">💻 CodeS<span class="sub">🔧 v2: tek model + XLoRA uzmanları (codeS_design_lora vb.) — şu an geçici motorlarla akıyor</span></div>
-                    <div style="padding:8px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">⚡ EFFORT — DÜŞÜNME SEVİYESİ (CodeS)</div>
-                    <div class="model-opt" onclick="selectModel('CODES_LITE')">⚡ Lite<span class="sub">effort: düşük — anında cevap, düşünme kapalı</span></div>
-                    <div class="model-opt" onclick="selectModel('CODES_FLASH')">🔥 Flash<span class="sub">effort: orta — dengeli düşünme</span></div>
-                    <div class="model-opt" onclick="selectModel('CODES_PRO')">👑 Pro<span class="sub">effort: yüksek — kodlama &amp; uzun işler, düşünme açık</span></div>
-                    <div class="model-opt" onclick="selectModel('CODES_EXPERT')">🧠 Expert<span class="sub">effort: maksimum — en derin muhakeme</span></div>
-                    <div style="padding:8px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">MOTORLAR (Yardimcilar)</div>
-                    <div class="model-opt" onclick="selectModel('MAXP')">🐾 Max+ (Yerli 3B)<span class="sub">en hızlı — gulmezcetiner:max+ ✅ aktif</span></div>
-                    <div class="model-opt" onclick="selectModel('CODER_14B')">💻 Qwen-Coder 14B<span class="sub">✅ kurulu — derin kod</span></div>
-                    <div class="model-opt" onclick="selectModel('R1_14B')">🧠 DeepSeek-R1 14B<span class="sub">✅ kurulu — adım adım düşünür</span></div>
-                    <div style="padding:8px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">GÖRSEL</div>
+                    <div style="padding:6px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">MODEL SEÇ</div>
+                    <div class="model-opt active" onclick="selectModel('CODES')">💻 CodeS<span class="sub">tek model + XLoRA uzmanları — ana beyin</span></div>
+                    <div class="model-opt" onclick="selectModel('MAXP')">🐾 Max+ (Yerli 3B)<span class="sub">en hızlı — gulmezcetiner:max+ ✅</span></div>
+                    <div class="model-opt" onclick="selectModel('R1_14B')">🧠 DeepSeek-R1 14B<span class="sub">adım adım düşünür ✅</span></div>
+                    <div class="model-opt" onclick="selectModel('CODER_14B')">💻 Qwen-Coder 14B<span class="sub">derin kod ✅</span></div>
+                    <div style="border-top:1px solid #eee;margin:6px 0"></div>
+                    <div class="model-opt" onclick="event.stopPropagation();toggleEffortPanel()" style="display:flex;justify-content:space-between;align-items:center">
+                        <span>⚡ Effort</span><span id="effortDeger" style="color:#7c3aed;font-weight:600">Yüksek ›</span>
+                    </div>
+                    <div id="effortPanel" style="display:none;background:#faf9f6;border-radius:8px;margin:4px 8px;padding:4px">
+                        <div class="model-opt effort-opt" data-effort="DUSUK" onclick="event.stopPropagation();selectEffort('DUSUK')">🐢 Düşük<span class="sub">anında cevap, düşünme kapalı</span></div>
+                        <div class="model-opt effort-opt" data-effort="ORTA" onclick="event.stopPropagation();selectEffort('ORTA')">🔥 Orta<span class="sub">Varsayılan</span></div>
+                        <div class="model-opt effort-opt active" data-effort="YUKSEK" onclick="event.stopPropagation();selectEffort('YUKSEK')">👑 Yüksek</div>
+                        <div class="model-opt effort-opt" data-effort="MAKS" onclick="event.stopPropagation();selectEffort('MAKS')">🧠 Maksimum<span class="sub">⚠️ daha fazla kullanım</span></div>
+                    </div>
+                    <div class="model-opt" onclick="event.stopPropagation();toggleThinking()" style="display:flex;justify-content:space-between;align-items:center">
+                        <span>🧠 Thinking<span class="sub"> Karmaşık görevler için düşünür</span></span>
+                        <span id="thinkSwitch" style="font-weight:700;color:#7c3aed">AÇIK</span>
+                    </div>
+                    <div style="border-top:1px solid #eee;margin:6px 0"></div>
+                    <div style="padding:8px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">DİĞER</div>
                     <div class="model-opt" onclick="toast('🎨 SkyS-Maker beta yolda — plan B1')" style="opacity:.55">🎨 SkyS-Maker<span class="sub">🔧 yapılacak — görsel üretim</span></div>
                     <div style="padding:8px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">ADMIN</div>
                     <div class="model-opt" onclick="selectModelAdmin()">🔒 MaxCode<span class="sub">🔧 yapılacak — yetkili modeli, şifre gerekli</span></div>
@@ -870,10 +879,10 @@
         <div id="settingsPers" style="margin-top:16px">
             <label style="font-size:.82rem;font-weight:500;color:#333;display:block;margin-bottom:6px">Varsayılan Model / Effort</label>
             <div style="display:flex;gap:6px;flex-wrap:wrap" id="settingsModels">
-                <button class="sk-tab active" data-model="CODES_LITE" onclick="selectModel('CODES_LITE')">⚡ Lite</button>
-                <button class="sk-tab" data-model="CODES_FLASH" onclick="selectModel('CODES_FLASH')">🔥 Flash</button>
-                <button class="sk-tab" data-model="CODES_PRO" onclick="selectModel('CODES_PRO')">👑 Pro</button>
-                <button class="sk-tab" data-model="CODES_EXPERT" onclick="selectModel('CODES_EXPERT')">🧠 Expert</button>
+                <button class="sk-tab active" data-model="CODES_LITE" onclick="selectEffort('DUSUK')">⚡ Düşük</button>
+                <button class="sk-tab" data-model="CODES_FLASH" onclick="selectEffort('ORTA')">🔥 Orta</button>
+                <button class="sk-tab" data-model="CODES_PRO" onclick="selectEffort('YUKSEK')">👑 Yüksek</button>
+                <button class="sk-tab" data-model="CODES_EXPERT" onclick="selectEffort('MAKS')">🧠 Maks</button>
                 <button class="sk-tab" data-model="CODES" onclick="selectModel('CODES')">💻 Otomatik</button>
             </div>
             <div style="margin-top:18px">
@@ -1207,7 +1216,7 @@
             const prefsText = (document.getElementById('settingsPrefs')?.value || '');
             const payload = {
                 user_id: currentAuthUser.id,
-                preferred_model: MODEL_BACKEND[currentModel] || currentModel,
+                preferred_model: gonderilecekModel(),
                 agent_style: currentStyle,
                 extended_thinking: !!extendedThinking,
                 web_search_enabled: !!webSearchEnabled,
@@ -1286,9 +1295,39 @@
         'R1_14B': 'R1_14B',
         'CODER_14B': 'CODER_14B'
     };
+    let effortLevel = 'YUKSEK';
+    const EFFORT_TIER = { DUSUK: 'CODES_LITE', ORTA: 'CODES', YUKSEK: 'CODES_PRO', MAKS: 'CODES_EXPERT' };
+    const EFFORT_LABEL = { DUSUK: 'Düşük', ORTA: 'Orta', YUKSEK: 'Yüksek', MAKS: 'Maksimum' };
+    function gonderilecekModel() {
+        if (currentModel === 'CODES') return EFFORT_TIER[effortLevel] || 'CODES';
+        return gonderilecekModel();
+    }
+    function toggleEffortPanel() {
+        const pnl = document.getElementById('effortPanel');
+        if (pnl) pnl.style.display = (pnl.style.display === 'block') ? 'none' : 'block';
+    }
+    function selectEffort(sev) {
+        effortLevel = sev;
+        const dv = document.getElementById('effortDeger');
+        if (dv) dv.textContent = EFFORT_LABEL[sev] + ' ›';
+        document.querySelectorAll('.effort-opt').forEach(o => o.classList.toggle('active', o.getAttribute('data-effort') === sev));
+        if (sev === 'YUKSEK' || sev === 'MAKS') { if (!extendedThinking) { extendedThinking = true; thinkingGorsel(); } }
+        if (sev === 'DUSUK') { if (extendedThinking) { extendedThinking = false; thinkingGorsel(); } }
+        toast('⚡ Effort: ' + EFFORT_LABEL[sev]);
+        const pnl = document.getElementById('effortPanel'); if (pnl) pnl.style.display = 'none';
+    }
+    function toggleThinking() {
+        extendedThinking = !extendedThinking;
+        thinkingGorsel();
+        toast(extendedThinking ? '🧠 Thinking: AÇIK' : '🧠 Thinking: KAPALI');
+    }
+    function thinkingGorsel() {
+        const sw = document.getElementById('thinkSwitch');
+        if (sw) { sw.textContent = extendedThinking ? 'AÇIK' : 'KAPALI'; sw.style.color = extendedThinking ? '#7c3aed' : '#999'; }
+    }
     let currentStyle = 'normal';
     let webSearchEnabled = false;
-    let extendedThinking = false;
+    let extendedThinking = true;
     let multiAgentMode = false;
     let multiAgentSubtasks = [];
     let activeAbortController = null;
@@ -1484,12 +1523,6 @@
 
     function selectModel(id) {
         currentModel = id;
-        // EFFORT = düşünme seviyesi otomasyonu
-        if (id === 'CODES_EXPERT' || id === 'CODES_PRO') {
-            if (!extendedThinking) { extendedThinking = true; toast('🧠 Düşünme modu: AÇIK (effort yüksek)'); }
-        } else if (id === 'CODES_LITE') {
-            if (extendedThinking) { extendedThinking = false; toast('⚡ Düşünme modu: KAPALI (effort düşük)'); }
-        }
         const labels = {
             'CODES': '💻 CodeS',
             'CODES_LITE': '⚡ CodeS Lite',
@@ -3655,7 +3688,7 @@ Temel Kuralların:
             const apiRes = await fetch(LOCAL_FASTAPI_API, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({message: msg, model: MODEL_BACKEND[currentModel] || currentModel})
+                body: JSON.stringify({message: msg, model: gonderilecekModel()})
             });
             if (apiRes.ok) {
                 const d = await apiRes.json();
@@ -3705,7 +3738,7 @@ Temel Kuralların:
             const apiRes = await fetch(LOCAL_FASTAPI_API, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({message: msg, model: MODEL_BACKEND[currentModel] || currentModel, stream: true})
+                body: JSON.stringify({message: msg, model: gonderilecekModel(), stream: true})
             });
             if (apiRes.ok && apiRes.body) {
                 const reader = apiRes.body.getReader();
