@@ -24,15 +24,22 @@ OLLAMA_TAGS = f"{OLLAMA_BASE}/api/tags"
 M_XOPUS = "glassesglitchstudio/x_opus:V1_X_OPUS"
 M_GOPUS = "glassesglitchstudio/glitch_opus:X_GLITCH_OPUS"
 M_FABLE = "glassesglitchstudio/x_fable_coder:V1"
+M_LOCAL = "gulmezcetiner-max-plus:latest"
+M_QWEN35 = "qwen3.5:9b"
+M_CODER14 = "qwen2.5-coder:14b"
+M_R1 = "deepseek-r1:14b"
 
 # ── Ticari kademe → tercih zinciri (kurulu ilk model seçilir) ───────────────
 TIER_CHAINS: Dict[str, Optional[List[str]]] = {
-    "CODES_LITE":   [M_GOPUS, M_XOPUS],
-    "CODES_FLASH":  [M_XOPUS, M_GOPUS],
-    "CODES_PRO":    [M_FABLE, M_XOPUS, M_GOPUS],
-    "CODES_EXPERT": [M_FABLE, M_XOPUS],
+    "CODES_LITE":   [M_LOCAL, M_GOPUS, M_XOPUS],
+    "CODES_FLASH":  [M_QWEN35, M_LOCAL, M_XOPUS],
+    "CODES_PRO":    [M_CODER14, M_FABLE, M_QWEN35, M_LOCAL],
+    "CODES_EXPERT": [M_R1, M_CODER14, M_FABLE, M_LOCAL],
     "CODES":        None,   # otomatik: kategoriye göre zincir
     "MAXCODE":      [M_XOPUS, M_FABLE],
+    "MAXP":         [M_LOCAL],
+    "R1_14B":       [M_R1, M_LOCAL],
+    "CODER_14B":    [M_CODER14, M_FABLE, M_LOCAL],
 }
 
 # ── Kategori → tercih zinciri ───────────────────────────────────────────────
@@ -52,6 +59,9 @@ TIER_LABELS = {
     "CODES_EXPERT": "CodeS Expert",
     "CODES": "CodeS (otomatik)",
     "MAXCODE": "MaxCode",
+    "MAXP": "🐾 Max+ (Yerli)",
+    "R1_14B": "🧠 DeepSeek-R1 14B",
+    "CODER_14B": "💻 Qwen-Coder 14B",
 }
 
 # ── Sınıflandırma sinyalleri ────────────────────────────────────────────────
@@ -116,7 +126,11 @@ class CodeSRouter:
         if not installed:
             return list(chain)  # ollama kapalıysa zinciri olduğu gibi dene
         ready = [m for m in chain if m.lower() in installed]
-        return ready or list(chain)
+        if ready:
+            return ready
+        if M_LOCAL.lower() in installed:
+            return [M_LOCAL]          # son savunma: yerli Max+ her zaman cevap verir
+        return list(chain)
 
     # ── Kural tabanlı sınıflandırıcı (ML yok; uzunluk + anahtar kelime + bağlam)
     def classify(self, message: str) -> str:

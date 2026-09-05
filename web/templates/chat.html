@@ -60,7 +60,7 @@
         .model-selector:hover{border-color:#7c3aed}
         .model-selector .dot{width:6px;height:6px;border-radius:50%;background:#7c3aed;display:inline-block;flex-shrink:0}
         #modelName{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:130px;display:inline-block}
-        .model-dropdown{position:absolute;top:calc(100%+4px);left:0;min-width:210px;max-width:calc(100vw - 24px);background:#fff;border:1px solid #e0ddd5;border-radius:10px;padding:4px;z-index:70;display:none;box-shadow:0 8px 40px rgba(0,0,0,0.06)}
+        .model-dropdown{position:absolute;bottom:calc(100%+4px);top:auto;left:0;min-width:210px;max-width:calc(100vw - 24px);background:#fff;border:1px solid #e0ddd5;border-radius:10px;padding:4px;z-index:70;display:none;box-shadow:0 8px 40px rgba(0,0,0,0.06)}
         .model-dropdown.show{display:block}
         .model-opt{padding:7px 10px;border-radius:6px;cursor:pointer;font-size:.78rem;color:#333;transition:background .1s}
         .model-opt:hover{background:#f5f5f5}
@@ -135,7 +135,7 @@
         /* Model Selector in Light Mode */
         .model-selector { padding: 5px 10px; border-radius: 6px; border: 1px solid #e0ddd5; background: #fff; cursor: pointer; font-size: .72rem; font-weight: 500; color: #444; transition: all .15s; position: relative; display: flex; align-items: center; gap: 4px; }
         .model-selector:hover { border-color: #7c3aed; }
-        .model-dropdown { position: absolute; top: calc(100% + 4px); left: 0; min-width: 210px; background: #fff; border: 1px solid #e0ddd5; border-radius: 10px; padding: 4px; z-index: 70; display: none; box-shadow: 0 8px 30px rgba(0,0,0,0.1); }
+        .model-dropdown { position: absolute; bottom: calc(100% + 4px); top: auto; left: 0; min-width: 210px; background: #fff; border: 1px solid #e0ddd5; border-radius: 10px; padding: 4px; z-index: 70; display: none; box-shadow: 0 8px 30px rgba(0,0,0,0.1); }
         .model-dropdown.show { display: block; }
         .model-opt { padding: 7px 10px; border-radius: 6px; cursor: pointer; font-size: .78rem; color: #333; transition: background .1s; }
         .model-opt:hover { background: #f5f5f5; }
@@ -671,6 +671,10 @@
                     <div class="model-opt" onclick="selectModel('CODES_FLASH')">🔥 CodeS Flash<span class="sub">geçici — dengeli asistan</span></div>
                     <div class="model-opt" onclick="selectModel('CODES_PRO')">👑 CodeS Pro<span class="sub">geçici — kodlama &amp; uzun işler</span></div>
                     <div class="model-opt" onclick="selectModel('CODES_EXPERT')">🧠 CodeS Expert<span class="sub">geçici — en derin muhakeme</span></div>
+                    <div style="padding:8px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">YEREL MODELLER (Ollama)</div>
+                    <div class="model-opt" onclick="selectModel('MAXP')">🐾 Max+ (Yerli 3B)<span class="sub">en hızlı — gulmezcetiner:max+ ✅ aktif</span></div>
+                    <div class="model-opt" onclick="selectModel('CODER_14B')">💻 Qwen-Coder 14B<span class="sub">✅ kurulu — derin kod</span></div>
+                    <div class="model-opt" onclick="selectModel('R1_14B')">🧠 DeepSeek-R1 14B<span class="sub">✅ kurulu — adım adım düşünür</span></div>
                     <div style="padding:8px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">GÖRSEL</div>
                     <div class="model-opt" onclick="toast('🎨 SkyS-Maker beta yolda — plan B1')" style="opacity:.55">🎨 SkyS-Maker<span class="sub">🔧 yapılacak — görsel üretim</span></div>
                     <div style="padding:8px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">ADMIN</div>
@@ -1277,7 +1281,10 @@
         'CODES_PRO': 'CODES_PRO',
         'CODES_EXPERT': 'CODES_EXPERT',
         'CODES': 'CODES',
-        'MAXCODE': 'MAXCODE'
+        'MAXCODE': 'MAXCODE',
+        'MAXP': 'MAXP',
+        'R1_14B': 'R1_14B',
+        'CODER_14B': 'CODER_14B'
     };
     let currentStyle = 'normal';
     let webSearchEnabled = false;
@@ -1484,7 +1491,10 @@
             'CODES_PRO': '👑 CodeS Pro',
             'CODES_EXPERT': '🧠 CodeS Expert',
             'CODES': '💻 CodeS',
-            'MAXCODE': '🔒 MaxCode'
+            'MAXCODE': '🔒 MaxCode',
+            'MAXP': '🐾 Max+',
+            'R1_14B': '🧠 R1 14B',
+            'CODER_14B': '💻 Coder 14B'
         };
         const displayName = labels[id] || id;
         const mEl = document.getElementById('modelName');
