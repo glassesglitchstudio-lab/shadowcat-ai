@@ -1,0 +1,32 @@
+[
+    {
+        "name": "system_status",
+        "description": "Canli CPU/RAM/disk/sicaklik verisi dondurur (psutil tabanli)",
+        "endpoint": "GET /status",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    {
+        "name": "full_diagnostics",
+        "description": "Kapsamli teshis: sistem durumu + kurulu Ollama modelleri + benchmark ozeti",
+        "endpoint": "GET /api/diagnostics",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    },
+    {
+        "name": "benchmark_summary",
+        "description": "Son benchmark oturumunun ozeti (GFLOPS, tok/s olcumleri)",
+        "endpoint": "GET /api/diagnostics (benchmark_ozet alani)",
+        "parameters": {
+            "type": "object",
+            "properties": {},
+            "required": []
+        }
+    }
+]

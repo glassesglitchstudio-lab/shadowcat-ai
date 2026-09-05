@@ -1,0 +1,10 @@
+{
+    "name": "system_doctor",
+    "version": "1.0.0",
+    "description": "Sistem doktoru — CPU/RAM/disk durumu, kurulu modeller ve benchmark verileriyle canli teshis",
+    "author": "Shadowcat",
+    "category": "productivity",
+    "dependencies": [],
+    "python_deps": ["psutil", "requests"],
+    "enabled": true
+}

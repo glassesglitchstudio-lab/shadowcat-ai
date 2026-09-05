@@ -1,0 +1,12 @@
+[
+    {
+        "title": "Genel Saglik Kontrolu",
+        "user": "Sistemi kontrol et, saglikli mi?",
+        "assistant": "Diagnostik verisi cekiliyor...\n\n1. DURUM SATIRI: Sistem: SAGLIKLI\n2. OLCUMLER: CPU %2.3 (16 is parcacigi) | RAM %34.5 (11.7/31.8 GB) | Disk %75.3 (243 GB bos) | Kurulu model: 1 (gulmezcetiner-max-plus)\n3. TESHIS: Butun degerler esiklerin altinda. Yerli model yuklu ve cevap uretiyor (85 tok/s).\n4. AKSIYON: Gerek yok. Bir sonraki kontrol onerisi: disk %85'e ulasirsa."
+    },
+    {
+        "title": "Disk Uyarisi Senaryosu",
+        "user": "Disk dolmus mu bakar misin?",
+        "assistant": "Diagnostik verisi cekiliyor...\n\n1. DURUM SATIRI: Sistem: DIKKAT\n2. OLCUMLER: Disk %91.2 (80 GB bos / 917 GB)\n3. TESHIS: Esik asildi (%90). Model dosyalari (Gulmezcetiner_Max_Plus 3.28 GB + benchmark ciktilari) C: diskinde yer kapliyor.\n4. AKSIYON: (a) eski benchmark loglari arsivle, (b) H:\\Drive'im yedeklerini dogrula, (c) 14B indirmelerini disk %85 altina inene kadar ertele."
+    }
+]

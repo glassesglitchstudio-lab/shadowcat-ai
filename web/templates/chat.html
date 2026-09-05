@@ -1529,6 +1529,23 @@
         }
     }
 
+    async function runSystemTest() {
+        toast('Teşhis çalışıyor...');
+        try {
+            const r = await fetch('/api/diagnostics');
+            const d = await r.json();
+            const st = d.status || {};
+            const ram = st.memory ? ('RAM %' + st.memory.percent.toFixed(1)) : 'RAM ?';
+            const cpu = st.cpu ? ('CPU %' + st.cpu.percent.toFixed(1)) : 'CPU ?';
+            const disk = st.disk ? ('Disk %' + st.disk.percent.toFixed(1)) : 'Disk ?';
+            const modeller = Array.isArray(d.kurulu_modeller) ? d.kurulu_modeller.length + ' model kurulu' : 'model listesi alınamadı';
+            toast('Teşhis: ' + cpu + ' | ' + ram + ' | ' + disk + ' | ' + modeller);
+            console.log('[Shadowcat Diagnostik]', d);
+        } catch (e) {
+            toast('Teşhis alınamadı: ' + e.message);
+        }
+    }
+
     function selectComing(name) {
         currentModel = 'MAXP';
         toast('' + name + ' yakında geliyor — GCM+ cevap veriyor');
@@ -2954,7 +2971,7 @@ Hafif, sıfır bağımlılık gerektiren ve yüksek performanslı SQLite veritab
     <div class="card">
         <h1>⚡ Shadowcat Studio</h1>
         <p>Elytra-ai Canlı Web Önizleme Motoru devrede. Kodlarınızı anında yan panelde canlı test edin!</p>
-        <button class="btn" onclick="alert('⚡ Shadowcat Canlı Sistem Çalışıyor!')">Sistemi Test Et</button>
+        <button class="btn" onclick="runSystemTest()">Sistemi Test Et</button>
     </div>
 </body>
 </html>`
@@ -3037,7 +3054,7 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
         const tpl = document.getElementById('npTemplate') ? document.getElementById('npTemplate').value : 'ue5';
         const instructions = document.getElementById('npDesc').value.trim();
 
-        if (!name) { alert('Lütfen proje adı girin!'); return; }
+        if (!name) { toast('Lütfen proje adı girin!'); return; }
 
         let files = [];
         let category = 'Genel Proje';

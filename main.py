@@ -805,6 +805,27 @@ async def screen_status():
 
 
 
+@app.get("/api/diagnostics")
+def api_diagnostics():
+    """Canli sistem teshisi: durum + kurulu modeller + benchmark ozeti"""
+    import json as _json, time as _time
+    sonuc = {"status": get_system_status(), "tarih": _time.strftime("%Y-%m-%d %H:%M")}
+    try:
+        r = subprocess.run(["ollama", "list"], capture_output=True, text=True, timeout=15)
+        satirlar = [l for l in (r.stdout or "").splitlines()[1:] if l.strip()]
+        sonuc["kurulu_modeller"] = [l.split()[0] for l in satirlar]
+    except Exception as e:
+        sonuc["kurulu_modeller"] = f"alinamadi: {e}"
+    try:
+        yol = os.path.join(os.path.dirname(__file__), "benchmark_results.json")
+        with open(yol, encoding="utf-8") as f:
+            d = _json.load(f)
+        oturum = (d.get("oturumlar") or [{}])[-1]
+        sonuc["benchmark_ozet"] = oturum.get("ollama_testleri") or oturum.get("gpu") or "veri yok"
+    except Exception as e:
+        sonuc["benchmark_ozet"] = f"alinamadi: {e}"
+    return sonuc
+
 @app.post("/chat")
 
 async def chat(request: ChatRequest):
