@@ -362,6 +362,17 @@ def train_maxcode_70b():
     )
 
 
+# ===================== AEGIS-CYBER 7B (Şifreli Siber Güvenlik) QuantumQ =====================
+def train_aegis_cyber_7b():
+    """Aegis-Cyber 7B: Şifreli siber güvenlik, jailbreak kalkanı ve kod zırhlama modeli."""
+    train_quantumq(
+        model_name="Qwen/Qwen2.5-7B-Instruct",
+        dataset_path="C:/Users/ErCuM/CascadeProjects/shadowcat/opti-lora/data/aegis-cyber.jsonl",
+        output_dir="C:/Users/ErCuM/CascadeProjects/shadowcat/opti-lora/models/aegis-cyber-7b",
+        num_epochs=2, use_dora=True, lora_plus=True
+    )
+
+
 # ===================== TEST =====================
 if __name__ == "__main__":
     print("QuantumQ v1.0 modülü yüklendi (QDoRA + LoRAM + DoRA + LoRA+ + AdaLoRA).")
@@ -377,6 +388,7 @@ if __name__ == "__main__":
     print("  train_codes_14b_xlora() - CodeS 14B (6 XLoRA uzman)")
     print("  train_neos_30b() - NeoS 30B (KG + multi-lingual)")
     print("  train_maxcode_70b() - MaxCode 70B (admin)")
+    print("  train_aegis_cyber_7b() - Aegis-Cyber 7B (şifreli siber güvenlik)")
     print()
     print("Alignment:")
     print("  train_dpo_quantumq(..., method='dpo'/'orpo') - DPO/ORPO")

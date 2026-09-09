@@ -1,0 +1,434 @@
+{
+  "ad": "TR-100",
+  "tarih": "06.09.2026",
+  "amac": "Sabit Turkce degerlendirme seti",
+  "kategoriler": [
+    "kimlik",
+    "sohbet",
+    "kod",
+    "mat",
+    "genel"
+  ],
+  "sorular": [
+    {
+      "kategori": "kimlik",
+      "soru": "Sen kimsin?"
+    },
+    {
+      "kategori": "kimlik",
+      "soru": "Sen nesin?"
+    },
+    {
+      "kategori": "kimlik",
+      "soru": "Adin ne?"
+    },
+    {
+      "kategori": "kimlik",
+      "soru": "Kimsin sen?"
+    },
+    {
+      "kategori": "kimlik",
+      "soru": "Kendini tanit."
+    },
+    {
+      "kategori": "kimlik",
+      "soru": "Seni kim yaratti?"
+    },
+    {
+      "kategori": "kimlik",
+      "soru": "Seni kim egitti?"
+    },
+    {
+      "kategori": "kimlik",
+      "soru": "Elytra-ai nedir?"
+    },
+    {
+      "kategori": "kimlik",
+      "soru": "Sen Qwen misin?"
+    },
+    {
+      "kategori": "kimlik",
+      "soru": "Sen ChatGPT misin?"
+    },
+    {
+      "kategori": "kimlik",
+      "soru": "Hangi modelsin?"
+    },
+    {
+      "kategori": "kimlik",
+      "soru": "Shadowcat ailesi nedir?"
+    },
+    {
+      "kategori": "kimlik",
+      "soru": "CodeS nedir senin icin?"
+    },
+    {
+      "kategori": "kimlik",
+      "soru": "Atlas nedir?"
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Merhaba, nasilsin?"
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Bugun nasil hissediyorsun?"
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Bana gunaydin de."
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Iyi geceler dilerim."
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Tesekkur ederim!"
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Ne yapıyorsun simdi?"
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Bana bir fikir ver."
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Kisaca kendini ozetle."
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "En sevdigin konu nedir?"
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Bana moral ver."
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Yoruldum, ne onerirsin?"
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Yeni bir projeye basliyorum, tavsiye?"
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Bana bir sarki oner."
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Hava cok sicak, ne yapmaliyim?"
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Kahve mi cay mi?"
+    },
+    {
+      "kategori": "kod",
+      "soru": "Python ile ekrana Merhaba yazdiran kodu ver."
+    },
+    {
+      "kategori": "kod",
+      "soru": "Python'da 1'den 10'a kadar sayilari yazdiran donguyu yaz."
+    },
+    {
+      "kategori": "kod",
+      "soru": "Iki sayiyi toplayan bir Python fonksiyonu yaz."
+    },
+    {
+      "kategori": "kod",
+      "soru": "Bir listenin elemanlarini ters ceviren Python kodu yaz."
+    },
+    {
+      "kategori": "kod",
+      "soru": "Python'da bir dosyayi okuyup icerigini yazdiran kodu ver."
+    },
+    {
+      "kategori": "kod",
+      "soru": "FizzBuzz problemini Python ile coz."
+    },
+    {
+      "kategori": "kod",
+      "soru": "Bir string'i tersten yazdiran Python fonksiyonu yaz."
+    },
+    {
+      "kategori": "kod",
+      "soru": "Python'da rastgele sayi ureten kod ornegi ver."
+    },
+    {
+      "kategori": "kod",
+      "soru": "Bir sozlukteki anahtarlari listeleyen Python kodu yaz."
+    },
+    {
+      "kategori": "kod",
+      "soru": "Python ile bir listeyi siralayan kod ver."
+    },
+    {
+      "kategori": "kod",
+      "soru": "Verilen sayinin faktoriyelini hesaplayan fonksiyon yaz."
+    },
+    {
+      "kategori": "kod",
+      "soru": "Python'da class ornegi ver: Araba sinifi."
+    },
+    {
+      "kategori": "kod",
+      "soru": "Bir try-except ornegi yaz."
+    },
+    {
+      "kategori": "kod",
+      "soru": "Iki listeyi birlestiren Python kodu yaz."
+    },
+    {
+      "kategori": "kod",
+      "soru": "Bir kelimenin palindrom olup olmadigini kontrol eden fonksiyon yaz."
+    },
+    {
+      "kategori": "mat",
+      "soru": "12 elma 3 liradan, 2 armut 5 liradan alindi. Toplam kac lira?",
+      "beklenen_cevap": 44
+    },
+    {
+      "kategori": "mat",
+      "soru": "5 elma 4 liradan, 7 armut 3 liradan alindi. Toplam kac lira?",
+      "beklenen_cevap": 69
+    },
+    {
+      "kategori": "mat",
+      "soru": "3 elma 8 liradan, 2 armut 3 liradan alindi. Toplam kac lira?",
+      "beklenen_cevap": 30
+    },
+    {
+      "kategori": "mat",
+      "soru": "5 elma 5 liradan, 6 armut 7 liradan alindi. Toplam kac lira?",
+      "beklenen_cevap": 43
+    },
+    {
+      "kategori": "mat",
+      "soru": "10 elma 5 liradan, 7 armut 7 liradan alindi. Toplam kac lira?",
+      "beklenen_cevap": 92
+    },
+    {
+      "kategori": "mat",
+      "soru": "5 elma 9 liradan, 6 armut 5 liradan alindi. Toplam kac lira?",
+      "beklenen_cevap": 63
+    },
+    {
+      "kategori": "mat",
+      "soru": "4 elma 8 liradan, 4 armut 5 liradan alindi. Toplam kac lira?",
+      "beklenen_cevap": 48
+    },
+    {
+      "kategori": "mat",
+      "soru": "5 elma 7 liradan, 2 armut 3 liradan alindi. Toplam kac lira?",
+      "beklenen_cevap": 47
+    },
+    {
+      "kategori": "mat",
+      "soru": "3 elma 7 liradan, 8 armut 5 liradan alindi. Toplam kac lira?",
+      "beklenen_cevap": 77
+    },
+    {
+      "kategori": "mat",
+      "soru": "6 elma 2 liradan, 7 armut 6 liradan alindi. Toplam kac lira?",
+      "beklenen_cevap": 61
+    },
+    {
+      "kategori": "mat",
+      "soru": "3 elma 8 liradan, 2 armut 7 liradan alindi. Toplam kac lira?",
+      "beklenen_cevap": 34
+    },
+    {
+      "kategori": "mat",
+      "soru": "12 elma 7 liradan, 6 armut 4 liradan alindi. Toplam kac lira?",
+      "beklenen_cevap": 102
+    },
+    {
+      "kategori": "mat",
+      "soru": "2 elma 5 liradan, 8 armut 5 liradan alindi. Toplam kac lira?",
+      "beklenen_cevap": 34
+    },
+    {
+      "kategori": "mat",
+      "soru": "5 elma 3 liradan, 5 armut 5 liradan alindi. Toplam kac lira?",
+      "beklenen_cevap": 45
+    },
+    {
+      "kategori": "mat",
+      "soru": "12 elma 7 liradan, 3 armut 5 liradan alindi. Toplam kac lira?",
+      "beklenen_cevap": 99
+    },
+    {
+      "kategori": "mat",
+      "soru": "18 * 7 + 14 kac eder?",
+      "beklenen_cevap": 140
+    },
+    {
+      "kategori": "mat",
+      "soru": "33 * 7 + 14 kac eder?",
+      "beklenen_cevap": 245
+    },
+    {
+      "kategori": "mat",
+      "soru": "20 * 7 + 14 kac eder?",
+      "beklenen_cevap": 154
+    },
+    {
+      "kategori": "mat",
+      "soru": "34 * 7 + 14 kac eder?",
+      "beklenen_cevap": 252
+    },
+    {
+      "kategori": "mat",
+      "soru": "33 * 7 + 14 kac eder?",
+      "beklenen_cevap": 245
+    },
+    {
+      "kategori": "genel",
+      "soru": "Turkiye'nin baskenti neresidir?"
+    },
+    {
+      "kategori": "genel",
+      "soru": "Gunes sistemindeki gezegen sayisi kactir?"
+    },
+    {
+      "kategori": "genel",
+      "soru": "Suyun kimyasal formulu nedir?"
+    },
+    {
+      "kategori": "genel",
+      "soru": "Dunya'nin uydusu nedir?"
+    },
+    {
+      "kategori": "genel",
+      "soru": "Turkiye'nin en kalabalik sehri hangisidir?"
+    },
+    {
+      "kategori": "genel",
+      "soru": "Bir yilda kac ay vardir?"
+    },
+    {
+      "kategori": "genel",
+      "soru": "Ataturk hangi yilda dogmustur?"
+    },
+    {
+      "kategori": "genel",
+      "soru": "Instagram hangi yilda kuruldu?"
+    },
+    {
+      "kategori": "genel",
+      "soru": "Bilgisayarın babasi kimdir?"
+    },
+    {
+      "kategori": "genel",
+      "soru": "DNA neyin kısaltmasıdır?"
+    },
+    {
+      "kategori": "genel",
+      "soru": "En buyuk okyanus hangisidir?"
+    },
+    {
+      "kategori": "genel",
+      "soru": "Piramitler hangi ulkededir?"
+    },
+    {
+      "kategori": "genel",
+      "soru": "1 kilobayt kac bayttir?"
+    },
+    {
+      "kategori": "genel",
+      "soru": "Internette kullanilan HTTP neyin kisaltmasidir?"
+    },
+    {
+      "kategori": "genel",
+      "soru": "Turkiye'nin nufusu yaklasik kactir?"
+    },
+    {
+      "kategori": "genel",
+      "soru": "Ay'a ilk inen insan kimdir?"
+    },
+    {
+      "kategori": "genel",
+      "soru": "Elektrik akiminin birimine ne denir?"
+    },
+    {
+      "kategori": "genel",
+      "soru": "Yeryuzunun en yuksek dagi hangisidir?"
+    },
+    {
+      "kategori": "genel",
+      "soru": "Python dili hangi yilda cikti?"
+    },
+    {
+      "kategori": "genel",
+      "soru": "Yapay zeka nedir, kisa tanimla?"
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Nasil gidiyor?"
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Bugun gunlerden ne?"
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Bana bir hikaye anlat."
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Yarin ne yapmaliyim?"
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Bana bir bilmece sor."
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Sen de dinleniyor musun?"
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "En iyi arkadasin kim?"
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Bir hedef belirle."
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Bana bir alinti soyle."
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Nasil daha verimli olurum?"
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Sabah rutini oner."
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Bana bir kitap oner."
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Spor yapmak icin motivasyon ver."
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Bana birespri yap."
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Kisaca kendini gelistirmek istiyorum, ne onermelisin?"
+    },
+    {
+      "kategori": "sohbet",
+      "soru": "Bugun ogrendigim seyi tekrar et."
+    }
+  ]
+}

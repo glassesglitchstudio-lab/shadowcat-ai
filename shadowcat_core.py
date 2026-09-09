@@ -1,83 +1,23 @@
-"""
-
-╔═══════════════════════════════════════════════════════════════╗
-
-║                                                               ║
-
-║          SHADOWCAT CORE - MERKEZİ ÇEKİRDEK ║
-
-║                                                               ║
-
-║    Tüm alt sistemleri birleştiren ana yönetim katmanı        ║
-
-║                                                               ║
-
-║    Mimarisi:                                                   ║
-
-║    ShadowcatCore                                                  ║
-
-║     ├── AgentLoop (ReAct)      Düşün + Karar Ver + Uygula  ║
-
-║     ├── ToolExecutor           Fonksiyon çağırma motoru    ║
-
-║     ├── TaskPlanner            Çok adımlı görev planlama   ║
-
-║     ├── StateManager           Kalıcı durum yönetimi       ║
-
-║     ├── MemoryManager          Nexus hafıza yönetimi    ║
-
-║     ├── ModelRouter            AI model yönlendirici       ║
-
-║     ├── SkillManager           Yetenek paketleri           ║
-
-║     ├── PluginManager          Eklenti sistemi             ║
-
-║     ├── WebAgent               Otonom web tarayıcı         ║
-
-║     ├── FeedbackLoop           Öğrenme ve hata toleransı   ║
-
-║     └── ErrorFixEngine         Kendi kendini iyileştirme  ║
-
-║                                                               ║
-
-╚═══════════════════════════════════════════════════════════════╝
-
-"""
-
-
+"""Shadowcat Core - Central Management Layer"""
 
 import os
-
 import sys
-
 import json
-
 import time
-
 import uuid
-
 import logging
-
 import threading
-
 from datetime import datetime
-
 from typing import Dict, List, Optional, Any, Callable
-
 from pathlib import Path
-
 from dataclasses import dataclass, field, asdict
 
-
-
-# Logging
-
 logging.basicConfig(level=logging.INFO)
-
 logger = logging.getLogger("ShadowcatCore")
 
-
-
+VERSION = "5.0.0"
+AGENT_NAME = "Shadowcat"
+OWNER = "ErCuM"
 # ─────────────────────────────────────────────────────────────
 
 # MODÜL YÜKLEMELERİ (opsiyonel - graceful fallback ile)
@@ -1759,7 +1699,7 @@ class ShadowcatCore:
 
             # Sorguyla ilgili hafızaları ara
 
-            related = self.memory.recall(query, max_results=3)
+            related = self.memory.recall(query, limit=3)
 
             
 
@@ -1805,7 +1745,7 @@ class ShadowcatCore:
 
                 for r in all_hits[:5]:
 
-                    preview = r["content_preview"][:150].replace('\n', ' ').strip()
+                    preview = r["content"][:150].replace('\n', ' ').strip()
 
                     parts.append(f"{r.get('type', '?')}: {preview}...")
 

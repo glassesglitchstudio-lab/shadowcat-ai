@@ -529,7 +529,7 @@ class UltraAgentEngine:
         logger.info(f"  Ultra_Agent araclari kaydedildi ({len(tools)} yeni arac)")
 
     def process(self, user_input: str) -> str:
-        """LLM destekli process - dogal dili anla ve dogru alt sisteme yonlendir"""
+        """Ultra Agent Engine - 9 Agent Protocols"""
         if self.core and self.core.model_router:
             system_prompt = """Sen Ultra_Agent'in karar motorusun. Kullanıcının isteğini analiz et ve sadece bir KATEGORİ adı döndür.
 

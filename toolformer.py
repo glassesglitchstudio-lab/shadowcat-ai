@@ -1,4 +1,4 @@
-﻿"""
+"""
 ╔══════════════════════════════════════════════════════════════════╗
 ║                                                                  ║
 ║       TOOLFORMER - Fonksiyon Çağırma Sistemi                    ║
@@ -648,16 +648,22 @@ class ResponseParser:
         self.registry = registry
         self._call_counter = 0
     
-    def parse(self, text: str) -> List[ToolCall]:
+    def parse(self, text) -> List[ToolCall]:
         """
         AI yanıt metninden tüm araç çağrılarını çıkart.
         
         Args:
-            text: AI tarafından üretilen yanıt metni
+            text: AI tarafından üretilen yanıt metni (string veya dict olabilir)
         
         Returns:
             List[ToolCall]: Bulunan tüm araç çağrıları
         """
+        # Dict veya diğer tipler geldğinde string'e çevir
+        if isinstance(text, dict):
+            text = json.dumps(text, ensure_ascii=False)
+        elif not isinstance(text, str):
+            text = str(text) if text is not None else ""
+        
         calls = []
         
         if not text or not text.strip():
@@ -836,8 +842,13 @@ class ResponseParser:
         except Exception:
             return None
     
-    def has_tool_calls(self, text: str) -> bool:
-        """Metin araç çağrısı içeriyor mu?"""
+    def has_tool_calls(self, text) -> bool:
+        """Metin arac cagrisi iceriyor mu? (dict destegi var)"""
+        if isinstance(text, dict):
+            text = json.dumps(text, ensure_ascii=False)
+        elif not isinstance(text, str):
+            text = str(text) if text is not None else ""
+
         if not text:
             return False
         
@@ -851,8 +862,13 @@ class ResponseParser:
         
         return any(p.search(text) for p in patterns)
     
-    def strip_tool_calls(self, text: str) -> str:
-        """Metinden araç çağrılarını temizle, sadece doğal dili bırak"""
+    def strip_tool_calls(self, text) -> str:
+        """Metinden arac cagrilarini temizle, sadece dogal dili birak (dict destegi var)"""
+        if isinstance(text, dict):
+            text = json.dumps(text, ensure_ascii=False)
+        elif not isinstance(text, str):
+            text = str(text) if text is not None else ""
+
         result = text
         
         # FUNCCALL temizle

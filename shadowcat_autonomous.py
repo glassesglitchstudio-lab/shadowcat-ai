@@ -36,7 +36,7 @@ parser = CommandParser()
 
 # ==================== BAĞLI CLIENTLAR ====================
 class ConnectedClients:
-    """Bağlı clientları takip et"""
+    """Shadowcat Autonomous - WebSocket Connection"""
     
     def __init__(self):
         self.clients = {}  # sid -> {type, mode, last_seen}
@@ -80,7 +80,7 @@ class IntentProcessor:
         self.auto_respond = True
     
     def process(self, message: str, client_info: Dict = None) -> Dict:
-        """Mesajı otomatik işle"""
+        """Shadowcat Autonomous - WebSocket Connection"""
         # Komut ayrıştır
         result = parser.parse(message)
         
@@ -101,7 +101,7 @@ class IntentProcessor:
         }
     
     def _create_auto_response(self, intent_result: Dict) -> str:
-        """Otomatik yanıt oluştur"""
+        """Shadowcat Autonomous - WebSocket Connection"""
         mode = intent_result["mode"]
         confidence = intent_result["confidence"]
         
@@ -115,14 +115,14 @@ class IntentProcessor:
             return "Shadowcat: Mesajınızı işliyorum... "
     
     def get_code(self, intent_result: Dict) -> str:
-        """Üretilen kodu al"""
+        """Shadowcat Autonomous - WebSocket Connection"""
         return intent_result.get("generated_code", "")
 
 intent_processor = IntentProcessor()
 
 # ==================== GODOT ENTEGRASYONU ====================
 class GodotBridge:
-    """Godot ile iletişim köprüsü"""
+    """Shadowcat Autonomous - WebSocket Connection"""
     
     def __init__(self):
         self.connected = False
@@ -139,12 +139,12 @@ class GodotBridge:
         print("Godot bağlantısı koptu")
     
     def send_to_godot(self, event: str, data: Dict):
-        """Godot'a mesaj gönder"""
+        """Shadowcat Autonomous - WebSocket Connection"""
         if self.godot_sid:
             socketio.emit(event, data, room=self.godot_sid)
     
     def execute_game_code(self, code: str):
-        """Godot'a kod gönder çalıştır"""
+        """Shadowcat Autonomous - WebSocket Connection"""
         self.send_to_godot("execute_code", {
             "code": code,
             "timestamp": datetime.now().isoformat()
@@ -156,7 +156,7 @@ godot_bridge = GodotBridge()
 
 @socketio.on('connect')
 def handle_connect():
-    """Client bağlandığında"""
+    """Shadowcat Autonomous - WebSocket Connection"""
     print(f"Client bağlandı: {request.sid}")
     emit('connected', {
         'status': 'ok',
@@ -166,7 +166,7 @@ def handle_connect():
 
 @socketio.on('register')
 def handle_register(data):
-    """Client tipi kaydet (web/godot)"""
+    """Shadowcat Autonomous - WebSocket Connection"""
     client_type = data.get('type', 'web')
     connected_clients.add(request.sid, client_type)
     
@@ -178,7 +178,7 @@ def handle_register(data):
 
 @socketio.on('disconnect')
 def handle_disconnect():
-    """Client ayrıldığında"""
+    """Shadowcat Autonomous - WebSocket Connection"""
     client_info = connected_clients.clients.get(request.sid, {})
     client_type = client_info.get('type', 'unknown')
     
@@ -224,7 +224,7 @@ def handle_message(data):
 
 @socketio.on('godot_command')
 def handle_godot_command(data):
-    """Godot'a özel komut gönder"""
+    """Shadowcat Autonomous - WebSocket Connection"""
     command = data.get('command', '')
     params = data.get('params', {})
     
@@ -239,7 +239,7 @@ def handle_godot_command(data):
 
 @socketio.on('request_status')
 def handle_status_request(data):
-    """Durum talebi"""
+    """Shadowcat Autonomous - WebSocket Connection"""
     emit('status', {
         'connected_clients': len(connected_clients.clients),
         'godot_connected': godot_bridge.connected,
@@ -252,12 +252,12 @@ def handle_status_request(data):
 
 @app.route('/')
 def index():
-    """Ana sayfa"""
+    """Shadowcat Autonomous - WebSocket Connection"""
     return render_template('index.html')
 
 @app.route('/api/intent', methods=['POST'])
 def http_intent():
-    """HTTP ile niyet gönder"""
+    """Shadowcat Autonomous - WebSocket Connection"""
     data = request.get_json()
     message = data.get('message', '')
     
@@ -273,7 +273,7 @@ def http_intent():
 
 @app.route('/api/status')
 def http_status():
-    """HTTP durum"""
+    """Shadowcat Autonomous - WebSocket Connection"""
     return jsonify({
         "connected": len(connected_clients.clients),
         "godot": godot_bridge.connected,
@@ -283,7 +283,7 @@ def http_status():
 # ==================== TEST SAYFASI ====================
 @app.route('/test')
 def test_page():
-    """Test sayfası - otomatik mesaj gönder"""
+    """Shadowcat Autonomous - WebSocket Connection"""
     return """
     <!DOCTYPE html>
     <html>

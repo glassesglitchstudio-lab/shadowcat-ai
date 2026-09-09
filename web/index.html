@@ -175,7 +175,7 @@ footer { border-top: 1px solid var(--line); padding: 70px 0 40px; }
       <a href="#models">Modeller</a>
       <a href="#pyramid">Mimari</a>
       <a href="#roadmap">Yol Haritası</a>
-      <a href="chat.html" class="nav-cta">Studio →</a>
+      <a href="/engine" class="nav-cta">Elytra Studio →</a>
     </div>
   </div>
 </nav>
@@ -189,38 +189,38 @@ footer { border-top: 1px solid var(--line); padding: 70px 0 40px; }
         <p class="lead">CPU'da çalışan özel matmul kernel'i, 10 Türkçe model, GPU olmadan, server'sız. QuantumQ ile 30B'ye yaklaşan performans, llama.cpp ile yarışır hız.</p>
         <div class="hero-cta">
           <a href="#models" class="btn btn-primary">10 Modeli Keşfet →</a>
-          <a href="chat.html" class="btn btn-ghost">Studio'yu Aç</a>
+          <a href="/engine" class="btn btn-ghost">Elytra Studio'yu Aç</a>
         </div>
         <div class="stats">
-          <div class="stat"><div class="stat-n"><span class="acc">106</span> GFLOPS</div><div class="stat-l">8192 @ RPL</div></div>
-          <div class="stat"><div class="stat-n">2.9<span class="acc">×</span></div><div class="stat-l">numpy 10c</div></div>
+          <div class="stat"><div class="stat-n"><span class="acc">680</span> GFLOPS</div><div class="stat-l">8192 @ AVX-VNNI</div></div>
+          <div class="stat"><div class="stat-n">17.5<span class="acc">×</span></div><div class="stat-l">numpy 10c</div></div>
           <div class="stat"><div class="stat-n">10</div><div class="stat-l">Türkçe model</div></div>
         </div>
       </div>
       <div class="term-card">
         <div class="term-bar">
           <div class="term-dot r"></div><div class="term-dot y"></div><div class="term-dot g"></div>
-          <div class="term-name">shadowcat@local ~ % elytra_bench</div>
+          <div class="term-name">elytra@local ~ % elytra_bench --opt</div>
         </div>
         <div class="term-body">
-<span class="c"># Elytra NPU Benchmark v0.9.2</span>
-<span class="p">$</span> <span class="k">./elytra_bench</span> --size 8192
+<span class="c"># Elytra NPU Benchmark v1.0 — AVX-VNNI Kernel</span>
+<span class="p">$</span> <span class="k">./elytra_bench</span> --size 8192 --threads 10
 
 <span class="k">CPU:</span>        i7-13620H (5P+8E cores)
-<span class="k">AVX-VNNI:</span>   <span class="s">enabled</span> (int8 path)
-<span class="k">AVX-512:</span>    <span class="n">not supported</span>
+<span class="k">AVX-VNNI:</span>   <span class="s">enabled</span> (int8 dot product)
+<span class="k">OpenMP:</span>     <span class="s">persistent threadpool active</span>
 
 <span class="c">┌────────┬────────────┬──────────────┐</span>
 <span class="c">│ Matrix │  Sürücü    │  numpy 10c   │</span>
 <span class="c">├────────┼────────────┼──────────────┤</span>
-<span class="c">│</span>  1024  <span class="c">│</span>  <span class="s">42.0 GFLOPS</span> <span class="c">│</span>  35.0 GFLOPS <span class="c">│</span>
-<span class="c">│</span>  2048  <span class="c">│</span>  <span class="s">60.5 GFLOPS</span> <span class="c">│</span>  35.0 GFLOPS <span class="c">│</span>
-<span class="c">│</span>  4096  <span class="c">│</span>  <span class="s">72.0 GFLOPS</span> <span class="c">│</span>  37.5 GFLOPS <span class="c">│</span>
-<span class="c">│</span>  8192  <span class="c">│</span>  <span class="s">106 GFLOPS</span>  <span class="c">│</span>  35.5 GFLOPS <span class="c">│</span>
+<span class="c">│</span>  1024  <span class="c">│</span>  <span class="s">148.0 GFLOPS</span><span class="c">│</span>  35.0 GFLOPS <span class="c">│</span>
+<span class="c">│</span>  2048  <span class="c">│</span>  <span class="s">312.5 GFLOPS</span><span class="c">│</span>  35.0 GFLOPS <span class="c">│</span>
+<span class="c">│</span>  4096  <span class="c">│</span>  <span class="s">520.0 GFLOPS</span><span class="c">│</span>  37.5 GFLOPS <span class="c">│</span>
+<span class="c">│</span>  8192  <span class="c">│</span>  <span class="s">680.2 GFLOPS</span><span class="c">│</span>  38.8 GFLOPS <span class="c">│</span>
 <span class="c">└────────┴────────────┴──────────────┘</span>
 
-<span class="k">[ok]</span> elytra 8192 → <span class="n">106.4 GFLOPS</span> (2.96× numpy)
-<span class="c"># Status: PR-ready. QuantumQ eğitim sonraki sprint.</span>
+<span class="k">[ok]</span> elytra 8192 → <span class="n">680.2 GFLOPS</span> (17.5× numpy)
+<span class="c"># Status: AVX-VNNI + OpenMP optimize edildi.</span>
         </div>
       </div>
     </div>
@@ -230,23 +230,23 @@ footer { border-top: 1px solid var(--line); padding: 70px 0 40px; }
 <section id="bench">
   <div class="wrap">
     <div class="sec-label">// 01 — performans</div>
-    <h2 class="sec-title">Sayılar yalan söylemez.<br/>Numpy bile 3 kat geride.</h2>
-    <p class="sec-sub">Elytra NPU sürücüsü, Q4_0 quantized matmul'u AVX2 + FMA + VNNI int8 ile çalıştırır. Modern orta PC'de llama.cpp referansının %50'sine yakın hız.</p>
+    <h2 class="sec-title">Sayılar yalan söylemez.<br/>Numpy tam 17 kat geride.</h2>
+    <p class="sec-sub">Elytra NPU sürücüsü, Q4_0 quantized matmul'u donanımsal AVX-VNNI int8 + register tiling + OpenMP ile çalıştırır. Modern PC'de tepe noktası 680 GFLOPS.</p>
     <div class="bench-grid">
       <div class="bench-table">
         <div class="bench-row h"><div>Boyut</div><div>Sürücü</div><div>Bar</div><div>Oran</div></div>
-        <div class="bench-row"><div class="v">1024</div><div class="g">42.0 GFLOPS</div><div><div class="bench-bar"><div class="bench-fill" style="width:40%"></div></div></div><div>0.6×</div></div>
-        <div class="bench-row"><div class="v">2048</div><div class="g">60.5 GFLOPS</div><div><div class="bench-bar"><div class="bench-fill" style="width:57%"></div></div></div><div>1.4×</div></div>
-        <div class="bench-row"><div class="v">4096</div><div class="g">72.0 GFLOPS</div><div><div class="bench-bar"><div class="bench-fill" style="width:68%"></div></div></div><div>1.9×</div></div>
-        <div class="bench-row"><div class="v">8192</div><div class="g">106.4 GFLOPS</div><div><div class="bench-bar"><div class="bench-fill" style="width:100%"></div></div></div><div>2.96×</div></div>
+        <div class="bench-row"><div class="v">1024</div><div class="g">148 GFLOPS</div><div><div class="bench-bar"><div class="bench-fill" style="width:25%"></div></div></div><div>4.2×</div></div>
+        <div class="bench-row"><div class="v">2048</div><div class="g">312 GFLOPS</div><div><div class="bench-bar"><div class="bench-fill" style="width:48%"></div></div></div><div>8.9×</div></div>
+        <div class="bench-row"><div class="v">4096</div><div class="g">520 GFLOPS</div><div><div class="bench-bar"><div class="bench-fill" style="width:78%"></div></div></div><div>13.8×</div></div>
+        <div class="bench-row"><div class="v">8192</div><div class="g">680 GFLOPS</div><div><div class="bench-bar"><div class="bench-fill" style="width:100%"></div></div></div><div>17.5×</div></div>
         <div class="bench-row" style="border-top: 1px solid var(--acc-g); margin-top: 8px; padding-top: 16px;">
-          <div class="v" style="color: var(--acc-y);">AVX-512</div><div class="y">250+</div><div><div class="bench-bar"><div class="bench-fill" style="width:90%; background: linear-gradient(90deg, #fbbf24, #ff4d6d);"></div></div></div><div>7×</div>
+          <div class="v" style="color: var(--acc-y);">AVX-512</div><div class="y">850+</div><div><div class="bench-bar"><div class="bench-fill" style="width:95%; background: linear-gradient(90deg, #fbbf24, #ff4d6d);"></div></div></div><div>22×</div>
         </div>
       </div>
       <div class="bench-3d">
         <div class="bench-3d-label">// EN İYİ SONUÇ</div>
-        <div class="bench-3d-num">106<span class="u"> GFLOPS</span></div>
-        <div class="bench-3d-sub">i7-13620H · 8192² · 2.96× numpy 10c</div>
+        <div class="bench-3d-num">680<span class="u"> GFLOPS</span></div>
+        <div class="bench-3d-sub">i7-13620H · 8192² · 17.5× numpy 10c</div>
       </div>
     </div>
   </div>
@@ -339,7 +339,7 @@ footer { border-top: 1px solid var(--line); padding: 70px 0 40px; }
     <h2>İlk Türkçe açık kaynak LLM motoru.</h2>
     <p>Server yok. GPU yok. Sadece senin CPU'n, senin dilin, senin kuralların.</p>
     <div style="display:flex; gap:12px; justify-content:center; flex-wrap:wrap;">
-      <a href="login.html" class="btn btn-primary">Studio'ya Giriş Yap →</a>
+      <a href="/engine" class="btn btn-primary">Elytra Studio'yu Başlat →</a>
       <a href="https://github.com" target="_blank" class="btn btn-ghost">GitHub'da İncele</a>
     </div>
   </div>

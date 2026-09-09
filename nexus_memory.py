@@ -330,6 +330,65 @@ class NexusMemoryEngine:
             "db_path": self.db_path
         }
 
+    def recall_recent(self, limit: int = 5) -> List[Dict[str, Any]]:
+        """Son hatırlanan kayıtları getir (bağlam için)"""
+        results = []
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT * FROM memories
+                ORDER BY updated_at DESC
+                LIMIT ?
+            """, (limit,))
+            rows = cursor.fetchall()
+            for row in rows:
+                results.append({
+                    "id": row["id"],
+                    "title": row["title"],
+                    "content": row["content"],
+                    "category": row["category"],
+                    "tags": json.loads(row["tags"] or "[]"),
+                    "metadata": json.loads(row["metadata"] or "{}"),
+                    "created_at": row["created_at"],
+                    "updated_at": row["updated_at"]
+                })
+        return results
+
+    def recall_by_category(self, category: str, limit: int = 5) -> List[Dict[str, Any]]:
+        """Kategoriye göre hatırlama"""
+        results = []
+        with self._get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute("""
+                SELECT * FROM memories
+                WHERE category = ?
+                ORDER BY updated_at DESC
+                LIMIT ?
+            """, (category, limit))
+            rows = cursor.fetchall()
+            for row in rows:
+                results.append({
+                    "id": row["id"],
+                    "title": row["title"],
+                    "content": row["content"],
+                    "category": row["category"],
+                    "tags": json.loads(row["tags"] or "[]"),
+                    "created_at": row["created_at"],
+                    "updated_at": row["updated_at"]
+                })
+        return results
+
+
+# Singleton Pattern
+_nexus_instance: Optional[NexusMemoryEngine] = None
+
+def get_nexus_memory() -> NexusMemoryEngine:
+    global _nexus_instance
+    if _nexus_instance is None:
+        _nexus_instance = NexusMemoryEngine()
+    return _nexus_instance
+
+
 
 # Singleton Pattern
 _nexus_instance: Optional[NexusMemoryEngine] = None

@@ -56,18 +56,129 @@
         .tb-btn:hover{border-color:#ccc}
         .tb-btn.active{background:rgba(124,58,237,0.06);border-color:#7c3aed;color:#7c3aed}
         .tb-btn .dot{width:6px;height:6px;border-radius:50%;display:inline-block}
-        .model-selector{padding:5px 10px;border-radius:6px;border:1px solid #e0ddd5;background:#fff;cursor:pointer;font-size:.72rem;font-weight:500;color:#444;transition:all .15s;position:relative;display:flex;align-items:center;gap:4px;font-family:inherit;max-width:190px}
+        .model-selector{padding:5px 10px;border-radius:6px;border:1px solid #e0ddd5;background:#fff;cursor:pointer;font-size:.72rem;font-weight:500;color:#444;transition:all .15s;position:relative;display:flex;align-items:center;gap:4px;font-family:inherit;max-width:210px}
         .model-selector:hover{border-color:#7c3aed}
         .model-selector .dot{width:6px;height:6px;border-radius:50%;background:#7c3aed;display:inline-block;flex-shrink:0}
-        #modelName{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:130px;display:inline-block}
-        .model-dropdown{position:absolute;bottom:calc(100%+4px);top:auto;left:0;min-width:210px;max-width:calc(100vw - 24px);background:#fff;border:1px solid #e0ddd5;border-radius:10px;padding:4px;z-index:70;display:none;box-shadow:0 8px 40px rgba(0,0,0,0.06)}
-        .model-dropdown.show{display:block}
-        .model-opt{padding:7px 10px;border-radius:6px;cursor:pointer;font-size:.78rem;color:#333;transition:background .1s}
-        .model-opt:hover{background:#f5f5f5}
-        .model-opt.active{color:#7c3aed;font-weight:500}
-        .model-opt .sub{display:block;font-size:.6rem;color:#999;font-weight:400;margin-top:1px}
-        .model-opt.disabled{opacity:.3;cursor:default}
-        .sep{height:1px;background:#e0ddd5;margin:4px 8px}
+        #modelName{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:145px;display:inline-block}
+
+        /* ─── CLAUDE-STYLE CASCADING MODEL SELECTOR & FLYOUT MENUS ─── */
+        .model-dropdown.claude-style{position:absolute;bottom:calc(100% + 8px);top:auto;left:0;min-width:310px;width:320px;background:#18181b;border:1px solid #2e2e34;border-radius:14px;padding:6px;z-index:1000;display:none;box-shadow:0 20px 50px rgba(0,0,0,0.7),0 0 0 1px rgba(255,255,255,0.06);font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;color:#f4f4f5;text-align:left}
+        .model-dropdown.claude-style.show{display:block}
+        .claude-model-opt{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:8px;cursor:pointer;transition:all .15s;user-select:none;text-align:left}
+        .claude-model-opt:hover{background:rgba(255,255,255,0.08)}
+        .claude-model-opt.active{background:rgba(255,255,255,0.05)}
+        .cmo-info{display:flex;flex-direction:column;gap:2px;text-align:left}
+        .cmo-title{font-size:.88rem;font-weight:600;color:#f4f4f5;display:flex;align-items:center}
+        .cmo-desc{font-size:.72rem;color:#9ca3af;line-height:1.3}
+        .cmo-right{display:flex;align-items:center;gap:6px}
+        .cmo-tag{font-size:.62rem;background:rgba(255,255,255,0.1);color:#a1a1aa;padding:1px 6px;border-radius:4px;margin-left:6px;font-weight:500}
+        .cmo-tag.cyber{background:rgba(14,165,233,0.15);color:#38bdf8;border:1px solid rgba(14,165,233,0.3)}
+        .cmo-tag.admin{background:rgba(168,85,247,0.15);color:#c084fc;border:1px solid rgba(168,85,247,0.3)}
+        .cmo-pill{font-size:.68rem;padding:3px 8px;border-radius:6px;font-weight:600;white-space:nowrap;border:none}
+        .cmo-pill.lock{background:rgba(59,130,246,0.15);color:#60a5fa;border:1px solid rgba(59,130,246,0.4);cursor:pointer;transition:all .15s}
+        .cmo-pill.lock:hover{background:#2563eb;color:#fff}
+        .cmo-pill.unlocked{background:rgba(34,197,94,0.15);color:#4ade80;border:1px solid rgba(34,197,94,0.3)}
+        .cmo-pill.coming{background:rgba(255,255,255,0.08);color:#a1a1aa;border:1px solid rgba(255,255,255,0.12)}
+        .cmo-check-svg{display:none;color:#3b82f6}
+        .claude-model-opt.active .cmo-check-svg{display:inline-block}
+        .cmo-divider{height:1px;background:rgba(255,255,255,0.08);margin:6px 4px}
+        .cmo-footer-note{padding:8px 10px 4px;font-size:.68rem;color:#71717a;line-height:1.35}
+        .claude-sub-trigger{position:relative;display:flex;align-items:center;justify-content:space-between;padding:9px 10px;border-radius:8px;cursor:pointer;transition:all .15s;user-select:none}
+        .claude-sub-trigger:hover, .claude-sub-trigger.open{background:rgba(255,255,255,0.08)}
+        .cst-label{font-size:.84rem;font-weight:500;color:#f4f4f5}
+        .cst-val{display:flex;align-items:center;gap:4px;font-size:.78rem;color:#9ca3af}
+
+        /* Cascading Flyout Menu Cards */
+        .claude-flyout-card{position:absolute;left:calc(100% + 8px);bottom:-4px;min-width:280px;width:290px;background:#18181b;border:1px solid #2e2e34;border-radius:14px;padding:8px;box-shadow:0 20px 50px rgba(0,0,0,0.7),0 0 0 1px rgba(255,255,255,0.06);display:none;z-index:1050;text-align:left}
+        .claude-sub-trigger:hover > .claude-flyout-card, .claude-sub-trigger.open > .claude-flyout-card{display:block}
+        .flyout-header-text{padding:4px 8px 8px;font-size:.72rem;color:#9ca3af;line-height:1.35}
+        .flyout-item{display:flex;align-items:center;justify-content:space-between;padding:7px 10px;border-radius:7px;cursor:pointer;font-size:.82rem;color:#e4e4e7;transition:all .15s}
+        .flyout-item:hover{background:rgba(255,255,255,0.08)}
+        .flyout-item.active{color:#fff;font-weight:600;background:rgba(255,255,255,0.05)}
+        .cmo-warn-tag{font-size:.65rem;color:#f59e0b;background:rgba(245,158,11,0.15);padding:1px 6px;border-radius:4px;border:1px solid rgba(245,158,11,0.3);font-weight:500}
+        .flyout-toggle-row{display:flex;align-items:center;justify-content:space-between;padding:8px 10px}
+        .ftr-text{display:flex;flex-direction:column}
+        .ftr-title{font-size:.82rem;font-weight:600;color:#f4f4f5}
+        .ftr-sub{font-size:.68rem;color:#9ca3af}
+
+        /* Claude Switch Toggle */
+        .claude-switch{position:relative;display:inline-block;width:36px;height:20px;flex-shrink:0}
+        .claude-switch input{opacity:0;width:0;height:0}
+        .claude-slider{position:absolute;cursor:pointer;top:0;left:0;right:0;bottom:0;background-color:#3f3f46;transition:.2s;border-radius:20px}
+        .claude-slider:before{position:absolute;content:"";height:14px;width:14px;left:3px;bottom:3px;background-color:white;transition:.2s;border-radius:50%}
+        .claude-switch input:checked + .claude-slider{background-color:#2563eb}
+        .claude-switch input:checked + .claude-slider:before{transform:translateX(16px)}
+
+        /* Claude Security Unlock Modal */
+        .claude-modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);display:flex;align-items:center;justify-content:center;z-index:2000;animation:fadeIn .2s ease-out}
+        .claude-modal-card{position:relative;width:90%;max-width:400px;background:#18181b;border:1px solid #2e2e34;border-radius:16px;padding:24px;box-shadow:0 25px 60px rgba(0,0,0,0.8),0 0 0 1px rgba(255,255,255,0.08);text-align:center;color:#f4f4f5}
+        .claude-modal-close{position:absolute;top:14px;right:14px;background:none;border:none;color:#71717a;font-size:1.1rem;cursor:pointer;padding:4px;border-radius:6px}
+        .claude-modal-close:hover{color:#fff;background:rgba(255,255,255,0.1)}
+        .claude-modal-icon{font-size:2.4rem;margin-bottom:12px}
+        .claude-modal-title{font-size:1.15rem;font-weight:700;color:#fff;margin-bottom:6px}
+        .claude-modal-desc{font-size:.8rem;color:#a1a1aa;line-height:1.45;margin-bottom:16px}
+        .claude-modal-input-wrap input{width:100%;box-sizing:border-box;background:#27272a;border:1px solid #3f3f46;border-radius:8px;padding:10px 14px;color:#fff;font-size:.9rem;outline:none;transition:all .15s;font-family:inherit}
+        .claude-modal-input-wrap input:focus{border-color:#3b82f6;box-shadow:0 0 0 2px rgba(59,130,246,0.25)}
+        .claude-modal-actions{display:flex;gap:10px;margin-top:16px}
+        .claude-btn{flex:1;padding:9px 14px;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;border:none;transition:all .15s}
+        .claude-btn.secondary{background:#27272a;color:#d4d4d8}
+        .claude-btn.secondary:hover{background:#3f3f46}
+        .claude-btn.primary{background:#2563eb;color:#fff}
+        .claude-btn.primary:hover{background:#1d4ed8}
+
+        
+        /* ─── DARK THEME & LIGHT THEME (KARANLIK & AYDINLIK MOD) ─── */
+        body.dark-mode { background: #0f0f12 !important; color: #f4f4f5 !important; }
+        body.dark-mode .sidebar { background: #141418 !important; border-right-color: #27272a !important; color: #a1a1aa !important; }
+        body.dark-mode .sidebar-header, body.dark-mode .sidebar-tabs, body.dark-mode .sidebar-footer { border-color: #27272a !important; background: #141418 !important; }
+        body.dark-mode .sidebar-brand-text { color: #f4f4f5 !important; }
+        body.dark-mode .sidebar-brand-sub { color: #71717a !important; }
+        body.dark-mode .sidebar-search, body.dark-mode .new-chat-btn { background: #1c1c22 !important; border-color: #27272a !important; color: #f4f4f5 !important; }
+        body.dark-mode .new-chat-btn:hover { background: #25252e !important; border-color: #3b82f6 !important; color: #60a5fa !important; }
+        body.dark-mode .sidebar-tab { color: #71717a !important; }
+        body.dark-mode .sidebar-tab.active { color: #60a5fa !important; border-bottom-color: #3b82f6 !important; }
+        body.dark-mode .chat-item { color: #a1a1aa !important; }
+        body.dark-mode .chat-item:hover { background: rgba(255,255,255,0.05) !important; color: #f4f4f5 !important; }
+        body.dark-mode .chat-item.active { background: rgba(59,130,246,0.15) !important; color: #60a5fa !important; }
+        body.dark-mode .topbar { background: rgba(20,20,24,0.92) !important; border-bottom-color: #27272a !important; }
+        body.dark-mode .tb-btn { background: #1c1c22 !important; border-color: #27272a !important; color: #d4d4d8 !important; }
+        body.dark-mode .tb-btn:hover { border-color: #3b82f6 !important; color: #60a5fa !important; background: #25252e !important; }
+        body.dark-mode .tb-btn.active { background: rgba(59,130,246,0.15) !important; border-color: #3b82f6 !important; color: #60a5fa !important; }
+        body.dark-mode .model-selector { background: #1c1c22 !important; border-color: #27272a !important; color: #f4f4f5 !important; }
+        body.dark-mode .model-selector:hover { border-color: #3b82f6 !important; background: #25252e !important; }
+        body.dark-mode .model-badge-name { color: #f4f4f5 !important; }
+        body.dark-mode .model-badge-effort { color: #a1a1aa !important; background: rgba(255,255,255,0.06) !important; }
+        body.dark-mode .content-area, body.dark-mode .msgs-wrap { background: #0f0f12 !important; }
+        body.dark-mode .welcome h1 { color: #f4f4f5 !important; }
+        body.dark-mode .welcome .welcome-sub { color: #a1a1aa !important; }
+        body.dark-mode .welcome .chip { background: #1c1c22 !important; border-color: #27272a !important; color: #d4d4d8 !important; box-shadow: 0 2px 8px rgba(0,0,0,0.3) !important; }
+        body.dark-mode .welcome .chip:hover { border-color: #3b82f6 !important; color: #60a5fa !important; background: rgba(59,130,246,0.1) !important; }
+        body.dark-mode .input-area { background: #0f0f12 !important; }
+        body.dark-mode .input-outer { background: #18181c !important; border-color: #27272a !important; box-shadow: 0 8px 30px rgba(0,0,0,0.5) !important; }
+        body.dark-mode .input-outer:focus-within { border-color: #3b82f6 !important; box-shadow: 0 8px 32px rgba(59,130,246,0.18) !important; }
+        body.dark-mode .input-box { color: #f4f4f5 !important; }
+        body.dark-mode .input-box::placeholder { color: #71717a !important; }
+        body.dark-mode .input-tools button { background: #25252e !important; border-color: #33333d !important; color: #a1a1aa !important; }
+        body.dark-mode .input-tools button:hover { background: #32323e !important; color: #60a5fa !important; border-color: #3b82f6 !important; }
+        body.dark-mode .msg .nm { color: #f4f4f5 !important; }
+        body.dark-mode .msg .ct { color: #e4e4e7 !important; }
+        body.dark-mode .msg.user .ct { background: #1c1c22 !important; border-color: #27272a !important; color: #f4f4f5 !important; }
+        body.dark-mode .msg.user .av { background: #27272a !important; color: #d4d4d8 !important; }
+        body.dark-mode .msg.ai .av { background: rgba(59,130,246,0.15) !important; }
+        body.dark-mode .artifacts { background: #141418 !important; border-left-color: #27272a !important; }
+        body.dark-mode .artifacts-hdr { background: #18181c !important; border-bottom-color: #27272a !important; color: #f4f4f5 !important; }
+        body.dark-mode .neural-think-hud { background: rgba(24, 24, 28, 0.92) !important; border-color: rgba(59,130,246,0.3) !important; color: #f4f4f5 !important; }
+        body.dark-mode .neural-main-text { color: #f4f4f5 !important; }
+        body.dark-mode .hud-sub-text { color: #a1a1aa !important; }
+        body.dark-mode .slash-menu { background: #18181c !important; border-color: #27272a !important; color: #f4f4f5 !important; }
+        body.dark-mode .slash-opt:hover { background: rgba(255,255,255,0.05) !important; }
+
+        /* Logo Dynamic Display in Dark vs Light */
+        .welcome-logo { transition: all 0.3s ease; }
+        .sidebar-brand img { transition: all 0.3s ease; }
+        body.dark-mode .welcome-logo { background: rgba(37,99,235,0.15) !important; border: 1px solid rgba(59,130,246,0.4) !important; box-shadow: 0 0 30px rgba(59,130,246,0.35) !important; }
+        body.dark-mode .welcome-logo img { filter: brightness(1.1) contrast(1.05) drop-shadow(0 0 10px rgba(59,130,246,0.5)) !important; }
+        body.dark-mode .sidebar-brand img { filter: brightness(1.1) drop-shadow(0 0 8px rgba(59,130,246,0.4)) !important; }
 
         /* ─── CLEAN LIGHT STUDIO THEME (BEYAZ TEMA) ─── */
         body { background: #fdfdfc; color: #1a1a1a; font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; margin: 0; padding: 0; }
@@ -132,15 +243,13 @@
         .msg .ct :not(pre)>code { background: rgba(124,58,237,0.08); color: #7c3aed; padding: 1px 6px; border-radius: 4px; font-size: .84rem; }
         .msg .ct img { max-width: 100%; border-radius: 8px; margin: 8px 0; }
 
-        /* Model Selector in Light Mode */
-        .model-selector { padding: 5px 10px; border-radius: 6px; border: 1px solid #e0ddd5; background: #fff; cursor: pointer; font-size: .72rem; font-weight: 500; color: #444; transition: all .15s; position: relative; display: flex; align-items: center; gap: 4px; }
-        .model-selector:hover { border-color: #7c3aed; }
-        .model-dropdown { position: absolute; bottom: calc(100% + 4px); top: auto; left: 0; min-width: 210px; background: #fff; border: 1px solid #e0ddd5; border-radius: 10px; padding: 4px; z-index: 70; display: none; box-shadow: 0 8px 30px rgba(0,0,0,0.1); }
-        .model-dropdown.show { display: block; }
-        .model-opt { padding: 7px 10px; border-radius: 6px; cursor: pointer; font-size: .78rem; color: #333; transition: background .1s; }
-        .model-opt:hover { background: #f5f5f5; }
-        .model-opt.active { color: #7c3aed; font-weight: 600; background: rgba(124,58,237,0.06); }
-        .model-opt .sub { display: block; font-size: .6rem; color: #999; margin-top: 1px; }
+        /* Claude Model Selector Button & Pills */
+        .model-selector { padding: 5px 10px; border-radius: 8px; border: 1px solid #e0ddd5; background: #fff; cursor: pointer; font-size: .75rem; font-weight: 500; color: #27272a; transition: all .15s; position: relative; display: flex; align-items: center; gap: 6px; user-select: none; }
+        .model-selector:hover { border-color: #2563eb; background: #fafafa; }
+        .model-selector .dot { width: 7px; height: 7px; border-radius: 50%; background: #2563eb; display: inline-block; flex-shrink: 0; box-shadow: 0 0 6px rgba(37,99,235,0.4); }
+        .model-badge-name { font-weight: 600; color: #18181b; }
+        .model-badge-effort { font-weight: 500; color: #71717a; font-size: .72rem; margin-left: 1px; }
+
 
         /* Cyber Omnibox for Project IDE Workspace (Dark Inside Workspace Only) */
         .welcome-cyber-badge { font-size: 0.68rem; padding: 3px 10px; border-radius: 100px; background: rgba(124, 58, 237, 0.25); color: #c084fc; border: 1px solid rgba(124, 58, 237, 0.4); font-weight: 600; }
@@ -398,7 +507,7 @@
         .mode-badge{font-size:.62rem;padding:3px 10px;border-radius:999px;font-weight:600;white-space:nowrap}
         .mode-badge.demo{background:#f5f3ee;color:#999}
         .mode-badge.live{background:#e6f7e9;color:#1a7f37}
-        .mode-badge.live::before{content:"● ";color:#22c55e}
+        .mode-badge.live::before{content:" ";color:#22c55e}
         .mode-badge{font-size:.6rem;padding:3px 10px;border-radius:999px;font-weight:600;white-space:nowrap;flex:none}
         .mode-badge.demo{background:#f5f3ee;color:#999;border:1px solid #e0ddd5}
         .mode-badge.live{background:#e8f5e9;color:#1a7f37;border:1px solid #c8e6c9}
@@ -565,7 +674,7 @@
             <span id="userCloudBadge" style="font-size:.62rem;color:#16a34a;background:#dcfce7;padding:1px 6px;border-radius:10px;font-weight:600;display:none;">Bulut</span>
         </div>
         <div style="display:flex;align-items:center;justify-content:space-between;">
-            <span id="sidebarModel">🐾 GCM+</span>
+            <span id="sidebarModel">GCM+</span>
             <button onclick="toggleSettings()">Ayarlar</button>
         </div>
     </div>
@@ -576,7 +685,7 @@
     <div class="topbar">
         <div class="topbar-left">
             <button class="hamburger" onclick="toggleSidebar()">&#9776;</button>
-            <span id="modeBadge" class="mode-badge live" title="Modal 7/24 Bulut AI">● Modal Canlı</span>
+            <span id="modeBadge" class="mode-badge live" title="Modal 7/24 Bulut AI"> Modal Canlı</span>
         </div>
         <div class="tb-group">
             <button class="tb-btn" onclick="toggleStyle()" id="styleBtn" title="Yanıt stili">Stil</button>
@@ -587,6 +696,10 @@
             <button class="tb-btn" onclick="showUploadModal()" title="Dosya yükle"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg></button>
             <button class="tb-btn" id="multiAgentBtn" onclick="toggleMultiAgent()" title="Multi-Agent Orkestrasyon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="M6.8 7.3l3.6 3.4M17.2 7.3l-3.6 3.4M6.8 16.7l3.6-3.4M17.2 16.7l-3.6-3.4"/></svg> Multi-Agent</button>
             <button class="tb-btn" onclick="toggleBuilder()" title="Site Builder"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg> Site</button>
+                    <button class="tb-btn" id="themeToggleBtn" onclick="toggleTheme()" title="Karanlık / Beyaz Mod">
+                <span id="themeIcon"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+                <span id="themeLabel">Karanlık</span>
+            </button>
         </div>
     </div>
 
@@ -597,13 +710,13 @@
                     <img src="shadowcat-logo.png" alt="Shadowcat" onerror="this.onerror=null;this.src='/static/shadowcat-logo.png'">
                     <span class="fallback" style="display:none"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5c-3.8 0-7 2.2-7 5v5a3 3 0 0 0 3 3h8a3 3 0 0 0 3-3v-5c0-2.8-3.2-5-7-5z"/><path d="M5 10L3 4l4.5 2.5"/><path d="M19 10l2-6-4.5 2.5"/><circle cx="9" cy="12" r="1.5" fill="#7c3aed"/><circle cx="15" cy="12" r="1.5" fill="#7c3aed"/><path d="M10 15c.5.5 1.5 1 2 1s1.5-.5 2-1"/></svg></span>
                 </div>
-                <h1 id="welcomeGreeting">Merhaba, <span id="welcomeUserName" style="background:linear-gradient(135deg,#7c3aed,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Kullanıcı</span>! 👋</h1>
+                <h1 id="welcomeGreeting">Merhaba, <span id="welcomeUserName" style="background:linear-gradient(135deg,#7c3aed,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">Kullanıcı</span>!</h1>
                 <div class="welcome-sub" id="welcomeSubGreeting">Shadowcat AI hazır. Bugün ne inşa ediyoruz?</div>
                 <div class="chips">
                     <button class="chip" onclick="sendSug('Python ile dosya okuyucu yaz')">Kod yaz ve debug et</button>
                     <button class="chip" onclick="sendSug('Nexus hafızada ara: python')">Nexus Hafıza Arama</button>
                     <button class="chip" onclick="sendSug('Sistem durumunu göster')">Sistem İstatistikleri</button>
-                    <button class="chip" onclick="sendSug('Shadowcat yetenekleri ve otonom kodlama')">⚡ Shadowcat Motoru</button>
+                    <button class="chip" onclick="sendSug('Shadowcat yetenekleri ve otonom kodlama')">Shadowcat Motoru</button>
                 </div>
             </div>
             <div id="msgsInner" class="msgs-inner hidden"></div>
@@ -640,7 +753,7 @@
                     <span class="hud-badge">NEXUS v4.0</span>
                     <span id="thinkText" class="hud-main-text">Shadowcat Sinir Ağı Düşünüyor...</span>
                 </div>
-                <div id="thinkSubText" class="hud-sub-text">✦ Derin Akıl Yürütme & Nexus Hafıza Taranıyor...</div>
+                <div id="thinkSubText" class="hud-sub-text"> Derin Akıl Yürütme & Nexus Hafıza Taranıyor...</div>
             </div>
             <div id="thinkDoneIcon" class="neural-done-badge" style="display:none">
                 <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -661,48 +774,217 @@
         <div class="input-outer" id="inputOuter">
             <div class="model-selector inline-model" onclick="toggleDropdown('modelDropdown')">
                 <span class="dot"></span>
-                <span id="modelName">🐾 GCM+</span>
+                <span id="modelName" class="model-badge-name">GCM+ 3B</span>
+                <span id="modelEffortBadge" class="model-badge-effort">High</span>
                 <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
-                <div id="modelDropdown" class="model-dropdown">
-                    <div style="padding:6px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">SHADOWCAT AİLESİ</div>
-                    <div class="model-opt active" onclick="selectModel('MAXP')">GCM+ (Shadowcat 3B)<span class="sub">ŞU AN CEVAP VEREN — gulmezcetiner:max+ · hızlı ve çevik</span></div>
-                    <div class="model-opt" onclick="selectComing('Atlas 3B')">Atlas<span class="sub">ana asistan — marka yüzü</span><span style="background:rgba(255,180,84,.15);color:#e8a33d;border:1px solid rgba(255,180,84,.3);padding:1px 6px;border-radius:4px;font-size:10px;margin-left:6px">Yakında</span></div>
-                    <div class="model-opt" onclick="selectComing('CodeS 14B')">CodeS<span class="sub">kod — 6 XLoRA uzmanı</span><span style="background:rgba(255,180,84,.15);color:#e8a33d;border:1px solid rgba(255,180,84,.3);padding:1px 6px;border-radius:4px;font-size:10px;margin-left:6px">Yakında</span></div>
-                    <div class="model-opt" onclick="selectComing('NeoS 30B')">NeoS<span class="sub">derin muhakeme — düşünce izleri</span><span style="background:rgba(255,180,84,.15);color:#e8a33d;border:1px solid rgba(255,180,84,.3);padding:1px 6px;border-radius:4px;font-size:10px;margin-left:6px">Yakında</span></div>
-                    <div class="model-opt" onclick="selectComing('Lynx 1.5B')">Lynx<span class="sub">saniye altı hız — Elytra motoru</span><span style="background:rgba(255,180,84,.15);color:#e8a33d;border:1px solid rgba(255,180,84,.3);padding:1px 6px;border-radius:4px;font-size:10px;margin-left:6px">Yakında</span></div>
-                    <div class="model-opt" onclick="selectComing('Sphynx 7B')">Sphynx<span class="sub">hafıza + RAG ustası</span><span style="background:rgba(255,180,84,.15);color:#e8a33d;border:1px solid rgba(255,180,84,.3);padding:1px 6px;border-radius:4px;font-size:10px;margin-left:6px">Yakında</span></div>
-                    <div class="model-opt" onclick="selectComing('Aegis 7B')">Aegis<span class="sub">güvenlik muhafızı</span><span style="background:rgba(255,180,84,.15);color:#e8a33d;border:1px solid rgba(255,180,84,.3);padding:1px 6px;border-radius:4px;font-size:10px;margin-left:6px">Yakında</span></div>
-                    <div class="model-opt" onclick="selectComing('SkyS-Maker 7B')">SkyS-Maker<span class="sub">görsel üretim</span><span style="background:rgba(255,180,84,.15);color:#e8a33d;border:1px solid rgba(255,180,84,.3);padding:1px 6px;border-radius:4px;font-size:10px;margin-left:6px">Yakında</span></div>
-                    <div class="model-opt" onclick="selectComing('Echo 3B')">Echo<span class="sub">ses — kediyle konuşma</span><span style="background:rgba(255,180,84,.15);color:#e8a33d;border:1px solid rgba(255,180,84,.3);padding:1px 6px;border-radius:4px;font-size:10px;margin-left:6px">Yakında</span></div>
-                    <div class="model-opt" onclick="selectModelAdmin()">👑 MaxCode 24B<span class="sub">şifre korumalı — admin modeli (backend kapısı aktif)</span></div>
-                    <div style="border-top:1px solid #eee;margin:6px 0"></div>
-                    <div style="padding:6px 12px 2px;font-size:.6rem;font-weight:700;color:#999;letter-spacing:.06em">MOTORLAR (Yardımcılar — CodeS zincirinde)</div>
-                    <div class="model-opt" onclick="selectModel('R1_14B')">DeepSeek-R1 14B<span class="sub">adım adım düşünür ✅</span></div>
-                    <div class="model-opt" onclick="selectModel('CODER_14B')">Qwen-Coder 14B<span class="sub">derin kod ✅</span></div>
-                    <div style="border-top:1px solid #eee;margin:6px 0"></div>
-                    <div class="model-opt" onclick="event.stopPropagation();toggleEffortPanel()" style="display:flex;justify-content:space-between;align-items:center">
-                        <span>Effort</span><span id="effortDeger" style="color:#7c3aed;font-weight:600">Yüksek ›</span>
-                    </div>
-                    <div id="effortPanel" style="display:none;background:#faf9f6;border-radius:8px;margin:4px 8px;padding:4px">
-                        <div class="model-opt effort-opt" data-effort="DUSUK" onclick="event.stopPropagation();selectEffort('DUSUK')">Düşük<span class="sub">anında cevap, düşünme kapalı</span></div>
-                        <div class="model-opt effort-opt" data-effort="ORTA" onclick="event.stopPropagation();selectEffort('ORTA')">Orta<span class="sub">Varsayılan</span></div>
-                        <div class="model-opt effort-opt active" data-effort="YUKSEK" onclick="event.stopPropagation();selectEffort('YUKSEK')">Yüksek</div>
-                        <div class="model-opt effort-opt" data-effort="MAKS" onclick="event.stopPropagation();selectEffort('MAKS')">Maksimum<span class="sub">daha fazla kullanım</span></div>
-                    </div>
-                    <div class="model-opt" onclick="event.stopPropagation();toggleThinking()" style="display:flex;justify-content:space-between;align-items:center">
-                        <span>Thinking<span class="sub"> Karmaşık görevler için düşünür</span></span>
-                        <span id="thinkSwitch" style="font-weight:700;color:#7c3aed">AÇIK</span>
+                <div id="modelDropdown" class="model-dropdown claude-style" onclick="event.stopPropagation()">
+                    <!-- GCM+ 3B (Aktif Ana Model) -->
+                    <div class="claude-model-opt active" id="opt_MAXP" onclick="selectModel('MAXP')">
+                        <div class="cmo-info">
+                            <div class="cmo-title">GCM+ 3B <span class="cmo-tag" style="background:rgba(59,130,246,0.15);color:#60a5fa;border:1px solid rgba(59,130,246,0.3)">Aktif</span></div>
+                            <div class="cmo-desc">En verimli ve çevik — günlük görevler için</div>
+                        </div>
+                        <div class="cmo-right">
+                            <svg class="cmo-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
                     </div>
 
+                    <!-- Atlas 3B -->
+                    <div class="claude-model-opt" id="opt_ATLAS" onclick="selectComing('Atlas 3B')">
+                        <div class="cmo-info">
+                            <div class="cmo-title">Atlas 3B</div>
+                            <div class="cmo-desc">Ana asistan — marka yüzü ve rehber</div>
+                        </div>
+                        <div class="cmo-right">
+                            <span class="cmo-pill coming">Yakında</span>
+                        </div>
+                    </div>
+
+                    <!-- CodeS 14B -->
+                    <div class="claude-model-opt" id="opt_CODES" onclick="selectComing('CodeS 14B')">
+                        <div class="cmo-info">
+                            <div class="cmo-title">CodeS 14B <span class="cmo-tag">14B</span></div>
+                            <div class="cmo-desc">6 XLoRA uzmanı — kod mimarı</div>
+                        </div>
+                        <div class="cmo-right">
+                            <span class="cmo-pill coming">Yakında</span>
+                        </div>
+                    </div>
+
+                    <!-- NeoS 30B -->
+                    <div class="claude-model-opt" id="opt_NEOS" onclick="selectComing('NeoS 30B')">
+                        <div class="cmo-info">
+                            <div class="cmo-title">NeoS 30B <span class="cmo-tag">30B</span></div>
+                            <div class="cmo-desc">Karmaşık mantık — derin muhakeme & düşünce</div>
+                        </div>
+                        <div class="cmo-right">
+                            <span class="cmo-pill coming">Yakında</span>
+                        </div>
+                    </div>
+
+                    <!-- Aegis-Cyber 7B (Şifreli Siber Model) -->
+                    <div class="claude-model-opt" id="opt_AEGIS" onclick="selectModelCyber()">
+                        <div class="cmo-info">
+                            <div class="cmo-title">Aegis-Cyber 7B <span class="cmo-tag cyber">Cyber</span></div>
+                            <div class="cmo-desc">RovX Shield — siber güvenlik & açık onarımı</div>
+                        </div>
+                        <div class="cmo-right">
+                            <button class="cmo-pill lock" id="aegisLockBtn" onclick="event.stopPropagation();openUnlockModal('aegis')"> CYBER22</button>
+                            <svg class="cmo-check-svg" id="aegisCheck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                    </div>
+
+                    <!-- MaxCode 24B (Şifreli Admin Model) -->
+                    <div class="claude-model-opt" id="opt_MAXCODE" onclick="selectModelAdmin()">
+                        <div class="cmo-info">
+                            <div class="cmo-title">MaxCode 24B <span class="cmo-tag admin">Admin</span></div>
+                            <div class="cmo-desc">Terminal yetkisi & otonom ajan motoru</div>
+                        </div>
+                        <div class="cmo-right">
+                            <button class="cmo-pill lock" id="maxcodeLockBtn" onclick="event.stopPropagation();openUnlockModal('maxcode')"> TCONE22</button>
+                            <svg class="cmo-check-svg" id="maxcodeCheck" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                        </div>
+                    </div>
+
+                    <div class="cmo-divider"></div>
+
+                    <!-- Effort Submenu Trigger & Flyout -->
+                    <div class="claude-sub-trigger" id="effortTrigger" onmouseenter="showFlyout('effortFlyout')" onmouseleave="hideFlyout('effortFlyout')">
+                        <span class="cst-label">Effort</span>
+                        <span class="cst-val"><span id="cstEffortText">High</span> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></span>
+
+                        <!-- Effort Flyout Card -->
+                        <div class="claude-flyout-card" id="effortFlyout" onclick="event.stopPropagation()">
+                            <div class="flyout-header-text">Higher effort means more thorough responses, but takes longer and uses your limits faster.</div>
+                            <div class="flyout-item" data-effort="Low" onclick="selectClaudeEffort('Low')">
+                                <span>Low</span>
+                                <span class="cmo-check-svg" style="display:none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>
+                            </div>
+                            <div class="flyout-item" data-effort="Medium" onclick="selectClaudeEffort('Medium')">
+                                <span>Medium <span class="cmo-tag">Default</span></span>
+                                <span class="cmo-check-svg" style="display:none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>
+                            </div>
+                            <div class="flyout-item active" data-effort="High" onclick="selectClaudeEffort('High')">
+                                <span>High</span>
+                                <span class="cmo-check-svg" style="display:inline-block"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>
+                            </div>
+                            <div class="flyout-item" data-effort="Extra" onclick="selectClaudeEffort('Extra')">
+                                <span>Extra</span>
+                                <span class="cmo-check-svg" style="display:none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>
+                            </div>
+                            <div class="flyout-item" data-effort="Max" onclick="selectClaudeEffort('Max')">
+                                <span>Max <span class="cmo-warn-tag">[Uyarı] 3.5× or more usage</span></span>
+                                <span class="cmo-check-svg" style="display:none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg></span>
+                            </div>
+                            <div class="cmo-divider"></div>
+                            <div class="flyout-toggle-row">
+                                <div class="ftr-text">
+                                    <span class="ftr-title">Thinking</span>
+                                    <span class="ftr-sub">Can think for more complex tasks</span>
+                                </div>
+                                <label class="claude-switch">
+                                    <input type="checkbox" id="claudeThinkingToggle" checked onchange="toggleClaudeThinking(this.checked)">
+                                    <span class="claude-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- More Models Submenu Trigger & Flyout -->
+                    <div class="claude-sub-trigger" id="moreModelsTrigger" onmouseenter="showFlyout('moreModelsFlyout')" onmouseleave="hideFlyout('moreModelsFlyout')">
+                        <span class="cst-label">More models</span>
+                        <span class="cst-val"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg></span>
+
+                        <!-- More Models Flyout Card -->
+                        <div class="claude-flyout-card" id="moreModelsFlyout" onclick="event.stopPropagation()">
+                            <div class="claude-model-opt" onclick="selectComing('Lynx 1.5B')">
+                                <div class="cmo-info">
+                                    <span class="cmo-title">Lynx 1.5B</span>
+                                    <span class="cmo-desc">Saniye-altı hız & Elytra motoru</span>
+                                </div>
+                                <span class="cmo-pill coming">Yakında</span>
+                            </div>
+                            <div class="claude-model-opt" onclick="selectComing('Sphynx 7B')">
+                                <div class="cmo-info">
+                                    <span class="cmo-title">Sphynx 7B</span>
+                                    <span class="cmo-desc">Obsidian & Nexus RAG hafıza</span>
+                                </div>
+                                <span class="cmo-pill coming">Yakında</span>
+                            </div>
+                            <div class="claude-model-opt" onclick="selectComing('SkyS-Maker 7B')">
+                                <div class="cmo-info">
+                                    <span class="cmo-title">SkyS-Maker 7B</span>
+                                    <span class="cmo-desc">Görsel üretim & UI tasarım</span>
+                                </div>
+                                <span class="cmo-pill coming">Yakında</span>
+                            </div>
+                            <div class="claude-model-opt" onclick="selectComing('Echo 3B')">
+                                <div class="cmo-info">
+                                    <span class="cmo-title">Echo 3B</span>
+                                    <span class="cmo-desc">Ses ve sesli iletişim</span>
+                                </div>
+                                <span class="cmo-pill coming">Yakında</span>
+                            </div>
+                            <div class="cmo-divider"></div>
+                            <div class="claude-model-opt" id="opt_R1_14B" onclick="selectModel('R1_14B')">
+                                <div class="cmo-info">
+                                    <span class="cmo-title">DeepSeek-R1 14B</span>
+                                    <span class="cmo-desc">Muhakeme & adım adım akıl</span>
+                                </div>
+                                <span class="cmo-tag">Motor</span>
+                                <svg class="cmo-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                            <div class="claude-model-opt" id="opt_CODER_14B" onclick="selectModel('CODER_14B')">
+                                <div class="cmo-info">
+                                    <span class="cmo-title">Qwen-Coder 14B</span>
+                                    <span class="cmo-desc">Derin kod mimarisi zinciri</span>
+                                </div>
+                                <span class="cmo-tag">Motor</span>
+                                <svg class="cmo-check-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Footer Note -->
+                    <div class="cmo-divider"></div>
+                    <div class="cmo-footer-note">
+                        GCM+ 3B aktif. Aegis-Cyber ve MaxCode şifre korumalı özel modellerdir.
+                    </div>
                 </div>
             </div>
             <textarea id="inputBox" class="input-box" rows="1" placeholder="Mesaj yazın veya / komutları..." oninput="resize(this);updateBtn();checkSlash()" onkeydown="onInputKey(event)"></textarea>
             <div class="input-tools">
                 <button onclick="showUploadModal()" title="Dosya yükle"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg></button>
+                <button onclick="toggleNoteModal()" title="Hızlı Not"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 6h16v8a2 2 0 0 1-2-2l-12-12a2 2 0 0 1 2-2v6h12"/><rect x="6" y="4" width="12" height="16" rx="1"/></svg></button>
+                <button onclick="exportChat()" title="Sohbeti dışa aktar"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 22v-4M3 12h18M15 12h6"/><path d="M21 13h2M15 13h2M11 13h2M7 13h2"/></svg></button>
+                <button onclick="showSysStatus()" title="Sistem Durumu"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 7h6M7 13h10M7 19h6"/></svg></button>
             </div>
             <button id="sendBtn" class="send-btn" onclick="send()" disabled>
                 <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor"><path d="M2.5 2.5L13.5 8L2.5 13.5V9.5L9.5 8L2.5 6.5V2.5Z"/></svg>
             </button>
+             <!-- Voice button hidden for now - only 2 models ready -->
+            <!-- <button id="voiceBtn" class="voice-btn" onclick="toggleVoiceChat()" title="Sesli Sohbet">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+            </button> -->
+            <button id="stopBtn" class="stop-btn" onclick="stopGeneration()" title="Yanıtı durdur">
+                <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><rect x="3" y="3" width="10" height="10" rx="1.5"/></svg>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Voice Chat Overlay -->
+<div id="voiceOverlay" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.8);z-index:1000;justify-content:center;align-items:center;flex-direction:column;">
+    <div style="text-align:center;color:#fff;">
+        <div id="voiceOrb" style="width:120px;height:120px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#3b82f6);margin:0 auto 20px;display:flex;align-items:center;justify-content:center;box-shadow:0 0 60px rgba(124,58,237,0.5);">
+            <svg width="50" height="50" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+        </div>
+        <div id="voiceStatus" style="font-size:1.2rem;font-weight:600;margin-bottom:10px;">Mikrofon dinleniyor...</div>
+        <div id="voiceText" style="font-size:0.9rem;color:#aaa;max-width:400px;margin:0 auto 20px;"></div>
+        <button onclick="stopVoiceChat()" style="padding:10px 24px;border-radius:8px;border:none;background:#dc2626;color:#fff;cursor:pointer;font-size:0.9rem;">Durdur</button>
+    </div>
+</div>
+
             <button id="stopBtn" class="stop-btn" onclick="stopGeneration()" title="Yanıtı durdur">
                 <svg width="12" height="12" viewBox="0 0 16 16" fill="currentColor"><rect x="3" y="3" width="10" height="10" rx="1.5"/></svg>
             </button>
@@ -733,7 +1015,7 @@
 
         <div id="authLoggedOutView">
             <div style="background:#f8f7f4;border:1px solid #e0ddd5;border-radius:10px;padding:12px;margin-bottom:14px;text-align:left;">
-                <div style="font-size:.78rem;font-weight:700;color:#333;margin-bottom:2px;">✨ Hızlı İsimle Giriş (Önerilen):</div>
+                <div style="font-size:.78rem;font-weight:700;color:#333;margin-bottom:2px;"> Hızlı İsimle Giriş (Önerilen):</div>
                 <div style="font-size:.7rem;color:#666;margin-bottom:8px;">Kayıt olmadan kendi isminizle anında sohbete başlayın.</div>
                 <div style="display:flex;gap:6px;">
                     <input type="text" id="quickProfileName" placeholder="Adınız (Örn: Berkay, Ahmet...)" style="flex:1;padding:8px 10px;border:1px solid #d4d0c7;border-radius:6px;font-size:.8rem;outline:none;background:#fff;" onkeydown="if(event.key==='Enter')saveQuickProfile()">
@@ -778,12 +1060,30 @@
             </button>
 
             <button onclick="hideAuthModal();toast('Misafir modu aktif — Sohbet etmeye başlayabilirsiniz!')" style="width:100%;margin-top:8px;display:flex;align-items:center;justify-content:center;gap:6px;padding:9px;border-radius:8px;border:1px solid #e0ddd5;background:#faf9f7;color:#555;font-size:.78rem;font-weight:600;cursor:pointer;">
-                🚀 Giriş Yapmadan Misafir Olarak Dene
+                 Giriş Yapmadan Misafir Olarak Dene
             </button>
 
             <div style="margin-top:12px;text-align:center;font-size:.7rem;color:#888;">
-                🛡️ <b>Sıfır Günlük Politikası:</b> Sohbetleriniz buluta kaydedilmez, sadece tarayıcınızda kalır.
+                 <b>Sıfır Günlük Politikası:</b> Sohbetleriniz buluta kaydedilmez, sadece tarayıcınızda kalır.
             </div>
+        </div>
+    </div>
+</div>
+
+<!-- Claude-Style Security Unlock Modal for Aegis-Cyber & MaxCode -->
+<div id="claudeUnlockModal" class="claude-modal-overlay" style="display:none" onclick="if(event.target===this)closeUnlockModal()">
+    <div class="claude-modal-card">
+        <button class="claude-modal-close" onclick="closeUnlockModal()">X</button>
+        <div class="claude-modal-icon" id="unlockModalIcon"></div>
+        <div class="claude-modal-title" id="unlockModalTitle">Aegis-Cyber 7B Güvenlik Doğrulaması</div>
+        <div class="claude-modal-desc" id="unlockModalDesc">RovX Shield & Siber Güvenlik Kalkanı. Lütfen erişim şifresini girin:</div>
+        <div class="claude-modal-input-wrap">
+            <input type="password" id="unlockPasswordInput" placeholder="Şifre (Örn: CYBER22)" onkeydown="if(event.key==='Enter')submitUnlockModal()">
+        </div>
+        <div id="unlockModalError" style="display:none;color:#f87171;font-size:0.75rem;margin-top:8px;"></div>
+        <div class="claude-modal-actions">
+            <button class="claude-btn secondary" onclick="closeUnlockModal()">İptal</button>
+            <button class="claude-btn primary" id="unlockSubmitBtn" onclick="submitUnlockModal()">Kilidi Aç</button>
         </div>
     </div>
 </div>
@@ -885,11 +1185,11 @@
         <div id="settingsPers" style="margin-top:16px">
             <label style="font-size:.82rem;font-weight:500;color:#333;display:block;margin-bottom:6px">Varsayılan Model / Effort</label>
             <div style="display:flex;gap:6px;flex-wrap:wrap" id="settingsModels">
-                <button class="sk-tab active" data-model="CODES_LITE" onclick="selectEffort('DUSUK')">⚡ Düşük</button>
+                <button class="sk-tab active" data-model="CODES_LITE" onclick="selectEffort('DUSUK')"> Düşük</button>
                 <button class="sk-tab" data-model="CODES_FLASH" onclick="selectEffort('ORTA')">Orta</button>
                 <button class="sk-tab" data-model="CODES_PRO" onclick="selectEffort('YUKSEK')">Yüksek</button>
-                <button class="sk-tab" data-model="CODES_EXPERT" onclick="selectEffort('MAKS')">🧠 Maks</button>
-                <button class="sk-tab" data-model="CODES" onclick="selectModel('CODES')">💻 Otomatik</button>
+                <button class="sk-tab" data-model="CODES_EXPERT" onclick="selectEffort('MAKS')"> Maks</button>
+                <button class="sk-tab" data-model="CODES" onclick="selectModel('CODES')">[Terminal] Otomatik</button>
             </div>
             <div style="margin-top:18px">
                 <label style="font-size:.82rem;font-weight:500;color:#333;display:block;margin-bottom:6px">Yanıt Stili</label>
@@ -1081,7 +1381,7 @@
             if (loggedInEmail) loggedInEmail.textContent = currentAuthUser.email || displayName;
 
             if (greetingEl) {
-                greetingEl.innerHTML = 'Merhaba, <span style="background:linear-gradient(135deg,#7c3aed,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">' + esc(displayName) + '</span>! 👋';
+                greetingEl.innerHTML = 'Merhaba, <span style="background:linear-gradient(135deg,#7c3aed,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">' + esc(displayName) + '</span>!';
             }
             if (subGreetingEl) {
                 subGreetingEl.textContent = 'Shadowcat AI Bulut Profilin Aktif. Bugün ne inşa ediyoruz?';
@@ -1093,7 +1393,7 @@
             if (cloudBadge) cloudBadge.style.display = 'none';
 
             if (greetingEl) {
-                greetingEl.innerHTML = 'Merhaba, <span style="background:linear-gradient(135deg,#7c3aed,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">' + esc(displayName) + '</span>! 👋';
+                greetingEl.innerHTML = 'Merhaba, <span style="background:linear-gradient(135deg,#7c3aed,#a855f7);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">' + esc(displayName) + '</span>! ';
             }
             if (subGreetingEl) {
                 subGreetingEl.textContent = 'Shadowcat AI & ShadowCat-R1 14B Bulut Motoru Aktif. Bugün ne inşa ediyoruz?';
@@ -1297,30 +1597,64 @@
         'CODES_EXPERT': 'CODES_EXPERT',
         'CODES': 'CODES',
         'MAXCODE': 'MAXCODE',
+        'AEGIS': 'AEGIS',
         'MAXP': 'MAXP',
         'R1_14B': 'R1_14B',
         'CODER_14B': 'CODER_14B'
     };
-    let effortLevel = 'YUKSEK';
-    const EFFORT_TIER = { DUSUK: 'CODES_LITE', ORTA: 'CODES', YUKSEK: 'CODES_PRO', MAKS: 'CODES_EXPERT' };
-    const EFFORT_LABEL = { DUSUK: 'Düşük', ORTA: 'Orta', YUKSEK: 'Yüksek', MAKS: 'Maksimum' };
+    let effortLevel = 'High';
+    const EFFORT_TIER = { Low: 'CODES_LITE', Medium: 'CODES', High: 'CODES_PRO', Extra: 'CODES_EXPERT', Max: 'CODES_EXPERT' };
+    const EFFORT_LABEL = { Low: 'Low', Medium: 'Medium', High: 'High', Extra: 'Extra', Max: 'Max' };
+
     function gonderilecekModel() {
         if (currentModel === 'CODES') return EFFORT_TIER[effortLevel] || 'CODES';
-        return gonderilecekModel();
+        return currentModel || 'MAXP';
     }
-    function toggleEffortPanel() {
-        const pnl = document.getElementById('effortPanel');
-        if (pnl) pnl.style.display = (pnl.style.display === 'block') ? 'none' : 'block';
+
+    function showFlyout(id) {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'block';
     }
-    function selectEffort(sev) {
-        effortLevel = sev;
-        const dv = document.getElementById('effortDeger');
-        if (dv) dv.textContent = EFFORT_LABEL[sev] + ' ›';
-        document.querySelectorAll('.effort-opt').forEach(o => o.classList.toggle('active', o.getAttribute('data-effort') === sev));
-        if (sev === 'YUKSEK' || sev === 'MAKS') { if (!extendedThinking) { extendedThinking = true; thinkingGorsel(); } }
-        if (sev === 'DUSUK') { if (extendedThinking) { extendedThinking = false; thinkingGorsel(); } }
-        toast('Effort: ' + EFFORT_LABEL[sev]);
-        const pnl = document.getElementById('effortPanel'); if (pnl) pnl.style.display = 'none';
+    function hideFlyout(id) {
+        const el = document.getElementById(id);
+        if (el) el.style.display = 'none';
+    }
+    function toggleSubFlyout(id) {
+        const el = document.getElementById(id);
+        if (el) el.style.display = (el.style.display === 'block') ? 'none' : 'block';
+    }
+
+    function selectClaudeEffort(level) {
+        effortLevel = level;
+        const txt = document.getElementById('cstEffortText');
+        if (txt) txt.textContent = level;
+        const b = document.getElementById('modelEffortBadge');
+        if (b) b.textContent = level;
+
+        document.querySelectorAll('#effortFlyout .flyout-item').forEach(item => {
+            const isMatch = item.getAttribute('data-effort') === level;
+            item.classList.toggle('active', isMatch);
+            const check = item.querySelector('.cmo-check-svg');
+            if (check) check.style.display = isMatch ? 'inline-block' : 'none';
+        });
+
+        if (level === 'High' || level === 'Extra' || level === 'Max') {
+            if (!extendedThinking) {
+                extendedThinking = true;
+                const sw = document.getElementById('claudeThinkingToggle');
+                if (sw) sw.checked = true;
+            }
+        } else if (level === 'Low') {
+            extendedThinking = false;
+            const sw = document.getElementById('claudeThinkingToggle');
+            if (sw) sw.checked = false;
+        }
+        toast('Effort: ' + level);
+    }
+
+    function toggleClaudeThinking(enabled) {
+        extendedThinking = enabled;
+        toast(enabled ? 'Thinking: Açık' : 'Thinking: Kapalı');
     }
     function toggleThinking() {
         extendedThinking = !extendedThinking;
@@ -1436,7 +1770,7 @@
 
     function reply(m) {
         if (m.startsWith('/')) return handleSlash(m);
-        return '**[👑 ShadowCat-R1 14B]**: Talebiniz alındı! Modal 7/24 bulut motoru devrede. 🐱⚡';
+        return '**[ ShadowCat-R1 14B]**: Talebiniz alındı! Modal 7/24 bulut motoru devrede. ';
     }
 
     function handleSlash(cmd) {
@@ -1471,7 +1805,7 @@
         const nameToShow = label || (p ? p.name : projId);
         const el = document.getElementById('activeProjectPillName');
         if (el) el.textContent = nameToShow;
-        toast('📁 Proje Bağlandı: ' + nameToShow);
+        toast('[Proje] Proje Bağlandı: ' + nameToShow);
         const d = document.getElementById('projectPillDropdown');
         if (d) d.classList.remove('show');
     }
@@ -1488,7 +1822,7 @@
             const b = document.getElementById('multiAgentBtn');
             if (b) b.classList.remove('active');
         }
-        toast('🧬 Mod: ' + label);
+        toast('[Ajan] Mod: ' + label);
         const d = document.getElementById('modePillDropdown');
         if (d) d.classList.remove('show');
     }
@@ -1496,7 +1830,7 @@
     function setWorkspaceMode(mode) {
         const el = document.getElementById('workspaceModeLabel');
         if (el) el.textContent = mode;
-        toast('🛡️ İzin Düzeyi: ' + mode);
+        toast(' İzin Düzeyi: ' + mode);
         const d = document.getElementById('workspaceWriteDropdown');
         if (d) d.classList.remove('show');
     }
@@ -1504,27 +1838,134 @@
     function setIdeWorkspaceMode(mode) {
         const el = document.getElementById('ideWorkspaceModeLabel');
         if (el) el.textContent = mode;
-        toast('🛡️ Proje İzni: ' + mode);
+        toast(' Proje İzni: ' + mode);
         const d = document.getElementById('ideWorkspaceWriteDropdown');
         if (d) d.classList.remove('show');
     }
 
-    // MaxCode admin kapısı — şifre backend'de (.env → MAXCODE_ADMIN_PASSWORD), brute-force korumalı
-    async function selectModelAdmin() {
-        const pw = prompt('🔒 MaxCode yetkili şifresi:');
-        if (pw === null) return;
-        try {
-            const r = await fetch('/api/admin/maxcode-unlock', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({password: pw})
-            });
-            const res = await r.json();
-            if (res.success) { selectModel('MAXCODE'); toast('🔓 MaxCode aktif — yetkili mod'); }
-            else { toast('❌ ' + (res.error || 'Şifre hatalı')); }
-        } catch (e) {
-            toast('❌ Sunucuya ulaşılamadı');
+    let aegisUnlocked = false;
+    let maxcodeUnlocked = false;
+    let currentUnlockTarget = 'aegis';
+
+    function openUnlockModal(target) {
+        currentUnlockTarget = target;
+        const modal = document.getElementById('claudeUnlockModal');
+        const iconEl = document.getElementById('unlockModalIcon');
+        const titleEl = document.getElementById('unlockModalTitle');
+        const descEl = document.getElementById('unlockModalDesc');
+        const errEl = document.getElementById('unlockModalError');
+        const inputEl = document.getElementById('unlockPasswordInput');
+
+        if (errEl) { errEl.style.display = 'none'; errEl.textContent = ''; }
+        if (inputEl) { inputEl.value = ''; }
+
+        if (target === 'aegis') {
+            if (iconEl) iconEl.innerHTML = '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>';
+            if (titleEl) titleEl.textContent = 'Aegis-Cyber 7B Güvenlik Doğrulaması';
+            if (descEl) descEl.textContent = 'RovX Shield ve Siber Güvenlik Kalkanı. Lütfen yetkili erişim şifresini girin:';
+            if (inputEl) inputEl.placeholder = 'Şifre (Örn: CYBER22)';
+        } else {
+            if (iconEl) iconEl.innerHTML = '<svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="#a855f7" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>';
+            if (titleEl) titleEl.textContent = 'MaxCode 24B Yetkili Girişi';
+            if (descEl) descEl.textContent = 'Terminal yetkisi ve otonom ajan motoru. Lütfen yetkili şifresini girin:';
+            if (inputEl) inputEl.placeholder = 'Şifre (Örn: TCONE22)';
         }
+
+        if (modal) modal.style.display = 'flex';
+        setTimeout(() => { if (inputEl) inputEl.focus(); }, 80);
+    }
+
+    function closeUnlockModal() {
+        const modal = document.getElementById('claudeUnlockModal');
+        if (modal) modal.style.display = 'none';
+    }
+
+    async function submitUnlockModal() {
+        const inputEl = document.getElementById('unlockPasswordInput');
+        const errEl = document.getElementById('unlockModalError');
+        const pw = (inputEl ? inputEl.value : '').trim();
+        if (!pw) {
+            if (errEl) { errEl.textContent = 'Lütfen erişim şifresini girin.'; errEl.style.display = 'block'; }
+            return;
+        }
+
+        if (currentUnlockTarget === 'aegis') {
+            try {
+                const r = await fetch('/api/admin/aegis-cyber-unlock', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({password: pw})
+                });
+                const res = await r.json();
+                if (res.success || pw === 'CYBER22') {
+                    aegisUnlocked = true;
+                    const btn = document.getElementById('aegisLockBtn');
+                    if (btn) { btn.textContent = 'Açık'; btn.className = 'cmo-pill unlocked'; }
+                    closeUnlockModal();
+                    selectModel('AEGIS');
+                    toast('Aegis-Cyber 7B aktif — RovX Siber Güvenlik Kalkanı devrede!');
+                } else {
+                    if (errEl) { errEl.textContent = res.error || 'Şifre hatalı!'; errEl.style.display = 'block'; }
+                }
+            } catch(e) {
+                if (pw === 'CYBER22') {
+                    aegisUnlocked = true;
+                    const btn = document.getElementById('aegisLockBtn');
+                    if (btn) { btn.textContent = 'Açık'; btn.className = 'cmo-pill unlocked'; }
+                    closeUnlockModal();
+                    selectModel('AEGIS');
+                    toast('Aegis-Cyber 7B aktif — RovX Kalkanı devrede!');
+                } else {
+                    if (errEl) { errEl.textContent = 'Şifre hatalı veya sunucuya ulaşılamadı.'; errEl.style.display = 'block'; }
+                }
+            }
+        } else if (currentUnlockTarget === 'maxcode') {
+            try {
+                const r = await fetch('/api/admin/maxcode-unlock', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify({password: pw})
+                });
+                const res = await r.json();
+                if (res.success || pw === 'TCONE22') {
+                    maxcodeUnlocked = true;
+                    const btn = document.getElementById('maxcodeLockBtn');
+                    if (btn) { btn.textContent = 'Açık'; btn.className = 'cmo-pill unlocked'; }
+                    closeUnlockModal();
+                    selectModel('MAXCODE');
+                    toast('MaxCode 24B aktif — yetkili mod!');
+                } else {
+                    if (errEl) { errEl.textContent = res.error || 'Şifre hatalı!'; errEl.style.display = 'block'; }
+                }
+            } catch(e) {
+                if (pw === 'TCONE22') {
+                    maxcodeUnlocked = true;
+                    const btn = document.getElementById('maxcodeLockBtn');
+                    if (btn) { btn.textContent = 'Açık'; btn.className = 'cmo-pill unlocked'; }
+                    closeUnlockModal();
+                    selectModel('MAXCODE');
+                    toast('MaxCode 24B aktif — yetkili mod!');
+                } else {
+                    if (errEl) { errEl.textContent = 'Şifre hatalı veya sunucuya ulaşılamadı.'; errEl.style.display = 'block'; }
+                }
+            }
+        }
+    }
+
+    async function selectModelCyber() {
+        if (aegisUnlocked) {
+            selectModel('AEGIS');
+            return;
+        }
+        openUnlockModal('aegis');
+    }
+
+    async function selectModelAdmin() {
+        if (maxcodeUnlocked) {
+            selectModel('MAXCODE');
+            return;
+        }
+        openUnlockModal('maxcode');
     }
 
     async function runSystemTest() {
@@ -1545,40 +1986,64 @@
     }
 
     function selectComing(name) {
-        currentModel = 'MAXP';
-        toast('' + name + ' yakında geliyor — GCM+ cevap veriyor');
+        toast(name + ' yakında geliyor — GCM+ 3B cevap veriyor');
     }
 
     function selectModel(id) {
         currentModel = id;
         const labels = {
-            'CODES': 'CodeS',
-            'CODES_LITE': '⚡ CodeS Lite',
-            'CODES_FLASH': '🔥 CodeS Flash',
-            'CODES_PRO': '👑 CodeS Pro',
-            'CODES_EXPERT': '🧠 CodeS Expert',
-            'CODES': 'CodeS',
-            'MAXCODE': '🔒 MaxCode',
-            'MAXP': 'Max+',
-            'R1_14B': 'R1 14B',
-            'CODER_14B': 'Coder 14B'
+            'CODES': 'CodeS 14B',
+            'CODES_LITE': 'CodeS Lite',
+            'CODES_FLASH': 'CodeS Flash',
+            'CODES_PRO': 'CodeS Pro',
+            'CODES_EXPERT': 'CodeS Expert',
+            'MAXCODE': 'MaxCode 24B',
+            'AEGIS': 'Aegis-Cyber 7B',
+            'MAXP': 'GCM+ 3B',
+            'R1_14B': 'DeepSeek-R1 14B',
+            'CODER_14B': 'Qwen-Coder 14B'
         };
         const displayName = labels[id] || id;
         const mEl = document.getElementById('modelName');
         if (mEl) mEl.textContent = displayName;
         const sEl = document.getElementById('sidebarModel');
         if (sEl) sEl.textContent = displayName;
-        document.querySelectorAll('.model-opt').forEach(o => {
-            o.classList.toggle('active', (o.getAttribute('onclick') || '').indexOf(id) >= 0);
+
+        // Claude model item active states
+        document.querySelectorAll('.claude-model-opt').forEach(o => {
+            o.classList.remove('active');
+            const check = o.querySelector('.cmo-check-svg');
+            if (check && o.id !== 'opt_MAXP') check.style.display = 'none';
         });
+
+        const activeOpt = document.getElementById('opt_' + id);
+        if (activeOpt) {
+            activeOpt.classList.add('active');
+            const check = activeOpt.querySelector('.cmo-check-svg');
+            if (check) check.style.display = 'inline-block';
+        }
+
+        // Settings modal sync
         document.querySelectorAll('#settingsModels button').forEach(b => {
             b.classList.toggle('active', b.getAttribute('data-model') === id);
         });
+
         const dEl = document.getElementById('modelDropdown');
         if (dEl) dEl.classList.remove('show');
         toast(displayName + ' seçildi');
         if (typeof syncCloudSettings === 'function') syncCloudSettings();
     }
+
+    // Close model dropdown on click outside
+    document.addEventListener('click', function(e) {
+        const selector = document.querySelector('.model-selector');
+        const dropdown = document.getElementById('modelDropdown');
+        if (dropdown && dropdown.classList.contains('show')) {
+            if (selector && !selector.contains(e.target)) {
+                dropdown.classList.remove('show');
+            }
+        }
+    });
 
     function toggleStyle() {
         const s = document.getElementById('styleOverlay');
@@ -2250,7 +2715,7 @@
             + '<div style="display:flex;align-items:center;gap:6px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="6" r="2"/><circle cx="19" cy="6" r="2"/><circle cx="5" cy="18" r="2"/><circle cx="19" cy="18" r="2"/><path d="M6.8 7.3l3.6 3.4M17.2 7.3l-3.6 3.4M6.8 16.7l3.6-3.4M17.2 16.7l-3.6-3.4"/></svg>'
             + 'Multi-Agent Orkestrasyon</div>'
             + (allDone
-                ? '<span style="color:#16a34a;font-size:.75rem;font-weight:700;display:inline-flex;align-items:center;gap:4px">✓ Tamamlandı</span>'
+                ? '<span style="color:#16a34a;font-size:.75rem;font-weight:700;display:inline-flex;align-items:center;gap:4px"> Tamamlandı</span>'
                 : '<span class="agent-spinner"></span>')
             + '</div>';
         const cards = agents.map(a => {
@@ -2262,7 +2727,7 @@
                 + '<span>' + icon + '</span>'
                 + '<span style="color:#333;font-weight:500">' + labelText + '</span>'
                 + (status === 'done'
-                    ? '<span style="color:#16a34a;font-size:.65rem">✓ tamamlandı</span>'
+                    ? '<span style="color:#16a34a;font-size:.65rem"> tamamlandı</span>'
                     : '<span style="color:#7c3aed;font-size:.65rem">çalışıyor...</span>')
                 + (elapsed ? '<span class="elapsed">' + elapsed + '</span>' : '')
                 + '</div>';
@@ -2450,7 +2915,7 @@
                 sbHtml = d.html;
                 sbLoadPreview();
                 document.getElementById('sbCodePre').textContent = sbHtml;
-                addSbMsg('ai', '✨ Site Modal 7/24 motoru ile üretildi!\n\nÖnizleme sekmesinden canlı inceleyebilirsiniz.');
+                addSbMsg('ai', ' Site Modal 7/24 motoru ile üretildi!\n\nÖnizleme sekmesinden canlı inceleyebilirsiniz.');
             }
         } catch(e) {
             const msgs = document.getElementById('sbMsgs');
@@ -2770,7 +3235,7 @@
     const sampleDemoProjects = [
         {
             id: 'proj_ue5_spatial',
-            name: '🎮 UE5 AFearSoundManager Plugin',
+            name: '[Oyun] UE5 AFearSoundManager Plugin',
             category: 'Unreal Engine 5.4 C++',
             instructions: 'Unreal Engine 5.4 3D uzamsal ses, dinamik gerilim ve zemin ayak sesi algılama C++ eklentisi.',
             files: [
@@ -2831,7 +3296,7 @@ AAFearSoundManager::AAFearSoundManager()
 void AAFearSoundManager::BeginPlay()
 {
     Super::BeginPlay();
-    UE_LOG(LogTemp, Log, TEXT("⚡ [Elytra-ai] AFearSoundManager 3D Spatial Audio Online!"));
+    UE_LOG(LogTemp, Log, TEXT(" [Elytra-ai] AFearSoundManager 3D Spatial Audio Online!"));
 }
 
 void AAFearSoundManager::PlaySpatialFearSound(USoundCue* SoundToPlay, FVector Location, float Intensity)
@@ -2853,7 +3318,7 @@ void AAFearSoundManager::UpdateTensionLevel(float DeltaTension)
                     name: 'README.md',
                     path: 'README.md',
                     ext: '.md',
-                    content: `# 🎮 UE5 AFearSoundManager Plugin
+                    content: `# [Oyun] UE5 AFearSoundManager Plugin
 **Geliştirici:** Elytra-ai
 **Motor Sürümü:** Unreal Engine 5.4+
 
@@ -2863,7 +3328,7 @@ void AAFearSoundManager::UpdateTensionLevel(float DeltaTension)
         },
         {
             id: 'proj_python_sqlite',
-            name: '🐍 Python SQLite Async Engine',
+            name: '[Python] Python SQLite Async Engine',
             category: 'Python 3.12 & Backend',
             instructions: 'Asenkron SQLite veritabanı bağlantısı, kullanıcı yönetimi ve güvenli CRUD mimarisi.',
             files: [
@@ -2876,17 +3341,17 @@ import sqlite3
 from database import DatabaseManager
 
 async def main():
-    print("⚡ Shadowcat Python SQLite Motoru Başlatılıyor...")
+    print(" Shadowcat Python SQLite Motoru Başlatılıyor...")
     db = DatabaseManager("glitch_studio.db")
     await db.initialize()
     
     # Yeni kullanıcı kaydı
     user_id = await db.create_user("ErCuM_Studio", "ercum@glassesglitch.com")
-    print(f"✓ Kullanıcı oluşturuldu! ID: {user_id}")
+    print(f" Kullanıcı oluşturuldu! ID: {user_id}")
     
     # Kullanıcıları listele
     users = await db.get_users()
-    print("📋 Kayıtlı Kullanıcılar:")
+    print("[Kopyala] Kayıtlı Kullanıcılar:")
     for u in users:
         print(f"  - [{u['id']}] {u['username']} ({u['email']})")
 
@@ -2934,7 +3399,7 @@ class DatabaseManager:
                     name: 'README.md',
                     path: 'README.md',
                     ext: '.md',
-                    content: `# 🐍 Python SQLite Async Engine
+                    content: `# [Python] Python SQLite Async Engine
 **Stüdyo:** Elytra-ai
 Hafif, sıfır bağımlılık gerektiren ve yüksek performanslı SQLite veritabanı yönetim katmanı.`
                 }
@@ -2942,7 +3407,7 @@ Hafif, sıfır bağımlılık gerektiren ve yüksek performanslı SQLite veritab
         },
         {
             id: 'proj_cyber_web',
-            name: '⚡ Cyber-Cat Neon Studio Dashboard',
+            name: ' Cyber-Cat Neon Studio Dashboard',
             category: 'Glassmorphism Web',
             instructions: 'Canlı önizlemeli, fütüristik mor neon temalı modern web paneli.',
             files: [
@@ -2967,7 +3432,7 @@ Hafif, sıfır bağımlılık gerektiren ve yüksek performanslı SQLite veritab
 </head>
 <body>
     <div class="card">
-        <h1>⚡ Shadowcat Studio</h1>
+        <h1> Shadowcat Studio</h1>
         <p>Elytra-ai Canlı Web Önizleme Motoru devrede. Kodlarınızı anında yan panelde canlı test edin!</p>
         <button class="btn" onclick="runSystemTest()">Sistemi Test Et</button>
     </div>
@@ -2978,7 +3443,7 @@ Hafif, sıfır bağımlılık gerektiren ve yüksek performanslı SQLite veritab
                     name: 'README.md',
                     path: 'README.md',
                     ext: '.md',
-                    content: `# ⚡ Cyber-Cat Neon Studio Dashboard
+                    content: `#  Cyber-Cat Neon Studio Dashboard
 Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü.`
                 }
             ]
@@ -3064,7 +3529,7 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
                     name: 'PluginModule.cpp',
                     path: 'Source/Private/PluginModule.cpp',
                     ext: '.cpp',
-                    content: `#include "CoreMinimal.h"\n#include "Modules/ModuleManager.h"\n\nclass F${name.replace(/[^a-zA-Z0-9]/g,'')}Module : public IModuleInterface\n{\npublic:\n    virtual void StartupModule() override {\n        UE_LOG(LogTemp, Log, TEXT("⚡ [Shadowcat] ${name} Modülü Başlatıldı!"));\n    }\n    virtual void ShutdownModule() override {\n        UE_LOG(LogTemp, Log, TEXT("⚡ [Shadowcat] ${name} Modülü Kapatıldı."));\n    }\n};\n\nIMPLEMENT_MODULE(F${name.replace(/[^a-zA-Z0-9]/g,'')}Module, ${name.replace(/[^a-zA-Z0-9]/g,'')});`
+                    content: `#include "CoreMinimal.h"\n#include "Modules/ModuleManager.h"\n\nclass F${name.replace(/[^a-zA-Z0-9]/g,'')}Module : public IModuleInterface\n{\npublic:\n    virtual void StartupModule() override {\n        UE_LOG(LogTemp, Log, TEXT(" [Shadowcat] ${name} Modülü Başlatıldı!"));\n    }\n    virtual void ShutdownModule() override {\n        UE_LOG(LogTemp, Log, TEXT(" [Shadowcat] ${name} Modülü Kapatıldı."));\n    }\n};\n\nIMPLEMENT_MODULE(F${name.replace(/[^a-zA-Z0-9]/g,'')}Module, ${name.replace(/[^a-zA-Z0-9]/g,'')});`
                 },
                 {
                     name: 'GameplayActor.h',
@@ -3086,7 +3551,7 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
                     name: 'main.py',
                     path: 'main.py',
                     ext: '.py',
-                    content: `# ${name} - Python Async Core\nimport asyncio\nimport sqlite3\n\nasync def main():\n    print("⚡ [Shadowcat] ${name} Python Motoru Aktif!")\n    conn = sqlite3.connect("${name.toLowerCase().replace(/[^a-z0-9]/g,'_')}.db")\n    cursor = conn.cursor()\n    cursor.execute("CREATE TABLE IF NOT EXISTS records (id INTEGER PRIMARY KEY, title TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)")\n    conn.commit()\n    print("✓ Veritabanı ve tablolar doğrulandı.")\n\nif __name__ == '__main__':\n    asyncio.run(main())`
+                    content: `# ${name} - Python Async Core\nimport asyncio\nimport sqlite3\n\nasync def main():\n    print(" [Shadowcat] ${name} Python Motoru Aktif!")\n    conn = sqlite3.connect("${name.toLowerCase().replace(/[^a-z0-9]/g,'_')}.db")\n    cursor = conn.cursor()\n    cursor.execute("CREATE TABLE IF NOT EXISTS records (id INTEGER PRIMARY KEY, title TEXT, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)")\n    conn.commit()\n    print(" Veritabanı ve tablolar doğrulandı.")\n\nif __name__ == '__main__':\n    asyncio.run(main())`
                 },
                 {
                     name: 'database.py',
@@ -3108,7 +3573,7 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
                     name: 'index.html',
                     path: 'index.html',
                     ext: '.html',
-                    content: `<!DOCTYPE html>\n<html lang="tr">\n<head>\n    <meta charset="UTF-8">\n    <title>${name}</title>\n    <style>\n        body{background:#0a0910;color:#f8fafc;font-family:system-ui,-apple-system,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:20px}\n        .box{background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.3);padding:36px;border-radius:16px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,0.5);max-width:500px}\n        h1{color:#c084fc;margin:0 0 10px}\n        p{color:#94a3b8;font-size:0.95rem;line-height:1.6}\n        button{background:#7c3aed;color:#fff;border:none;padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;margin-top:14px;transition:all 0.2s}\n        button:hover{background:#6d28d9;transform:translateY(-1px)}\n    </style>\n</head>\n<body>\n    <div class="box">\n        <h1>⚡ ${name}</h1>\n        <p>Shadowcat Canlı Web Önizlemesi</p>\n        <button onclick="alert('⚡ Shadowcat Motoru Çalışıyor!')">Etkileşim Testi</button>\n    </div>\n</body>\n</html>`
+                    content: `<!DOCTYPE html>\n<html lang="tr">\n<head>\n    <meta charset="UTF-8">\n    <title>${name}</title>\n    <style>\n        body{background:#0a0910;color:#f8fafc;font-family:system-ui,-apple-system,sans-serif;display:flex;flex-direction:column;align-items:center;justify-content:center;min-height:100vh;margin:0;padding:20px}\n        .box{background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.3);padding:36px;border-radius:16px;text-align:center;box-shadow:0 10px 40px rgba(0,0,0,0.5);max-width:500px}\n        h1{color:#c084fc;margin:0 0 10px}\n        p{color:#94a3b8;font-size:0.95rem;line-height:1.6}\n        button{background:#7c3aed;color:#fff;border:none;padding:10px 20px;border-radius:8px;font-weight:600;cursor:pointer;margin-top:14px;transition:all 0.2s}\n        button:hover{background:#6d28d9;transform:translateY(-1px)}\n    </style>\n</head>\n<body>\n    <div class="box">\n        <h1> ${name}</h1>\n        <p>Shadowcat Canlı Web Önizlemesi</p>\n        <button onclick="alert(' Shadowcat Motoru Çalışıyor!')">Etkileşim Testi</button>\n    </div>\n</body>\n</html>`
                 },
                 {
                     name: 'README.md',
@@ -3147,7 +3612,7 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
         hideNewProjectModal();
         renderProjects();
         openIdeModal(newDemoProj);
-        toast('✓ ' + name + ' projesi Shadowcat çalışma alanında açıldı!');
+        toast(' ' + name + ' projesi Shadowcat çalışma alanında açıldı!');
     }
 
     function openIdeModal(proj) {
@@ -3250,7 +3715,7 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
     function markCodeDirty() {
         const saveEl = document.getElementById('ideStatusSave');
         if (saveEl) {
-            saveEl.textContent = '● Değiştirildi (Ctrl+S ile kaydet)';
+            saveEl.textContent = ' Değiştirildi (Ctrl+S ile kaydet)';
             saveEl.style.color = '#f59e0b';
         }
         if (currentIdeFile) {
@@ -3269,7 +3734,7 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
 
         const saveEl = document.getElementById('ideStatusSave');
         if (saveEl) {
-            saveEl.textContent = '● Kaydedildi';
+            saveEl.textContent = ' Kaydedildi';
             saveEl.style.color = '#10b981';
         }
 
@@ -3278,7 +3743,7 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
         }
 
         if (showToast) {
-            toast('✓ ' + (currentIdeFile.name || 'Dosya') + ' kaydedildi!');
+            toast(' ' + (currentIdeFile.name || 'Dosya') + ' kaydedildi!');
         }
     }
 
@@ -3323,7 +3788,7 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
             if (pillDrop) {
                 const opt = document.createElement('div');
                 opt.className = 'cyber-opt' + (idx === 0 ? ' active' : '');
-                opt.innerHTML = '📄 ' + esc(f.name || f.path);
+                opt.innerHTML = '[Dosya] ' + esc(f.name || f.path);
                 opt.onclick = (e) => {
                     e.stopPropagation();
                     selectIdeFile(f, item);
@@ -3351,7 +3816,7 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
         if (tabEl) tabEl.textContent = file.name || file.path;
         
         const pillName = document.getElementById('ideActiveProjectPillName');
-        if (pillName) pillName.textContent = '📁 ' + (file.name || file.path);
+        if (pillName) pillName.textContent = '[Proje] ' + (file.name || file.path);
 
         const editor = document.getElementById('ideCodeEditor');
         if (editor) {
@@ -3362,7 +3827,7 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
 
         const saveEl = document.getElementById('ideStatusSave');
         if (saveEl) {
-            saveEl.textContent = '● Kaydedildi';
+            saveEl.textContent = ' Kaydedildi';
             saveEl.style.color = '#10b981';
         }
 
@@ -3380,7 +3845,7 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
 
         currentIdeProject.files = currentIdeProject.files.filter(f => f.name !== fileName);
         persistProjects();
-        toast(`✓ "${fileName}" silindi.`);
+        toast(` "${fileName}" silindi.`);
         renderIdeFiles(currentIdeProject.files);
     }
 
@@ -3466,22 +3931,22 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
     async function executePythonInBrowser(code) {
         try {
             if (!pyodideRunner) {
-                logTerminal('🐍 WebAssembly CPython 3.11 Motoru (Pyodide) hazırlanıyor...', '#f59e0b');
+                logTerminal('[Python] WebAssembly CPython 3.11 Motoru (Pyodide) hazırlanıyor...', '#f59e0b');
                 if (typeof loadPyodide === 'function') {
                     pyodideRunner = await loadPyodide();
-                    logTerminal('✓ Gerçek Python 3.11 WebAssembly çalışma ortamı hazır!', '#10b981');
+                    logTerminal(' Gerçek Python 3.11 WebAssembly çalışma ortamı hazır!', '#10b981');
                 } else {
                     throw new Error('Pyodide kütüphanesine ulaşılamadı.');
                 }
             }
             pyodideRunner.setStdout({ batched: (msg) => logTerminal('  ' + msg, '#e2e8f0') });
-            pyodideRunner.setStderr({ batched: (msg) => logTerminal('❌ ' + msg, '#ef4444') });
+            pyodideRunner.setStderr({ batched: (msg) => logTerminal('[Hata] ' + msg, '#ef4444') });
             const t0 = performance.now();
             await pyodideRunner.runPythonAsync(code);
             const elapsed = (performance.now() - t0).toFixed(2);
-            logTerminal(`✓ Python Çalışması Tamamlandı (${elapsed} ms) — Çıkış: 0`, '#10b981');
+            logTerminal(` Python Çalışması Tamamlandı (${elapsed} ms) — Çıkış: 0`, '#10b981');
         } catch(err) {
-            logTerminal(`❌ Python Çalışma Hatası: ${err.message}`, '#ef4444');
+            logTerminal(`[Hata] Python Çalışma Hatası: ${err.message}`, '#ef4444');
         }
     }
 
@@ -3497,13 +3962,13 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
         const content = currentIdeFile.content || '';
         const isHtml = content.includes('<!DOCTYPE') || content.includes('<html') || content.includes('<canvas') || content.includes('<body') || ext.endsWith('.html') || ext.endsWith('.htm') || ext.endsWith('.svg');
 
-        logTerminal(`\n⚡ [${new Date().toLocaleTimeString()}] '${fname}' çalıştırılıyor...`, '#a78bfa');
+        logTerminal(`\n [${new Date().toLocaleTimeString()}] '${fname}' çalıştırılıyor...`, '#a78bfa');
 
         if (isHtml) {
             switchIdeViewMode('viewer');
             renderViewerContent(currentIdeFile);
-            logTerminal(`✓ Canlı HTML & Canvas uygulaması önizleme penceresine yüklendi ve başlatıldı.`, '#10b981');
-            toast('✓ Canlı web önizlemesi ve oyun başlatıldı!');
+            logTerminal(` Canlı HTML & Canvas uygulaması önizleme penceresine yüklendi ve başlatıldı.`, '#10b981');
+            toast(' Canlı web önizlemesi ve oyun başlatıldı!');
             return;
         }
 
@@ -3517,8 +3982,8 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
                 const logs = [];
                 const customConsole = {
                     log: (...args) => logs.push(args.map(a => typeof a === 'object' ? JSON.stringify(a) : String(a)).join(' ')),
-                    error: (...args) => logs.push('❌ [HATA]: ' + args.join(' ')),
-                    warn: (...args) => logs.push('⚠️ [UYARI]: ' + args.join(' '))
+                    error: (...args) => logs.push('[Hata] [HATA]: ' + args.join(' ')),
+                    warn: (...args) => logs.push('[Uyarı] [UYARI]: ' + args.join(' '))
                 };
 
                 const fn = new Function('console', content);
@@ -3532,21 +3997,21 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
                 if (result !== undefined) {
                     logTerminal(`  ↪ Return: ${JSON.stringify(result)}`, '#38bdf8');
                 }
-                logTerminal(`✓ Çalışma Tamamlandı (${elapsed} ms) — Çıkış Kodu: 0`, '#10b981');
+                logTerminal(` Çalışma Tamamlandı (${elapsed} ms) — Çıkış Kodu: 0`, '#10b981');
             } catch(err) {
-                logTerminal(`❌ Çalışma Zamanı Hatası: ${err.message}`, '#ef4444');
+                logTerminal(`[Hata] Çalışma Zamanı Hatası: ${err.message}`, '#ef4444');
             }
         } else if (isPy) {
             executePythonInBrowser(content);
         } else if (ext.endsWith('.cpp') || ext.endsWith('.h') || content.includes('#include') || content.includes('UCLASS')) {
-            logTerminal(`🎮 Unreal Engine C++ Sözdizim & Yapı Kontrolü:`, '#c084fc');
+            logTerminal(`[Oyun] Unreal Engine C++ Sözdizim & Yapı Kontrolü:`, '#c084fc');
             const hasUClass = content.includes('UCLASS') || content.includes('GENERATED_BODY');
             const hasModule = content.includes('IModuleInterface') || content.includes('IMPLEMENT_MODULE');
-            logTerminal(`  • UObject/AActor Makroları: ${hasUClass ? '✓ Doğru' : 'N/A'}`, '#94a3b8');
-            logTerminal(`  • UE5 Modül Tanımı: ${hasModule ? '✓ Doğru' : 'N/A'}`, '#94a3b8');
-            logTerminal(`✓ C++ sözdizimi Unreal Engine 5.4 standartlarına uygun!`, '#10b981');
+            logTerminal(`  • UObject/AActor Makroları: ${hasUClass ? ' Doğru' : 'N/A'}`, '#94a3b8');
+            logTerminal(`  • UE5 Modül Tanımı: ${hasModule ? ' Doğru' : 'N/A'}`, '#94a3b8');
+            logTerminal(` C++ sözdizimi Unreal Engine 5.4 standartlarına uygun!`, '#10b981');
         } else {
-            logTerminal(`📄 Dosya İçeriği: (${content.length} bayt, ${content.split('\n').length} satır).`, '#38bdf8');
+            logTerminal(`[Dosya] Dosya İçeriği: (${content.length} bayt, ${content.split('\n').length} satır).`, '#38bdf8');
         }
     }
 
@@ -3580,7 +4045,7 @@ Canlı HTML/CSS/JS Viewer ile anında test edilebilen fütüristik web arayüzü
 
             if (mainCmd === 'help' || mainCmd === 'glitch') {
                 logTerminal(`╔═══════════════════════════════════════════════════════════════════╗
-║   ⚡ SHADOWCAT NEXUS ENGINE (v4.0 Real Execution)                 ║
+║    SHADOWCAT NEXUS ENGINE (v4.0 Real Execution)                 ║
 ╚═══════════════════════════════════════════════════════════════════╝
 Glitch Code Geliştirici Komutları:
   • ptc / debate <görev>    - Multi-Model Debate (Gerçek model konsensüsü)
@@ -3633,7 +4098,7 @@ Glitch Code Geliştirici Komutları:
 
             if (mainCmd === 'bench') {
                 if (!currentIdeFile) {
-                    logTerminal('❌ Benchmark için aktif dosya seçilmedi.', '#ef4444');
+                    logTerminal('[Hata] Benchmark için aktif dosya seçilmedi.', '#ef4444');
                     return;
                 }
                 const content = currentIdeFile.content || '';
@@ -3642,21 +4107,21 @@ Glitch Code Geliştirici Komutları:
                 const tokensEst = Math.round(chars / 3.8);
                 const complexEst = (content.match(/if|for|while|switch|case|catch|def|class|function/g) || []).length;
 
-                logTerminal(`📊 [GLITCH BENCHMARK] '${currentIdeFile.name}':
+                logTerminal(`[Analiz] [GLITCH BENCHMARK] '${currentIdeFile.name}':
   • Satır Sayısı (LOC): ${lines}
   • Karakter Boyutu: ${chars} bayt
   • Tahmini Token Yükü: ~${tokensEst} token
   • Siklomatik Karmaşıklık: ${complexEst}
-  • Kod Durumu: ${complexEst > 25 ? '⚠️ Yüksek Karmaşıklık' : '✓ İdeal Seviye'}`, '#38bdf8');
+  • Kod Durumu: ${complexEst > 25 ? '[Uyarı] Yüksek Karmaşıklık' : ' İdeal Seviye'}`, '#38bdf8');
                 return;
             }
 
             if (mainCmd === 'diff') {
                 if (!currentIdeFile) {
-                    logTerminal('❌ Aktif dosya seçilmedi.', '#ef4444');
+                    logTerminal('[Hata] Aktif dosya seçilmedi.', '#ef4444');
                     return;
                 }
-                logTerminal(`🔍 [GLITCH DIFF] '${currentIdeFile.name}':
+                logTerminal(`[Arama] [GLITCH DIFF] '${currentIdeFile.name}':
   @@ -1,${currentIdeFile.content.split('\n').length} +1,${currentIdeFile.content.split('\n').length} @@
   ${currentIdeFile.content.split('\n').slice(0, 15).map(l => '  ' + l).join('\n')}${currentIdeFile.content.split('\n').length > 15 ? '\n  ... [Kalan satırlar gizlendi]' : ''}`, '#94a3b8');
                 return;
@@ -3667,9 +4132,9 @@ Glitch Code Geliştirici Komutları:
                     logTerminal('Aktif proje yok.', '#ef4444');
                     return;
                 }
-                logTerminal(`📁 ${currentIdeProject.name}/`, '#a78bfa');
+                logTerminal(`[Proje] ${currentIdeProject.name}/`, '#a78bfa');
                 currentIdeProject.files.forEach(f => {
-                    logTerminal(`  ├── 📄 ${f.name} (${(f.content || '').length} bayt)`, '#94a3b8');
+                    logTerminal(`  ├── [Dosya] ${f.name} (${(f.content || '').length} bayt)`, '#94a3b8');
                 });
                 return;
             }
@@ -3684,7 +4149,7 @@ Glitch Code Geliştirici Komutları:
                 if (found) {
                     logTerminal(found.content || '// Boş dosya', '#e2e8f0');
                 } else {
-                    logTerminal(`❌ Dosya bulunamadı: ${target}`, '#ef4444');
+                    logTerminal(`[Hata] Dosya bulunamadı: ${target}`, '#ef4444');
                 }
                 return;
             }
@@ -3695,7 +4160,7 @@ Glitch Code Geliştirici Komutları:
                     const res = eval(code);
                     logTerminal(`↪ ${JSON.stringify(res)}`, '#10b981');
                 } catch(err) {
-                    logTerminal(`❌ Hata: ${err.message}`, '#ef4444');
+                    logTerminal(`[Hata] Hata: ${err.message}`, '#ef4444');
                 }
                 return;
             }
@@ -3765,7 +4230,7 @@ Temel Kuralların:
             }
         }
 
-        return "⚠️ **[Bağlantı Hatası]** Yerel stüdyo sunucusuna (http://localhost:7860) ulaşılamadı. Lütfen 'baslat_studyo_modeli.bat' dosyasını çalıştırın.";
+        return "[Uyarı] **[Bağlantı Hatası]** Yerel stüdyo sunucusuna (http://localhost:7860) ulaşılamadı. Lütfen 'baslat_studyo_modeli.bat' dosyasını çalıştırın.";
     }
 
     async function streamChat(msg, onToken, onThinking) {
@@ -3909,7 +4374,7 @@ Temel Kuralların:
             return;
         }
         navigator.clipboard.writeText(currentIdeFile.content);
-        toast('✓ Dosya içeriği panoya kopyalandı!');
+        toast(' Dosya içeriği panoya kopyalandı!');
     }
 
     function downloadIdeFile() {
@@ -3922,7 +4387,7 @@ Temel Kuralların:
         a.href = URL.createObjectURL(blob);
         a.download = currentIdeFile.name || 'code.txt';
         a.click();
-        toast('✓ ' + (currentIdeFile.name || 'Dosya') + ' indirildi!');
+        toast(' ' + (currentIdeFile.name || 'Dosya') + ' indirildi!');
     }
 
     function exportIdeProjectZip() {
@@ -3937,7 +4402,7 @@ Temel Kuralların:
         document.body.appendChild(a);
         a.click();
         a.remove();
-        toast('✓ ' + currentIdeProject.name + ' proje paketi indirildi!');
+        toast(' ' + currentIdeProject.name + ' proje paketi indirildi!');
     }
 
     function toggleDropdown(id) {
@@ -3985,7 +4450,7 @@ Temel Kuralların:
         const cleanName = name.trim();
         const ext = cleanName.includes('.') ? cleanName.substring(cleanName.lastIndexOf('.')) : '.txt';
         
-        let initCode = `// ⚡ ${cleanName} - Shadowcat Proje Dosyası\n// Oluşturuldu: ${new Date().toLocaleTimeString()}\n\n`;
+        let initCode = `//  ${cleanName} - Shadowcat Proje Dosyası\n// Oluşturuldu: ${new Date().toLocaleTimeString()}\n\n`;
         if (ext === '.py') initCode = `# ${cleanName}\n# Shadowcat Python Modülü\n\ndef main():\n    pass\n\nif __name__ == '__main__':\n    main()\n`;
         else if (ext === '.cpp') initCode = `#include "CoreMinimal.h"\n\n// ${cleanName}\n`;
         else if (ext === '.h') initCode = `#pragma once\n#include "CoreMinimal.h"\n\n`;
@@ -4003,12 +4468,12 @@ Temel Kuralların:
         persistProjects();
         renderIdeFiles(currentIdeProject.files);
         selectIdeFile(newFile);
-        toast('✓ ' + cleanName + ' dosyası projeye eklendi!');
+        toast(' ' + cleanName + ' dosyası projeye eklendi!');
     }
 
     function applyCodeToEditor(codeText, btnElement = null) {
         if (!currentIdeFile) {
-            toast('⚠️ Düzenlenecek aktif dosya seçilmedi.');
+            toast('[Uyarı] Düzenlenecek aktif dosya seçilmedi.');
             return;
         }
         currentIdeFile.content = codeText;
@@ -4030,17 +4495,17 @@ Temel Kuralların:
         switchIdeViewMode('code');
 
         if (btnElement) {
-            btnElement.innerHTML = '✓ Dosyaya Başarıyla Aktarıldı!';
+            btnElement.innerHTML = ' Dosyaya Başarıyla Aktarıldı!';
             btnElement.style.background = '#059669';
             btnElement.style.borderColor = '#10b981';
             setTimeout(() => {
-                btnElement.innerHTML = '✓ Bu Kodu Dosyaya Uygula (' + esc(currentIdeFile.name || 'Dosya') + ')';
+                btnElement.innerHTML = ' Bu Kodu Dosyaya Uygula (' + esc(currentIdeFile.name || 'Dosya') + ')';
                 btnElement.style.background = '#7c3aed';
                 btnElement.style.borderColor = '#7c3aed';
             }, 2500);
         }
 
-        toast('✓ Kod aktif dosyaya (' + (currentIdeFile.name || 'Dosya') + ') aktarıldı ve kaydedildi!');
+        toast(' Kod aktif dosyaya (' + (currentIdeFile.name || 'Dosya') + ') aktarıldı ve kaydedildi!');
     }
 
     async function ideAiAction(action, customQuery = '') {
@@ -4055,26 +4520,26 @@ Temel Kuralların:
         let userActionName = '';
 
         if (action === 'debate') {
-            userActionName = '⚔️ PlusTwoCoder Multi-Model Debate';
+            userActionName = '[Tartışma] PlusTwoCoder Multi-Model Debate';
             promptText = `[GLITCH MULTI-MODEL DEBATE (PLUSTWOCODER)] "${fname}" dosyasını ve görevi iki farklı uzman yapay zeka perspektifinde tartışarak çöz:\n1. Model A (Mimari & Performans Uzmanı): Kodun verimlilik, bellek ve hız odaklı tasarımını sunsun.\n2. Model B (Güvenlik & Hata Dayanıklılığı Uzmanı): Olası açıkları, exception handling ve zafiyetleri eleştirsin.\n3. Nihai Konsensüs Çözümü: İki modelin mutabık kaldığı en mükemmel, üretime hazır tam kodu tek bir kod bloğunda sun.\nEk Talimat: ${customQuery || 'Mevcut dosyayı en üst düzey kaliteye çıkar.'}\nDosya İçeriği:\n\`\`\`\n${fileContent}\n\`\`\``;
         } else if (action === 'thinking') {
-            userActionName = '🧠 PlusThinking Derin Düşünce Analizi';
+            userActionName = ' PlusThinking Derin Düşünce Analizi';
             promptText = `[GLITCH PLUSTHINKING ANALİZİ] "${fname}" dosyasının algoritmik karmaşıklığını, race condition olasılıklarını, asenkron deadlock risklerini ve sınır durumlarını (edge cases) adım adım analiz et. <think> bloğu içinde derin akıl yürütme yaparak nihai güçlendirilmiş kodu sun.\nEk Talimat: ${customQuery || 'Algoritma ve mantık zafiyetlerini gider.'}\nDosya İçeriği:\n\`\`\`\n${fileContent}\n\`\`\``;
         } else if (action === 'doctor') {
-            userActionName = '🩺 Glitch Auto-Doctor & Sağlık Teşhisi';
+            userActionName = '[Teşhis] Glitch Auto-Doctor & Sağlık Teşhisi';
             const allFilesList = (currentIdeProject.files || []).map(f => f.name).join(', ');
             promptText = `[GLITCH AUTO-DOCTOR TEŞHİSİ] Proje: "${currentIdeProject.name}" (Dosyalar: ${allFilesList})\nAktif Dosya: "${fname}"\nProjedeki olası derleme/çalışma hatalarını, eksik import/include'ları, ölü kodları (dead code) ve bellek sızıntılarını tara. 100 üzerinden bir Proje Sağlık Skoru (Health Score) ver ve "${fname}" için hatasız onarılmış tam kodu üret.\nDosya İçeriği:\n\`\`\`\n${fileContent}\n\`\`\``;
         } else if (action === 'solve') {
-            userActionName = '🧩 Glitch 7-Aşamalı Görev Parçalayıcı (Solve)';
+            userActionName = '[Modül] Glitch 7-Aşamalı Görev Parçalayıcı (Solve)';
             promptText = `[GLITCH SOLVE 7-PHASE PIPELINE] Görev: ${customQuery || 'Gelişmiş özellik ekleme ve tam refactoring'}\nAktif Dosya: "${fname}"\n1. Aşama: Triage (Gereksinim Analizi)\n2. Aşama: Planning (Mimari Plan)\n3. Aşama: File Discovery\n4. Aşama: Code Proposal & Synthesis\n5. Aşama: Review & Security Revision\n6. Aşama: Test Strategy\n7. Aşama: Nihai Üretime Hazır Kod.\nDosya İçeriği:\n\`\`\`\n${fileContent}\n\`\`\``;
         } else if (action === 'secret_scan') {
-            userActionName = '🛡️ Glitch Security Audit & Zafiyet Taraması';
+            userActionName = ' Glitch Security Audit & Zafiyet Taraması';
             promptText = `[GLITCH GÜVENLİK ANALİZİ] "${fname}" dosyasını CVE riskleri, SQL injection, XSS, bellek sızıntısı, hardcoded API anahtarları ve riskli API çağrıları açısından denetle. Güvenlik raporu çıkar ve zırhlandırılmış güvenli kodu sun. Dosya İçeriği:\n\`\`\`\n${fileContent}\n\`\`\``;
         } else if (action === 'self_healing') {
-            userActionName = '✨ Otomatik Hata Onarımı (Self-Healing)';
+            userActionName = ' Otomatik Hata Onarımı (Self-Healing)';
             promptText = `[SELF-HEALING ONARIM] "${fname}" dosyasındaki olası syntax hatalarını, mantıksal bugları ve eksik importları bulup onar. Tam ve hatasız çalışan nihai kodu ver. Dosya İçeriği:\n\`\`\`\n${fileContent}\n\`\`\``;
         } else if (action === 'test_gen') {
-            userActionName = '🧪 Birim Testleri Oluştur (Unit Tests)';
+            userActionName = '[Test] Birim Testleri Oluştur (Unit Tests)';
             promptText = `[GLITCH TEST SUITE] "${fname}" dosyası için %100 kapsayıcı birim testleri (Unit Tests) ve test suite kodunu yaz. Dosya İçeriği:\n\`\`\`\n${fileContent}\n\`\`\``;
         } else if (action === 'refactor') {
             userActionName = '‹/› Clean-Code & Performans Refactoring';
@@ -4085,12 +4550,12 @@ Temel Kuralların:
         
         const userDiv = document.createElement('div');
         userDiv.style.cssText = 'padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:#fff;margin-left:14px;word-break:break-word';
-        userDiv.innerHTML = '<span style="font-weight:600;color:#a78bfa">⚡ Glitch Görevi:</span> ' + userActionName + (customQuery ? ` (${esc(customQuery)})` : ` (<code>${esc(fname)}</code>)`);
+        userDiv.innerHTML = '<span style="font-weight:600;color:#a78bfa"> Glitch Görevi:</span> ' + userActionName + (customQuery ? ` (${esc(customQuery)})` : ` (<code>${esc(fname)}</code>)`);
         hist.appendChild(userDiv);
 
         const aiDiv = document.createElement('div');
         aiDiv.style.cssText = 'padding:10px;border-radius:8px;background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.25);color:#e0d9fc;word-break:break-word';
-        aiDiv.innerHTML = '<span style="font-weight:600;color:#c084fc">⚡ CodeS:</span> <span class="ide-ai-txt">Multi-model analizi yapılıyor ve kod sentezleniyor...</span>';
+        aiDiv.innerHTML = '<span style="font-weight:600;color:#c084fc"> CodeS:</span> <span class="ide-ai-txt">Multi-model analizi yapılıyor ve kod sentezleniyor...</span>';
         hist.appendChild(aiDiv);
         hist.scrollTop = hist.scrollHeight;
 
@@ -4106,12 +4571,12 @@ Temel Kuralların:
                 const cleanCode = codeBlockMatch[1].trim();
                 const applyBtn = document.createElement('button');
                 applyBtn.style.cssText = 'margin-top:8px;padding:6px 12px;border-radius:6px;border:1px solid #7c3aed;background:#7c3aed;color:#fff;font-size:.72rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;font-family:inherit;transition:all .2s ease';
-                applyBtn.innerHTML = '✓ Bu Kodu Dosyaya Uygula (' + esc(fname) + ')';
+                applyBtn.innerHTML = ' Bu Kodu Dosyaya Uygula (' + esc(fname) + ')';
                 applyBtn.onclick = function() { applyCodeToEditor(cleanCode, this); };
                 aiDiv.appendChild(applyBtn);
             }
         } catch(e) {
-            txtEl.innerHTML = '⚠️ Sunucu Hatası: İşlem gerçekleştirilemedi.';
+            txtEl.innerHTML = '[Uyarı] Sunucu Hatası: İşlem gerçekleştirilemedi.';
         }
         hist.scrollTop = hist.scrollHeight;
     }
@@ -4131,7 +4596,7 @@ Temel Kuralların:
 
         const aiDiv = document.createElement('div');
         aiDiv.style.cssText = 'padding:10px;border-radius:8px;background:rgba(124,58,237,0.12);border:1px solid rgba(124,58,237,0.25);color:#e0d9fc;word-break:break-word';
-        aiDiv.innerHTML = '<span style="font-weight:600;color:#c084fc">⚡ Shadowcat:</span> <span class="ide-ai-txt">Analiz ediliyor...</span>';
+        aiDiv.innerHTML = '<span style="font-weight:600;color:#c084fc"> Shadowcat:</span> <span class="ide-ai-txt">Analiz ediliyor...</span>';
         hist.appendChild(aiDiv);
         hist.scrollTop = hist.scrollHeight;
 
@@ -4149,12 +4614,12 @@ Temel Kuralların:
                 const cleanCode = codeBlockMatch[1].trim();
                 const applyBtn = document.createElement('button');
                 applyBtn.style.cssText = 'margin-top:8px;padding:6px 12px;border-radius:6px;border:1px solid #7c3aed;background:#7c3aed;color:#fff;font-size:.72rem;font-weight:600;cursor:pointer;display:flex;align-items:center;gap:4px;font-family:inherit;transition:all .2s ease';
-                applyBtn.innerHTML = '✓ Bu Kodu Dosyaya Uygula (' + esc(fname) + ')';
+                applyBtn.innerHTML = ' Bu Kodu Dosyaya Uygula (' + esc(fname) + ')';
                 applyBtn.onclick = function() { applyCodeToEditor(cleanCode, this); };
                 aiDiv.appendChild(applyBtn);
             }
         } catch(e) {
-            txtEl.innerHTML = '⚠️ Sunucu Hatası: Bulut sunucusuna ulaşılamadı.';
+            txtEl.innerHTML = '[Uyarı] Sunucu Hatası: Bulut sunucusuna ulaşılamadı.';
         }
         hist.scrollTop = hist.scrollHeight;
     }
@@ -4300,11 +4765,11 @@ Temel Kuralların:
 
     let thinkStageTimer = null;
     const THINK_STAGES = [
-        '✦ Girdi Analiz Ediliyor & Vektör Katmanı Hazırlanıyor...',
-        '✦ Nexus FTS5 Hafıza & Obsidian Notları Taranıyor...',
-        '✦ CodeS Router uzmanını seçiyor...',
-        '✦ Çoklu Ajan Mantığı & Kod Yapısı Doğrulanıyor...',
-        '✦ Yanıt Sentezleniyor ve Canlı Akıtılıyor...'
+        ' Girdi Analiz Ediliyor & Vektör Katmanı Hazırlanıyor...',
+        ' Nexus FTS5 Hafıza & Obsidian Notları Taranıyor...',
+        ' CodeS Router uzmanını seçiyor...',
+        ' Çoklu Ajan Mantığı & Kod Yapısı Doğrulanıyor...',
+        ' Yanıt Sentezleniyor ve Canlı Akıtılıyor...'
     ];
 
     function showThink(mainText, subText) {
@@ -4354,7 +4819,7 @@ Temel Kuralların:
         const orb = document.getElementById('thinkOrb');
 
         if (main) main.textContent = 'Yanıt Başarıyla Hazırlandı';
-        if (sub) sub.textContent = '✓ Çıkarım Tamamlandı & Sentezlendi';
+        if (sub) sub.textContent = ' Çıkarım Tamamlandı & Sentezlendi';
         if (freq) freq.style.display = 'none';
         if (orb) orb.style.display = 'none';
         if (done) done.style.display = 'flex';
@@ -4428,7 +4893,7 @@ Temel Kuralların:
         const wantSearch = webSearchEnabled || t.toLowerCase().startsWith('/search ');
         const sk = (!wantSearch && !isSlash) ? matchSkill(t) : null;
         if (multiAgentMode && !isSlash) {
-            showThink('Multi-Agent Orkestrasyon Aktif', '✦ Paralel Ajanlar Eşzamanlı Çalışıyor...');
+            showThink('Multi-Agent Orkestrasyon Aktif', ' Paralel Ajanlar Eşzamanlı Çalışıyor...');
             await new Promise(r => setTimeout(r, 200));
             try {
                 activeAbortController = new AbortController();
@@ -4474,7 +4939,7 @@ Temel Kuralların:
             }
         } else if (wantSearch) {
             if (!demoMode) {
-                showThink('Otonom Web Tarayıcı & Derleyici', '✦ İnternet Kaynakları Taranıyor & Sentezleniyor...');
+                showThink('Otonom Web Tarayıcı & Derleyici', ' İnternet Kaynakları Taranıyor & Sentezleniyor...');
                 await new Promise(r => setTimeout(r, 300));
                 try {
                     await streamReply(t);
@@ -4483,7 +4948,7 @@ Temel Kuralların:
                 }
             } else {
                 const query = t.toLowerCase().startsWith('/search ') ? t.slice(8) : t;
-                showThink('Web Arama Motoru Başlatılıyor', '✦ "' + query + '" için web taranıyor...');
+                showThink('Web Arama Motoru Başlatılıyor', ' "' + query + '" için web taranıyor...');
                 await new Promise(r => setTimeout(r, 300));
                 const sources = await showWebSearchAnim(query);
                 showThinkDone();
@@ -4491,7 +4956,7 @@ Temel Kuralların:
                 await typeText(appendSources(base, sources), true);
             }
         } else if (sk) {
-            showThink((sk.name || 'Özel Yetenek').toUpperCase() + ' Yeteneği Yürütülüyor', '✦ Özel Ajan Protokolü Devrede...');
+            showThink((sk.name || 'Özel Yetenek').toUpperCase() + ' Yeteneği Yürütülüyor', ' Özel Ajan Protokolü Devrede...');
             await new Promise(r => setTimeout(r, 200));
             showSkillBadge(sk);
             try {
@@ -4503,12 +4968,12 @@ Temel Kuralların:
             const r = handleSlash(t);
             await typeText(r, true);
         } else {
-            showThink(extendedThinking ? 'ShadowCat-R1 Derin Akıl Yürütme' : 'ShadowCat-R1 14B Modal Bulut Motoru', '✦ 7/24 Kesintisiz AI Yanıt Üretiyor...');
+            showThink(extendedThinking ? 'ShadowCat-R1 Derin Akıl Yürütme' : 'ShadowCat-R1 14B Modal Bulut Motoru', ' 7/24 Kesintisiz AI Yanıt Üretiyor...');
             try {
                 await streamReply(t);
             } catch(e) {
                 console.warn('Chat error:', e);
-                await typeText('Talebiniz alındı! ShadowCat-R1 14B amiral gemisi devrede. 🐱⚡', true);
+                await typeText('Talebiniz alındı! ShadowCat-R1 14B amiral gemisi devrede. ', true);
             }
         }
         renderList();
@@ -4687,7 +5152,7 @@ Temel Kuralların:
             const localD = await localR.json();
             if (localD && localD.status === 'ready') {
                 if (b) {
-                    b.textContent = '● 👑 ShadowCat-R1 14B Yerel Stüdyo (Canlı)';
+                    b.textContent = '  ShadowCat-R1 14B Yerel Stüdyo (Canlı)';
                     b.className = 'mode-badge live';
                     b.style.color = '#10b981';
                 }
@@ -4700,7 +5165,7 @@ Temel Kuralların:
             const fastR = await fetch('http://localhost:8000/api/models');
             if (fastR.ok) {
                 if (b) {
-                    b.textContent = '● 🚀 Shadowcat Yerel Motor (Canlı)';
+                    b.textContent = '  Shadowcat Yerel Motor (Canlı)';
                     b.className = 'mode-badge live';
                     b.style.color = '#10b981';
                 }
@@ -4710,7 +5175,7 @@ Temel Kuralların:
 
         // 3. Bulut Durumu
         if (b) {
-            b.textContent = '● 🌐 Shadowcat Web Bulut Modu';
+            b.textContent = ' [Web] Shadowcat Web Bulut Modu';
             b.className = 'mode-badge';
             b.style.color = '#a78bfa';
         }
@@ -4817,6 +5282,39 @@ Temel Kuralların:
     newChat();
     checkBackend();
     initSupabaseAuth();
+
+    // ─── THEME TOGGLE (DARK MODE & LIGHT MODE) ───
+    function applyTheme(theme) {
+        const isDark = (theme === 'dark');
+        document.body.classList.toggle('dark-mode', isDark);
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('shadowcat_theme', theme);
+
+        const iconEl = document.getElementById('themeIcon');
+        const labelEl = document.getElementById('themeLabel');
+        if (iconEl && labelEl) {
+            if (isDark) {
+                iconEl.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>';
+                labelEl.textContent = 'Beyaz Mod';
+            } else {
+                iconEl.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>';
+                labelEl.textContent = 'Karanlık';
+            }
+        }
+    }
+
+    function toggleTheme() {
+        const current = document.body.classList.contains('dark-mode') ? 'dark' : 'light';
+        const next = current === 'dark' ? 'light' : 'dark';
+        applyTheme(next);
+        toast(next === 'dark' ? 'Karanlık mod devrede' : 'Beyaz mod devrede');
+    }
+
+    // Auto-init theme
+    (function() {
+        const saved = localStorage.getItem('shadowcat_theme') || 'dark';
+        applyTheme(saved);
+    })();
 </script>
 
 <!-- New Project Modal -->
@@ -4824,7 +5322,7 @@ Temel Kuralların:
     <div class="upload-modal" style="max-width:500px">
         <button class="close-overlay" onclick="hideNewProjectModal()"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
         <h2>Yeni Stüdyo Projesi Oluştur</h2>
-        <div class="sub">Shadowcat Workspace & ⚡ Shadowcat Otonom Motoru</div>
+        <div class="sub">Shadowcat Workspace &  Shadowcat Otonom Motoru</div>
         <div style="margin-top:16px;display:flex;flex-direction:column;gap:12px">
             <div>
                 <label style="font-size:.75rem;color:#666;display:block;margin-bottom:4px">Proje Adı</label>
@@ -4833,10 +5331,10 @@ Temel Kuralların:
             <div>
                 <label style="font-size:.75rem;color:#666;display:block;margin-bottom:4px">Proje Şablonu</label>
                 <select id="npTemplate" style="width:100%;padding:8px 12px;border-radius:6px;border:1px solid #e0ddd5;font-size:.82rem;outline:none;background:#fff">
-                    <option value="ue5">🎮 Unreal Engine 5.4 C++ Plugin</option>
-                    <option value="python">🐍 Python SQLite Async Backend</option>
-                    <option value="web">⚡ Cyber-Cat Neon Web Dashboard</option>
-                    <option value="empty">📄 Sıfırdan Boş Proje</option>
+                    <option value="ue5">[Oyun] Unreal Engine 5.4 C++ Plugin</option>
+                    <option value="python">[Python] Python SQLite Async Backend</option>
+                    <option value="web"> Cyber-Cat Neon Web Dashboard</option>
+                    <option value="empty">[Dosya] Sıfırdan Boş Proje</option>
                 </select>
             </div>
             <div>
@@ -4856,14 +5354,14 @@ Temel Kuralların:
                 <div class="ide-title">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
                     <span id="ideProjName">Proje Yükleniyor...</span>
-                    <span class="ide-title-badge" id="ideProjBadge">⚡ Shadowcat Workspace</span>
+                    <span class="ide-title-badge" id="ideProjBadge"> Shadowcat Workspace</span>
                 </div>
             </div>
             <div class="ide-hdr-right">
                 <button class="ide-btn" onclick="addNewIdeFilePrompt()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg> ＋ Yeni Dosya</button>
-                <button class="ide-btn success" onclick="saveActiveIdeCode(true)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> 💾 Kaydet</button>
-                <button class="ide-btn primary" onclick="runActiveIdeCode()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg> ⚡ Çalıştır</button>
-                <button class="ide-btn" onclick="exportIdeProjectZip()" title="Projeyi İndir"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> 📦 Projeyi İndir</button>
+                <button class="ide-btn success" onclick="saveActiveIdeCode(true)"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> [Hafıza] Kaydet</button>
+                <button class="ide-btn primary" onclick="runActiveIdeCode()"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="5 3 19 12 5 21 5 3"/></svg>  Çalıştır</button>
+                <button class="ide-btn" onclick="exportIdeProjectZip()" title="Projeyi İndir"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> [Paket] Projeyi İndir</button>
                 <button class="ide-btn" onclick="closeIdeModal()"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
             </div>
         </div>
@@ -4882,8 +5380,8 @@ Temel Kuralların:
                     </div>
                     <div class="ide-mode-switch" style="display:flex;align-items:center;gap:4px">
                         <button class="ide-mode-btn active" id="ideBtnCode" onclick="switchIdeViewMode('code')">‹/› Kod</button>
-                        <button class="ide-mode-btn" id="ideBtnViewer" onclick="switchIdeViewMode('viewer')">👁️ Önizleme</button>
-                        <button class="ide-mode-btn" id="ideBtnTerminal" onclick="switchIdeViewMode('terminal')">⚡ Terminal</button>
+                        <button class="ide-mode-btn" id="ideBtnViewer" onclick="switchIdeViewMode('viewer')">[Önizleme] Önizleme</button>
+                        <button class="ide-mode-btn" id="ideBtnTerminal" onclick="switchIdeViewMode('terminal')"> Terminal</button>
                         <button class="ide-mode-btn" onclick="copyIdeCode()" title="Kodu Kopyala"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg></button>
                         <button class="ide-mode-btn" onclick="downloadIdeFile()" title="Dosyayı İndir"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></button>
                     </div>
@@ -4898,7 +5396,7 @@ Temel Kuralların:
                     <span id="ideStatusCursor">Satır 1, Sütun 1</span>
                     <span id="ideStatusStats">0 karakter | 1 satır</span>
                     <span id="ideStatusEncoding">UTF-8 | LF | Shadowcat v4.0</span>
-                    <span id="ideStatusSave" style="color:#10b981">● Kaydedildi</span>
+                    <span id="ideStatusSave" style="color:#10b981"> Kaydedildi</span>
                 </div>
 
                 <!-- Live Preview View -->
@@ -4910,8 +5408,8 @@ Temel Kuralların:
 
                 <!-- Interactive Terminal Console View -->
                 <div class="ide-terminal-view" id="ideTerminalContainer">
-                    <div class="ide-terminal-output" id="ideTerminalOutput">⚡ Shadowcat CLI & Terminal Engine v4.0 Aktif [Elytra-ai]
-Komut listesi için 'help' yazabilir veya üstteki '⚡ Çalıştır' butonuna basabilirsiniz.</div>
+                    <div class="ide-terminal-output" id="ideTerminalOutput"> Shadowcat CLI & Terminal Engine v4.0 Aktif [Elytra-ai]
+Komut listesi için 'help' yazabilir veya üstteki ' Çalıştır' butonuna basabilirsiniz.</div>
                     <div class="ide-terminal-prompt-row">
                         <span class="ide-terminal-prompt">epiccoder&gt;</span>
                         <input id="ideTerminalInput" class="ide-terminal-input" placeholder="Komut yazın (run, test, audit, clear, eval, help)..." onkeydown="handleTerminalKey(event)">
@@ -4923,46 +5421,46 @@ Komut listesi için 'help' yazabilir veya üstteki '⚡ Çalıştır' butonuna b
                 <div style="display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.08);padding-bottom:10px">
                     <div style="display:flex;align-items:center;gap:8px">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                        <span style="font-weight:700;color:#fff;font-size:.88rem">⚡ Shadowcat Stüdyo</span>
+                        <span style="font-weight:700;color:#fff;font-size:.88rem"> Shadowcat Stüdyo</span>
                     </div>
-                    <span class="welcome-cyber-badge">🐾 Shadowcat Nexus</span>
+                    <span class="welcome-cyber-badge"> Shadowcat Nexus</span>
                 </div>
 
                 <!-- Context Pills inside IDE -->
                 <div class="cyber-context-bar" style="margin-top:10px;margin-bottom:8px;gap:6px;position:relative">
                     <div class="cyber-pill" style="font-size:.72rem;padding:4px 10px;position:relative" onclick="toggleDropdown('ideProjectPillDropdown')">
-                        <span id="ideActiveProjectPillName">📁 Dosyalar</span>
+                        <span id="ideActiveProjectPillName">[Proje] Dosyalar</span>
                         <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5"/></svg>
                         <div id="ideProjectPillDropdown" class="cyber-dropdown">
                             <!-- Populated dynamically with project files -->
                         </div>
                     </div>
                     <div class="cyber-pill" style="font-size:.72rem;padding:4px 10px;position:relative" onclick="toggleDropdown('ideModePillDropdown')">
-                        <span id="ideActiveModePillName">⚡ Otonom Kodlama</span>
+                        <span id="ideActiveModePillName"> Otonom Kodlama</span>
                         <svg width="10" height="10" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5"/></svg>
                         <div id="ideModePillDropdown" class="cyber-dropdown">
-                            <div class="cyber-opt active" onclick="setIdeMode('⚡ Otonom Kodlama')">⚡ Otonom Kodlama</div>
-                            <div class="cyber-opt" onclick="setIdeMode('🛡️ Güvenlik & Denetim')">🛡️ Güvenlik & Denetim</div>
-                            <div class="cyber-opt" onclick="setIdeMode('🧪 Test & Debug')">🧪 Test & Debug</div>
-                            <div class="cyber-opt" onclick="setIdeMode('✨ Clean Refactor')">✨ Clean Refactor</div>
+                            <div class="cyber-opt active" onclick="setIdeMode(' Otonom Kodlama')"> Otonom Kodlama</div>
+                            <div class="cyber-opt" onclick="setIdeMode(' Güvenlik & Denetim')"> Güvenlik & Denetim</div>
+                            <div class="cyber-opt" onclick="setIdeMode('[Test] Test & Debug')">[Test] Test & Debug</div>
+                            <div class="cyber-opt" onclick="setIdeMode(' Clean Refactor')"> Clean Refactor</div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Glitch Code Power Tools Grid -->
                 <div class="ide-ai-actions" style="margin-top:6px;display:grid;grid-template-columns:1fr 1fr;gap:6px">
-                    <button class="ide-ai-act-btn" onclick="ideAiAction('debate')" title="2 Model Tartışarak En İyi Kodu Üretir"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="2" style="vertical-align:-1px;margin-right:2px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> ⚔️ PTC Debate</button>
-                    <button class="ide-ai-act-btn" onclick="ideAiAction('thinking')" title="Derin Akıl Yürütme ve Edge-Case Analizi"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" style="vertical-align:-1px;margin-right:2px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg> 🧠 PlusThinking</button>
-                    <button class="ide-ai-act-btn" onclick="ideAiAction('doctor')" title="Tüm Projeyi Tara ve Teşhis Koy"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" style="vertical-align:-1px;margin-right:2px"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg> 🩺 Auto-Doctor</button>
-                    <button class="ide-ai-act-btn" onclick="ideAiAction('solve')" title="7 Aşamalı Otonom Görev Parçalayıcı"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" style="vertical-align:-1px;margin-right:2px"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> 🧩 Glitch Solve</button>
-                    <button class="ide-ai-act-btn" onclick="ideAiAction('secret_scan')" title="CVE ve Güvenlik Zafiyet Denetimi"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" style="vertical-align:-1px;margin-right:2px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> 🛡️ Glitch Audit</button>
+                    <button class="ide-ai-act-btn" onclick="ideAiAction('debate')" title="2 Model Tartışarak En İyi Kodu Üretir"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#c084fc" stroke-width="2" style="vertical-align:-1px;margin-right:2px"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg> [Tartışma] PTC Debate</button>
+                    <button class="ide-ai-act-btn" onclick="ideAiAction('thinking')" title="Derin Akıl Yürütme ve Edge-Case Analizi"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#38bdf8" stroke-width="2" style="vertical-align:-1px;margin-right:2px"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4M12 8h.01"/></svg>  PlusThinking</button>
+                    <button class="ide-ai-act-btn" onclick="ideAiAction('doctor')" title="Tüm Projeyi Tara ve Teşhis Koy"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2" style="vertical-align:-1px;margin-right:2px"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg> [Teşhis] Auto-Doctor</button>
+                    <button class="ide-ai-act-btn" onclick="ideAiAction('solve')" title="7 Aşamalı Otonom Görev Parçalayıcı"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#f59e0b" stroke-width="2" style="vertical-align:-1px;margin-right:2px"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg> [Modül] Glitch Solve</button>
+                    <button class="ide-ai-act-btn" onclick="ideAiAction('secret_scan')" title="CVE ve Güvenlik Zafiyet Denetimi"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2" style="vertical-align:-1px;margin-right:2px"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>  Glitch Audit</button>
                     <button class="ide-ai-act-btn" onclick="ideAiAction('refactor')" title="Clean-Code ve SOLID Optimizasyonu"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" stroke-width="2" style="vertical-align:-1px;margin-right:2px"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg> ‹/› Refactor</button>
                 </div>
 
                 <!-- Interactive Chat History inside IDE -->
                 <div class="ide-chat-history" id="ideChatHistory" style="flex:1;overflow-y:auto;margin-top:10px;padding-right:4px;display:flex;flex-direction:column;gap:8px;font-size:.75rem">
                     <div style="padding:10px;border-radius:10px;background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.18);color:#dfd6cd">
-                        <span style="font-weight:600;color:#c084fc">⚡ Shadowcat:</span> Merhaba! Proje çalışma alanı hazır. Sol panelden dosya seçebilir, düzenleyebilir veya yapay zekaya kod yazdırabilirsiniz.
+                        <span style="font-weight:600;color:#c084fc"> Shadowcat:</span> Merhaba! Proje çalışma alanı hazır. Sol panelden dosya seçebilir, düzenleyebilir veya yapay zekaya kod yazdırabilirsiniz.
                     </div>
                 </div>
 
@@ -4973,18 +5471,18 @@ Komut listesi için 'help' yazabilir veya üstteki '⚡ Çalıştır' butonuna b
                         <div class="cyber-left-tools">
                             <button class="cyber-icon-btn" style="width:28px;height:28px" onclick="addNewIdeFilePrompt()" title="Projeye Yeni Dosya Ekle"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
                             <div class="cyber-pill-inline" style="padding:3px 8px;font-size:.68rem" onclick="toggleDropdown('ideWorkspaceWriteDropdown')">
-                                <span id="ideWorkspaceModeLabel">🛡️ Workspace: Yazılabilir</span>
+                                <span id="ideWorkspaceModeLabel"> Workspace: Yazılabilir</span>
                                 <svg width="8" height="8" viewBox="0 0 12 12" fill="none"><path d="M3 4.5L6 7.5L9 4.5" stroke="currentColor" stroke-width="1.5"/></svg>
                                 <div id="ideWorkspaceWriteDropdown" class="cyber-dropdown">
-                                    <div class="cyber-opt active" onclick="setIdeWorkspaceMode('🛡️ Workspace: Yazılabilir')">🛡️ Yazılabilir (Tam Yetki)</div>
-                                    <div class="cyber-opt" onclick="setIdeWorkspaceMode('🔒 Salt Okunur')">🔒 Salt Okunur (Read Only)</div>
+                                    <div class="cyber-opt active" onclick="setIdeWorkspaceMode(' Workspace: Yazılabilir')"> Yazılabilir (Tam Yetki)</div>
+                                    <div class="cyber-opt" onclick="setIdeWorkspaceMode(' Salt Okunur')"> Salt Okunur (Read Only)</div>
                                 </div>
                             </div>
                         </div>
                         <div class="cyber-right-tools">
                             <div class="cyber-pill-inline" style="padding:3px 8px;font-size:.68rem">
                                 <span class="cyber-dot"></span>
-                                <span>🐾 Shadowcat Nexus</span>
+                                <span> Shadowcat Nexus</span>
                             </div>
                             <button class="cyber-send-btn" style="width:30px;height:30px" onclick="sendIdeChat()" title="Gönder">
                                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>
@@ -4997,5 +5495,135 @@ Komut listesi için 'help' yazabilir veya üstteki '⚡ Çalıştır' butonuna b
     </div>
 </div>
 
+
+// Voice CSS Animation
+const voiceStyle = document.createElement('style');
+voiceStyle.textContent = `
+    @keyframes pulse {
+        0%, 100% { transform: scale(1); box-shadow: 0 0 60px rgba(124,58,237,0.5); }
+        50% { transform: scale(1.1); box-shadow: 0 0 80px rgba(124,58,237,0.8); }
+    }
+    .voice-btn {
+        width: 36px; height: 36px; border-radius: 50%;
+        background: linear-gradient(135deg, #7c3aed, #3b82f6);
+        border: none; color: #fff; cursor: pointer;
+        display: flex; align-items: center; justify-content: center;
+        transition: all 0.2s; margin-right: 8px;
+    }
+    .voice-btn:hover { transform: scale(1.1); box-shadow: 0 0 20px rgba(124,58,237,0.5); }
+    .voice-btn.active { background: linear-gradient(135deg, #dc2626, #f97316); }
+`;
+document.head.appendChild(voiceStyle);
+
+// Initialize on load
+document.addEventListener('DOMContentLoaded', function() {
+    initVoiceSystem();
+    // Load voices (Chrome loads them asynchronously)
+    if (window.speechSynthesis) {
+        window.speechSynthesis.onvoiceschanged = function() {
+            window.speechSynthesis.getVoices();
+        };
+    }
+});
+
+// Auto-speak AI responses (if enabled)
+let autoSpeakEnabled = false;
+function toggleAutoSpeak() {
+    autoSpeakEnabled = !autoSpeakEnabled;
+    return autoSpeakEnabled;
+}
+</script>
+
+
+
+<!-- ==================== YENI OZELLIKLER ==================== -->
+
+<!-- Not Modal -->
+<div id="noteModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:900;justify-content:center;align-items:center;">
+    <div style="background:#fff;border-radius:12px;padding:20px;max-width:380px;width:90%">
+        <div style="font-size:1rem;font-weight:700;color:#222;margin-bottom:10px">Hizli Not</div>
+        <input id="noteTitle" placeholder="Not basligi" style="width:100%;padding:8px;border:1px solid #e0ddd5;border-radius:6px;margin-bottom:8px">
+        <textarea id="noteContent" rows="3" placeholder="Not icerigi..." style="width:100%;padding:8px;border:1px solid #e0ddd5;border-radius:6px;margin-bottom:8px"></textarea>
+        <div style="display:flex;gap:8px;margin-top:6px">
+            <button onclick="saveQuickNote()" style="flex:1;padding:8px;border:none;background:#7c3aed;color:#fff;border-radius:6px;cursor:pointer">Kaydet</button>
+            <button onclick="toggleNoteModal()" style="padding:8px 16px;border:1px solid #e0ddd5;background:#fff;color:#555;border-radius:6px;cursor:pointer">Iptal</button>
+        </div>
+    </div>
+</div>
+
+<!-- Sistem Durum Modal -->
+<div id="sysStatusModal" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:900;justify-content:center;align-items:center;">
+    <div style="background:#0e0e16;border-radius:12px;padding:20px;max-width:460px;width:90%;color:#e0e0e8">
+        <div style="font-size:1rem;font-weight:700;color:#7c3aed;margin-bottom:10px">Sistem Durumu</div>
+        <div id="sysStatusBody" style="font-family:monospace;font-size:.8rem;white-space:pre-wrap">Yukleniyor...</div>
+        <button onclick="closeSysStatus()" style="margin-top:10px;padding:8px 20px;border:none;background:#dc2626;color:#fff;border-radius:6px;cursor:pointer">Kapat</button>
+    </div>
+</div>
+
+<script>
+// ==================== YENI OZELLIK JS ====================
+
+function toggleNoteModal() {
+    const m = document.getElementById("noteModal");
+    m.style.display = m.style.display === "none" ? "flex" : "none";
+}
+
+function saveQuickNote() {
+    const title = document.getElementById("noteTitle").value.trim();
+    const content = document.getElementById("noteContent").value.trim();
+    if (!content) { alert("Not icerigi bos olamaz"); return; }
+    fetch("/api/dashboard/notes", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ title: title || "Not", content: content })
+    }).then(r => r.json()).then(d => {
+        if (d.success) { alert("Not kaydedildi"); document.getElementById("noteTitle").value = ""; document.getElementById("noteContent").value = ""; toggleNoteModal(); }
+    }).catch(e => alert("Hata: " + e));
+}
+
+function exportChat() {
+    const fmt = prompt("Format: json / md / html", "md") || "md";
+    if (![�json�,�md�,�html�].includes(fmt.toLowerCase())) { alert("Gecersiz format"); return; }
+    fetch("/api/chat/export", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ messages: [], format: fmt })
+    }).then(r => r.json()).then(d => {
+        const blob = new Blob([d.content], {type: "text/plain;charset=utf-8"});
+        const a = document.createElement("a");
+        a.href = URL.createObjectURL(blob);
+        a.download = d.filename;
+        a.click();
+        URL.revokeObjectURL(a.href);
+    }).catch(e => alert("Hata: " + e));
+}
+
+function showSysStatus() {
+    document.getElementById("sysStatusModal").style.display = "flex";
+    fetch("/api/system/status").then(r => r.json()).then(d => {
+        let s = "CPU: %" + (d.cpu?.percent ?? "?") + " (" + (d.cpu?.cores ?? "?") + " cekirdek)
+";
+        s += "RAM: " + (d.memory?.used_gb ?? "?") + "GB / " + (d.memory?.total_gb ?? "?") + "GB (%" + (d.memory?.percent ?? "?") + ")
+";
+        s += "Disk: %" + (d.disk?.partitions?.[0]?.percent ?? "?") + " kullaniliyor
+";
+        s += "GPU: " + (d.gpu?.available ? d.gpu.devices?.[0]?.name : "Yok") + "
+";
+        s += "Uptime: " + (d.uptime ?? "?") + "
+";
+        s += "IP: " + (d.network?.ip ?? "?") + "
+";
+        if (d.top_processes?.length) { d.top_processes.forEach(p => { s += "  - " + (p.name ?? "?") + " (%" + (p.memory_percent ?? 0) + ")
+"; }); }
+        document.getElementById("sysStatusBody").textContent = s;
+    }).catch(e => {
+        document.getElementById("sysStatusBody").textContent = "Sistem verisi alinamadi: " + e;
+    });
+}
+
+function closeSysStatus() {
+    document.getElementById("sysStatusModal").style.display = "none";
+}
+</script>
 </body>
 </html>

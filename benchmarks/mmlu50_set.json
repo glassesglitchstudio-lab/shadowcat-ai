@@ -1,0 +1,507 @@
+{
+  "ad": "Mini-MMLU-50",
+  "tarih": "06.09.2026",
+  "amac": "Genel bilgi saglik kontrolu (kalite dustu mu olcumu)",
+  "sorular": [
+    {
+      "soru": "Gunes sisteminde en buyuk gezegen hangisidir?",
+      "secenekler": [
+        "Mars",
+        "Jupiter",
+        "Saturn",
+        "Venüs"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "Insan vucudunda kac kemik vardir (yetiskin)?",
+      "secenekler": [
+        "106",
+        "206",
+        "306",
+        "406"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "ISI'nin birimi nedir?",
+      "secenekler": [
+        "Joule",
+        "Watt",
+        "Newton",
+        "Pascal"
+      ],
+      "dogru_index": 0
+    },
+    {
+      "soru": "Cumhuriyet Turkiye'de hangi yilda ilan edildi?",
+      "secenekler": [
+        "1920",
+        "1923",
+        "1938",
+        "1945"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "Python bir ___ dilidir.",
+      "secenekler": [
+        "derlenmis",
+        "yorumlanmis",
+        "sadece mobil",
+        "grafik"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "Dunyadaki en uzun nehir hangisidir?",
+      "secenekler": [
+        "Amazon",
+        "Nil",
+        "Tuna",
+        "Fırat"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "Iscik'nin formulu nedir?",
+      "secenekler": [
+        "E=mc2",
+        "F=ma",
+        "PV=nRT",
+        "H2O"
+      ],
+      "dogru_index": 0
+    },
+    {
+      "soru": "Bir bilgisayarin beyin hangi parcadir?",
+      "secenekler": [
+        "RAM",
+        "GPU",
+        "CPU",
+        "Disk"
+      ],
+      "dogru_index": 2
+    },
+    {
+      "soru": "Osmanli Imparatorlugu kac yil surdu?",
+      "secenekler": [
+        "499",
+        "623",
+        "714",
+        "350"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "Fotograf makinesi icadi kimdir ilgili olarak bilinir?",
+      "secenekler": [
+        "Edison",
+        "Daguerre",
+        "Tesla",
+        "Newton"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "Kirmizi kan hucresinin gorevi nedir?",
+      "secenekler": [
+        "Enfeksiyon savasi",
+        "Oksijen tasima",
+        "Pıhtılasma",
+        "Hormon"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "IPv4 adres kac bitliktir?",
+      "secenekler": [
+        "16",
+        "32",
+        "64",
+        "128"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "Ikinci Dunya Savasi hangi yilda bitti?",
+      "secenekler": [
+        "1918",
+        "1939",
+        "1945",
+        "1950"
+      ],
+      "dogru_index": 2
+    },
+    {
+      "soru": "Mona Lisa'yi kim resmetti?",
+      "secenekler": [
+        "Van Gogh",
+        "Picasso",
+        "Da Vinci",
+        "Rembrandt"
+      ],
+      "dogru_index": 2
+    },
+    {
+      "soru": "Yer cekimini tanimlayan bilim insani kimdir?",
+      "secenekler": [
+        "Einstein",
+        "Newton",
+        "Galileo",
+        "Kepler"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "HTML'in acilimi nedir?",
+      "secenekler": [
+        "Hyper Text Markup Language",
+        "High Tech Modern Language",
+        "Hyper Transfer Markup Link",
+        "Home Tool Markup Language"
+      ],
+      "dogru_index": 0
+    },
+    {
+      "soru": "Ayin Dunya etrafindaki turu kac gun surer?",
+      "secenekler": [
+        "7",
+        "14",
+        "28",
+        "60"
+      ],
+      "dogru_index": 2
+    },
+    {
+      "soru": "En sert dogal tas nedir?",
+      "secenekler": [
+        "Celik",
+        "Elmas",
+        "Granit",
+        "Mermer"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "Ilk bilinen bilgisayar virusu hangisidir?",
+      "secenekler": [
+        "Creeper (1971)",
+        "Morris (1988)",
+        "Melissa",
+        "ILOVEYOU"
+      ],
+      "dogru_index": 0
+    },
+    {
+      "soru": "Turkiye kac bolgeye ayrilmistir?",
+      "secenekler": [
+        "5",
+        "7",
+        "9",
+        "12"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "Bir bit (bit) kac deger alabilir?",
+      "secenekler": [
+        "0-255",
+        "0 veya 1",
+        "0-9",
+        "A-F"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "Python'in tarih ve saat modulu hangisidir?",
+      "secenekler": [
+        "datetime",
+        "zamanmod",
+        "saatlib",
+        "clock"
+      ],
+      "dogru_index": 0
+    },
+    {
+      "soru": "Kan gruplarindan evrensel verici hangisidir?",
+      "secenekler": [
+        "A",
+        "B",
+        "AB",
+        "0 negatif"
+      ],
+      "dogru_index": 3
+    },
+    {
+      "soru": "Dunya'nin cevresi ekvatorde yaklasik kactir?",
+      "secenekler": [
+        "10.000 km",
+        "20.000 km",
+        "40.000 km",
+        "80.000 km"
+      ],
+      "dogru_index": 2
+    },
+    {
+      "soru": "Kriptografide SHA-256 ne uretir?",
+      "secenekler": [
+        "Sifre",
+        "Hash",
+        "Anahtar cifti",
+        "Imza"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "Buharli makineyi gelistiren kimdir?",
+      "secenekler": [
+        "James Watt",
+        "Nikola Tesla",
+        "Edison",
+        "Volta"
+      ],
+      "dogru_index": 0
+    },
+    {
+      "soru": "Uzayda ses iletisir mi?",
+      "secenekler": [
+        "Evet, hizli",
+        "Hayir, ortam yok",
+        "Sadece sivida",
+        "Sadece gazda"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "Veri biliminde 'overfitting' nedir?",
+      "secenekler": [
+        "Hiz artisi",
+        "Asiri ogrenme/ezber",
+        "Veri kaybi",
+        "Agirlik kaybi"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "Turk dilinin ilk yazili belgeleri hangi yazyitlardir?",
+      "secenekler": [
+        "Orhun",
+        "Gokturk",
+        "Divan",
+        "Dede Korkut"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "GPU hangi islemde CPU'dan iyidir?",
+      "secenekler": [
+        "Sira islem",
+        "Paralel matematik",
+        "Dosya okuma",
+        "Ses"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "DNA cift sarmal modelini kimler onerdi?",
+      "secenekler": [
+        "Watson & Crick",
+        "Mendel & Darwin",
+        "Pasteur & Koch",
+        "Curie x2"
+      ],
+      "dogru_index": 0
+    },
+    {
+      "soru": "Ekvator'da yil boyunca ne yasaniyor?",
+      "secenekler": [
+        "4 mevsim",
+        "2 mevsim",
+        "Yaz",
+        "Kis"
+      ],
+      "dogru_index": 2
+    },
+    {
+      "soru": "Ilk Olimpiyatlar nerede yapildi (modern)?",
+      "secenekler": [
+        "Atina",
+        "Paris",
+        "Londra",
+        "Roma"
+      ],
+      "dogru_index": 0
+    },
+    {
+      "soru": "AI'da 'token' ne demektir?",
+      "secenekler": [
+        "Sifre",
+        "Metin parcasi",
+        "Anahtar kelime",
+        "Resim"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "Ay'in yer cekimi Dunya'nin yaklasik kactir?",
+      "secenekler": [
+        "ayni",
+        "1/2",
+        "1/6",
+        "1/100"
+      ],
+      "dogru_index": 2
+    },
+    {
+      "soru": "Internette en cok kullanilan protokol?",
+      "secenekler": [
+        "FTP",
+        "HTTP/HTTPS",
+        "SMTP",
+        "SSH"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "Mikroislemcide 'cache' ne yapar?",
+      "secenekler": [
+        "Hafiza hizlandirir",
+        "Elektrik uretir",
+        "Goruntu uretir",
+        "Ses kaydeder"
+      ],
+      "dogru_index": 0
+    },
+    {
+      "soru": "Karadeniz'in tuzlulugu neden dusuktur?",
+      "secenekler": [
+        "Buharlama",
+        "Nehir akislari",
+        "Derinlik",
+        "Yosun"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "Lego hangi ulkenin urunudur?",
+      "secenekler": [
+        "Almanya",
+        "Danimarka",
+        "ABD",
+        "Isvec"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "Uydu interneti hangi sirket yaygınlastirdi (Starlink)?",
+      "secenekler": [
+        "SpaceX",
+        "Boeing",
+        "Airbus",
+        "NASA"
+      ],
+      "dogru_index": 0
+    },
+    {
+      "soru": "Yerel sinir aglarinda 'epoch' nedir?",
+      "secenekler": [
+        "Veri parcasi",
+        "Tam veri turu",
+        "Katman",
+        "Birim"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "Resim formatlarindan kayipsiz olan hangisidir?",
+      "secenekler": [
+        "JPG",
+        "PNG",
+        "WEBP (kayipli)",
+        "GIF"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "Ilk yazı sistemi hangi uygarliga aittir?",
+      "secenekler": [
+        "Mısır hiyeroglifi",
+        "Sumer çivi yazısı",
+        "Çince",
+        "Roma"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "Bilgisayarda 'boot' ne demektir?",
+      "secenekler": [
+        "Cizme",
+        "Acilis",
+        "Kapantis",
+        "Guncelleme"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "Ay tutulmasi nasil olusur?",
+      "secenekler": [
+        "Ay Gunesi kapatir",
+        "Dunya Ay'in onune gecer",
+        "Gunes Dunyayi kapatir",
+        "Uydu engeller"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "Kahve hangi bolgeden dunyaya yayildi (koken)?",
+      "secenekler": [
+        "Guney Amerika",
+        "Etiyopya",
+        "Turkiye",
+        "Hindistan"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "4-bit quantization bir modelin boyutunu yaklasik ne kadar dusurur (fp16'ya gore)?",
+      "secenekler": [
+        "%25",
+        "%50",
+        "%75",
+        "%10"
+      ],
+      "dogru_index": 2
+    },
+    {
+      "soru": "Kedi ortam suresi kac saat uyur (yaklasik)?",
+      "secenekler": [
+        "6",
+        "10",
+        "14-16",
+        "20"
+      ],
+      "dogru_index": 2
+    },
+    {
+      "soru": "Bilgisayarin kalici hafiza birimi hangisidir?",
+      "secenekler": [
+        "RAM",
+        "SSD",
+        "Cache",
+        "Register"
+      ],
+      "dogru_index": 1
+    },
+    {
+      "soru": "Versiyon kontrol sisteminin adı nedir (en yaygin)?",
+      "secenekler": [
+        "Git",
+        "SVN",
+        "Mercurial",
+        "Perforce"
+      ],
+      "dogru_index": 0
+    }
+  ]
+}

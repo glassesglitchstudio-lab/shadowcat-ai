@@ -1,64 +1,26 @@
-"""
-
-╔═══════════════════════════════════════════════════════════╗
-
-║                                                           ║
-
-║     SHADOWCAT - WEB SUNUCUSU (FastAPI) ║
-
-║                                                           ║
-
-║    ShadowcatCore + AgentLoop + TaskPlanner + Web UI         ║
-
-║                                                           ║
-
-║    Ozellikler:                                            ║
-
-║    - Web arayuzu ile AI sohbet                           ║
-
-║    - Cok adimli gorev yonetimi                           ║
-
-║    - Sistem izleme ve kontrol                            ║
-
-║    - Kullanici hesap sistemi                             ║
-
-║    - Admin paneli                                         ║
-
-║    - Obsidian hafiza entegrasyonu                        ║
-
-║                                                           ║
-
-╚═══════════════════════════════════════════════════════════╝
-
-"""
-
-
+"""Shadowcat AI - Web Server (FastAPI)"""
 
 from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Response
-
 from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse, FileResponse
-
 from fastapi.middleware.cors import CORSMiddleware
-
 from fastapi.staticfiles import StaticFiles
-
 from fastapi.templating import Jinja2Templates
-
 from fastapi import Request
-
 from pydantic import BaseModel
-
 import httpx
-
 import asyncio
-
 import logging
-
 import os
-
+import json
+import re
+import hashlib
+import secrets
+from datetime import datetime
+import uuid
+import io
+import csv
 from typing import Optional, Dict, Any, List
 
-# 🔇 Küresel pencere perdesi (CMD kabusu fix'i): tüm subprocess çağrıları konsol açmaz
 import subprocess as _sub
 if os.name == "nt":
     _CREATE_NO_WINDOW = 0x08000000
@@ -79,25 +41,6 @@ if os.name == "nt":
     _sub.run = _patched_run
     _sub.Popen.__init__ = _patched_popen_init
 
-import json
-
-import re
-
-import hashlib
-
-import secrets
-
-from datetime import datetime
-
-import uuid
-
-import io
-
-import csv
-
-
-
-# Shadowcat AI Core - Yeni mimari
 
 try:
 
@@ -463,9 +406,14 @@ async def hub_page():
 
 
 @app.get("/app", response_class=HTMLResponse)
+@app.get("/engine", response_class=HTMLResponse)
 async def app_page():
-    """ShadowCat Studio: komple LM Studio benzeri arayuz (sidebar + chat)."""
+    """Elytra Engine: LM Studio benzeri yerel NPU arayüzü (sidebar + chat + telemetri)."""
+    engine_template = os.path.join(BASE_DIR, "web", "templates", "elytra_engine.html")
+    if os.path.exists(engine_template):
+        return FileResponse(engine_template, headers={"Cache-Control": "no-cache, no-store, must-revalidate"})
     return FileResponse(os.path.join(BASE_DIR, "web", "templates", "app.html"), headers={"Cache-Control": "no-cache, no-store, must-revalidate"})
+
 
 
 
@@ -2170,6 +2118,32 @@ async def maxcode_unlock(data: dict):
         return {"success": False, "error": "5 hatalı deneme — 5 dakika kilitlendi."}
 
     return {"success": False, "error": "Şifre hatalı."}
+    
+
+_aegis_cyber_attempts = {"count": 0, "locked_until": 0.0}
+
+@app.post("/api/admin/aegis-cyber-unlock")
+async def aegis_cyber_unlock(data: dict):
+    """Aegis-Cyber Siber Güvenlik Kasa kilit açma. Şifre .env'deki AEGIS_CYBER_PASSWORD.
+    5 hatalı deneme = 5 dakika kilit."""
+    import time as _time
+    now = _time.time()
+    if now < _aegis_cyber_attempts["locked_until"]:
+        wait = int(_aegis_cyber_attempts["locked_until"] - now)
+        return {"success": False, "error": f"Çok fazla hatalı deneme. {wait} sn bekleyin."}
+
+    expected = os.getenv("AEGIS_CYBER_PASSWORD", "CYBER22").strip()
+    given = str(data.get("password", "")).strip()
+    if given == expected:
+        _aegis_cyber_attempts["count"] = 0
+        return {"success": True, "model": "AEGIS_CYBER", "tier_label": "Aegis-Cyber (RovX Shield)"}
+
+    _aegis_cyber_attempts["count"] += 1
+    if _aegis_cyber_attempts["count"] >= 5:
+        _aegis_cyber_attempts["locked_until"] = now + 300
+        _aegis_cyber_attempts["count"] = 0
+        return {"success": False, "error": "5 hatalı deneme — 5 dakika kilitlendi."}
+    return {"success": False, "error": "Siber Kasa şifresi hatalı."}
 
 
 
@@ -4926,6 +4900,156 @@ if CORE_AVAILABLE:
     except Exception as e:
         logger.warning(f"Shadowcat Core baslatilamadi: {e}")
 
+
+# ==================== VOICE CHAT API ====================
+
+from voice_chat import get_voice_chat, TTS_AVAILABLE, STT_AVAILABLE
+
+@app.get("/api/voice/status")
+async def voice_status():
+    """Ses sistemi durumu"""
+    voice = get_voice_chat()
+    return JSONResponse(voice.get_status())
+
+@app.post("/api/voice/speak")
+async def voice_speak(request: Request):
+    """Text-to-Speech: Metni sese dönüştür"""
+    data = await request.json()
+    text = data.get("text", "")
+    provider = data.get("provider", None)
+    if not text:
+        raise HTTPException(status_code=400, detail="text gerekli")
+    voice = get_voice_chat()
+    result = voice.speak(text, provider)
+    return JSONResponse(result)
+
+@app.post("/api/voice/listen")
+async def voice_listen(request: Request):
+    """Speech-to-Text: Mikrofon dinle"""
+    data = await request.json()
+    timeout = data.get("timeout", 10)
+    voice = get_voice_chat()
+    result = voice.listen(timeout)
+    return JSONResponse(result)
+
+@app.post("/api/voice/toggle")
+async def voice_toggle(request: Request):
+    """Ses aç/kapat"""
+    data = await request.json()
+    enabled = data.get("enabled", None)
+    voice = get_voice_chat()
+    state = voice.toggle(enabled)
+    return JSONResponse({"enabled": state})
+
+@app.post("/api/voice/provider")
+async def voice_set_provider(request: Request):
+    """TTS provider değiştir (gtts, pyttsx3, edge)"""
+    data = await request.json()
+    provider = data.get("provider", "gtts")
+    voice = get_voice_chat()
+    success = voice.set_provider(provider)
+    return JSONResponse({"success": success, "provider": provider})
+
+@app.post("/api/voice/chat")
+async def voice_chat(request: Request):
+    """Sesli sohbet: Konuş -> Dinle -> Yanıt -> Konuş"""
+    data = await request.json()
+    text = data.get("text", "")
+    if not text:
+        raise HTTPException(status_code=400, detail="text gerekli")
+
+    # AI yanıtı üret
+    if CORE_AVAILABLE:
+        core = get_core()
+        result = core.process_message(text)
+        response_text = result.response
+    else:
+        response_text = "Shadowcat Core aktif değil"
+
+    # Sese dönüştür
+    voice = get_voice_chat()
+    voice_result = voice.speak(response_text)
+
+    return JSONResponse({
+        "user_text": text,
+        "ai_response": response_text,
+        "voice": voice_result
+    })
+
+# ==================== YENI OZELLIK API'LERI ====================
+
+# 1. Sistem Monitoru
+from system_monitor import get_system_monitor
+
+@app.get("/api/system/status")
+async def api_system_status():
+    """Canli sistem izleme: CPU, RAM, Disk, GPU, Ag"""
+    mon = get_system_monitor()
+    return JSONResponse(mon.get_all())
+
+
+# 2. Dashboard: Notlar + istatistik
+from dashboard import get_dashboard
+
+@app.get("/api/dashboard/notes")
+async def api_list_notes(limit: int = 50):
+    """Hizli notlari listele"""
+    dash = get_dashboard()
+    return JSONResponse({"notes": dash.list_notes(limit)})
+
+@app.post("/api/dashboard/notes")
+async def api_add_note(request: Request):
+    """Yeni hizli not ekle"""
+    data = await request.json()
+    title = data.get("title", "Not")
+    content = data.get("content", "")
+    tags = data.get("tags", [])
+    note = get_dashboard().add_note(title, content, tags)
+    return JSONResponse({"success": True, "note": note})
+
+@app.delete("/api/dashboard/notes/{note_id}")
+async def api_delete_note(note_id: str):
+    """Not sil"""
+    ok = get_dashboard().delete_note(note_id)
+    return JSONResponse({"success": ok})
+
+@app.get("/api/dashboard/notes/search")
+async def api_search_notes(q: str = ""):
+    """Notlarda ara"""
+    results = get_dashboard().search_notes(q)
+    return JSONResponse({"results": results})
+
+@app.get("/api/dashboard/stats")
+async def api_get_stats():
+    """Kullanim istatistikleri"""
+    dash = get_dashboard()
+    return JSONResponse({
+        "stats": dash.get_stats(),
+        "memory": dash.get_memory_summary(core.memory if CORE_AVAILABLE and 'core' in dir() else None)
+    })
+
+
+# 3. Sohbet disa aktarma
+from chat_export import export_file
+
+@app.post("/api/chat/export")
+async def api_chat_export(request: Request):
+    """Sohbeti JSON/MD/HTML olarak disa aktar"""
+    data = await request.json()
+    messages = data.get("messages", [])
+    fmt = data.get("format", "json")
+    title = data.get("title", "Shadowcat Sohbeti")
+    if not messages:
+        raise HTTPException(status_code=400, detail="mesaj yok")
+    result = export_file(messages, fmt, title)
+    return JSONResponse(result)
+
+
+# 4. Sifreleme / guvenlik ipuclari
+@app.get("/api/health")
+async def api_health():
+    """Sunucu saglik kontrolu"""
+    return JSONResponse({"status": "ok", "time": __import__("time").strftime("%Y-%m-%d %H:%M:%S")})
 
 if __name__ == "__main__":
     import uvicorn

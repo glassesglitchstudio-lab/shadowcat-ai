@@ -25,8 +25,8 @@ from huggingface_hub.utils import HfHubHTTPError
 # ---------- Model dizini kaynaklari (oncelik sirasi) ----------
 # 1) ortam degiskeni SHADOWCAT_MODELS_DIR
 # 2) ~/.shadowcat/config.json icindeki models_dir
-# 3) fallback: H:\\Drive'im\\Models
-DEFAULT_MODELS_DIR = Path(r"H:\Drive'ım\Models")
+# 3) varsayilan: C:\models (kullanici Settings'ten istedigi yolu secebilir)
+DEFAULT_MODELS_DIR = Path(r"C:\models")
 CONFIG_PATH = Path(os.environ.get("SHADOWCAT_CONFIG", Path.home() / ".shadowcat" / "config.json"))
 
 
@@ -42,10 +42,9 @@ def get_models_dir() -> Path:
         p = Path(cfg["models_dir"]).expanduser()
         if p.exists() or _is_creatable(p):
             return p
-    # fallback: H:\Drive'im\Models varsa orayi kullan, yoksa yine de orayi dondur
-    # (UI tarafinda kullanici degistirene kadar)
-    if DEFAULT_MODELS_DIR.exists():
-        return DEFAULT_MODELS_DIR
+    # varsayilan: C:\models (yoksa olusturulabilir)
+    if not DEFAULT_MODELS_DIR.exists():
+        _is_creatable(DEFAULT_MODELS_DIR)
     return DEFAULT_MODELS_DIR
 
 
