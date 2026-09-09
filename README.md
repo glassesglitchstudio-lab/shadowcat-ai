@@ -106,13 +106,7 @@ Sunucu `http://localhost:8000` adresinde başlar.
 
 ## Modeller
 
-| Model | Boyut | Görev |
-|-------|-------|-------|
-| gulmzcetiner:V3A | 8.0 GB | Ana AGI |
-| GulmezCetinerMax | 9.0 GB | Alternatif AGI |
-| qwen2.5-coder:14b | 9.0 GB | Kodlama |
-| deepseek-r1:8b | 5.2 GB | Analiz |
-| llava:latest | 4.7 GB | Görsel |
+YENİ MODELERİMİZ GELESEYE KADAR BİRAZ BEKELYİN O EKSİ MODELER TEST İÇİNDİ ARITK CİDDEN MODEL YAPAMYA BAŞLIYORUZ 
 
 ## Dizin Yapısı
 
