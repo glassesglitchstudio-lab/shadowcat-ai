@@ -20,6 +20,7 @@ import uuid
 import io
 import csv
 from typing import Optional, Dict, Any, List
+from contextlib import asynccontextmanager
 
 import subprocess as _sub
 if os.name == "nt":
@@ -275,13 +276,25 @@ def generate_token() -> str:
 
 # FastAPI uygulaması
 
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Başlangıç: Ollama servisini otomatik başlat
+    try:
+        ensure_ollama_running()
+    except Exception as e:
+        logger.warning(f"[Startup] Ollama kontrolü atlandı: {e}")
+    yield
+    # Kapanış: burada gerekiyorsa temizlik yapılabilir
+
 app = FastAPI(
 
     title="Shadowcat BETA",
 
     description="SWA 1.6 Mimarisi - Hibrit Zeka Sistemi",
 
-    version="1.0.0"
+    version="1.0.0",
+
+    lifespan=lifespan
 
 )
 
@@ -4886,10 +4899,6 @@ def ensure_ollama_running():
     else:
         logger.warning("[Ollama] Ollama calistirilabilir dosyasi bulunamadi.")
     return False
-
-@app.on_event("startup")
-async def startup_event():
-    ensure_ollama_running()
 
 # ==================== SHADOWCAT CORE BASLATMA ====================
 
