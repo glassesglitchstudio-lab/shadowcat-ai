@@ -1,6 +1,6 @@
 """Shadowcat AI - Web Server (FastAPI)"""
 
-from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Response
+from fastapi import FastAPI, HTTPException, UploadFile, File, Form, Response, Depends
 from fastapi.responses import HTMLResponse, JSONResponse, StreamingResponse, FileResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
@@ -13,6 +13,7 @@ import logging
 import os
 import json
 import re
+import shlex
 import hashlib
 import secrets
 from datetime import datetime
@@ -21,6 +22,8 @@ import io
 import csv
 from typing import Optional, Dict, Any, List
 from contextlib import asynccontextmanager
+
+from middleware.auth import require_admin
 
 import subprocess as _sub
 if os.name == "nt":
@@ -3233,7 +3236,7 @@ async def skills_hunt(req: SkillHuntRequest):
 
 @app.post("/api/skills/install")
 
-async def skills_install(req: SkillInstallRequest):
+async def skills_install(req: SkillInstallRequest, user=Depends(require_admin)):
 
     """Verilen kurulum komutunu Shadowcat'in kendi terminalinde calistirir."""
 
@@ -3242,6 +3245,10 @@ async def skills_install(req: SkillInstallRequest):
     if not command:
 
         return {"success": False, "error": "komut gerekli"}
+
+    if any(op in command for op in (";", "&&", "||", "|", "`", "$(", ">", "<", chr(10), chr(13))):
+
+        return {"success": False, "error": "Komutta zincirleme/yonlendirme operatoru olamaz"}
 
     if not re.match(r"^(git clone|npx\s|npm\s)", command):
 
@@ -3257,7 +3264,7 @@ async def skills_install(req: SkillInstallRequest):
 
         proc = subprocess.run(
 
-            command, shell=True, cwd=workdir, capture_output=True, text=True,
+            shlex.split(command), shell=False, cwd=workdir, capture_output=True, text=True,
 
             timeout=600, encoding="utf-8", errors="replace",
 

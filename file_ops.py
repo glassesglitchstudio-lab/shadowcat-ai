@@ -24,7 +24,6 @@ class FileOperations:
     
     # İzin verilen dizinler (güvenlik) — dinamik kullanıcı yolu
     ALLOWED_PATHS = [
-        os.path.expanduser("~"),
         os.path.expanduser("~/Desktop"),
         os.path.expanduser("~/Documents"),
         os.path.expanduser("~/Downloads"),
@@ -48,7 +47,7 @@ class FileOperations:
             resolved = Path(path).resolve()
             
             # Ana proje dizinine her zaman izin ver
-            project_root = Path(__file__).parent.parent.resolve()
+            project_root = Path(__file__).parent.resolve()
             if resolved.is_relative_to(project_root):
                 return True
             
@@ -115,7 +114,8 @@ class FileOperations:
             path.parent.mkdir(parents=True, exist_ok=True)
             
             mode = 'a' if append else 'w'
-            path.write_text(content, encoding=encoding)
+            with open(path, mode, encoding=encoding) as f:
+                f.write(content)
             
             self._log_operation("write", filepath, True)
             
