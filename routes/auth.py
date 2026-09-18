@@ -67,13 +67,13 @@ async def login(req: LoginRequest, response: Response):
 
     if req.email not in users:
         if dev_mode:
-            # DEV_MODE'da otomatik kayıt
+            # DEV_MODE'da otomatik kayıt — ama admin yetkisi VERME (güvenlik)
             from middleware.auth import hash_password, _save_users
             users[req.email] = {
                 "name": req.email.split("@")[0],
                 "email": req.email,
                 "password": hash_password(req.password),
-                "is_admin": True,
+                "is_admin": False,
                 "is_dev": True
             }
             _save_users(users)
@@ -102,7 +102,10 @@ async def logout(response: Response):
     response.delete_cookie("session_token")
     return {"message": "Çıkış yapıldı"}
 
-DEV_SIMPLE_PASSWORD = os.getenv("DEV_SIMPLE_PASSWORD", "adminShadowcat")
+# Geliştirici şifresi: SADECE DEV_MODE=true ve şifre env'de tanımlıysa aktif.
+# Sabit default şifre KALDIRILDI (güvenlik açığıydı — herkes bilerek giriş yapabilirdi).
+_DEV_PASSWORD = os.getenv("DEV_SIMPLE_PASSWORD", "")
+DEV_SIMPLE_PASSWORD = _DEV_PASSWORD if (os.getenv("DEV_MODE", "false").lower() == "true" and _DEV_PASSWORD) else None
 
 @router.post("/simple-login")
 async def simple_login(req: SimpleLoginRequest, response: Response):
@@ -132,7 +135,12 @@ async def simple_login(req: SimpleLoginRequest, response: Response):
     if not valid:
         raise HTTPException(status_code=401, detail="Gecersiz veya pasif davet kodu! Shadowcat su anda davetli kullanicilara aciktir.")
 
-    users[name] = {
+    # Benzersiz key oluştur — aynı isimli kullanıcı varsa time-stamp ekle
+    user_key = name
+    if user_key in users:
+        user_key = f"{name}_{int(datetime.now().timestamp())}"
+
+    users[user_key] = {
         "name": name,
         "beta_key": beta_key,
         "created_at": datetime.now().isoformat(),
@@ -140,16 +148,19 @@ async def simple_login(req: SimpleLoginRequest, response: Response):
     }
     _save_users(users)
 
-    token = create_session(name)
+    token = create_session(user_key)
     response.set_cookie("session_token", token, httponly=True, max_age=7*24*3600)
     return {"success": True, "message": f"Hoş geldin {name}!", "name": name, "token": token}
 
 @router.post("/dev-login-simple")
 async def dev_login_simple(req: DevLoginRequest, response: Response):
-    """Geliştirici girişi - Şifre: adminShadowcat"""
+    """Geliştirici girişi — yalnızca DEV_MODE=true + DEV_SIMPLE_PASSWORD env ile açılır"""
     from middleware.auth import users, create_session
     password = req.password.strip()
 
+    # Dev girişi kapalıysa endpoint bilgi sızdırmadan 404 döner
+    if DEV_SIMPLE_PASSWORD is None:
+        raise HTTPException(status_code=404, detail="Not Found")
     if not password:
         raise HTTPException(status_code=400, detail="Şifre gereklidir!")
     if password != DEV_SIMPLE_PASSWORD:

@@ -4,13 +4,17 @@ from typing import Optional, List
 import os
 import tempfile
 
+import logging
+
+logger = logging.getLogger("routes.rag")
 router = APIRouter()
 
 def get_rag():
     try:
         from rag_system import RAGEngine
         return RAGEngine()
-    except:
+    except (ImportError, Exception) as e:
+        logger.warning(f"RAG yüklenemedi: {e}")
         return None
 
 class RAGSearchQuery(BaseModel):
@@ -95,7 +99,8 @@ async def list_documents():
     try:
         docs = rag.list_documents()
         return {"documents": docs}
-    except:
+    except Exception as e:
+        logger.warning(f"Belge listelenemedi: {e}")
         return {"documents": []}
 
 @router.delete("/documents/{doc_id}")
@@ -127,5 +132,6 @@ async def rag_stats():
     try:
         stats = rag.get_stats()
         return {"available": True, **stats}
-    except:
+    except Exception as e:
+        logger.warning(f"RAG istatistikleri alınamadı: {e}")
         return {"available": True, "total_documents": 0, "total_chunks": 0}

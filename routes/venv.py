@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from typing import Optional
 import os
@@ -7,6 +7,8 @@ import sys
 import subprocess
 import time
 import logging
+
+from middleware.auth import require_auth
 
 logger = logging.getLogger("routes.venv")
 router = APIRouter()
@@ -105,7 +107,7 @@ async def venv_status():
 
 
 @router.post("/setup")
-async def venv_setup():
+async def venv_setup(user=Depends(require_auth)):
     try:
         if _check_venv_exists():
             return {"success": True, "message": "VENV zaten mevcut!"}
@@ -133,7 +135,7 @@ async def venv_setup():
 
 
 @router.post("/install")
-async def venv_install():
+async def venv_install(user=Depends(require_auth)):
     try:
         if not _check_venv_exists():
             raise HTTPException(status_code=400, detail="Once VENV olusturulmali!")
@@ -199,7 +201,7 @@ async def venv_install():
 
 
 @router.post("/execute")
-async def venv_execute(req: VenvExecuteRequest):
+async def venv_execute(req: VenvExecuteRequest, user=Depends(require_auth)):
     try:
         code = req.code.strip()
         if not code:

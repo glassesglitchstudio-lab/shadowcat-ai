@@ -8,9 +8,12 @@ import os
 import base64
 import threading
 import tempfile
+import logging
 from datetime import datetime
 from typing import Optional, Dict
 from pathlib import Path
+
+logger = logging.getLogger("tts")
 
 class TextToSpeech:
     """
@@ -95,7 +98,7 @@ class TextToSpeech:
             # Geçici dosyayı sil
             try:
                 os.unlink(temp_file)
-            except:
+            except OSError:
                 pass
             
             return {
@@ -142,10 +145,8 @@ class TextToSpeech:
             # Geçici dosyayı sil
             try:
                 os.unlink(temp_file)
-            except:
+            except OSError:
                 pass
-            
-            engine.stop()
             
             return {
                 "success": True,
@@ -178,7 +179,7 @@ class TextToSpeech:
                 
                 try:
                     os.unlink(temp_file)
-                except:
+                except OSError:
                     pass
                 
                 return audio_data
@@ -272,7 +273,7 @@ class TextToSpeech:
         for f in self.cache_dir.glob('tts_*'):
             try:
                 os.unlink(f)
-            except:
+            except OSError:
                 pass
 
 

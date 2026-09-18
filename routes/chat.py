@@ -50,7 +50,8 @@ def get_core():
     try:
         from shadowcat_core import get_core as _get_core
         return _get_core()
-    except:
+    except (ImportError, RuntimeError, Exception) as e:
+        logger.warning(f"Core yüklenemedi: {e}")
         return None
 
 async def ollama_stream(message: str, model: str = None):
@@ -127,7 +128,7 @@ async def websocket_chat(websocket: WebSocket):
         logger.error(f"WebSocket hatası: {e}")
         try:
             await websocket.send_json({"type": "error", "content": str(e)})
-        except:
+        except (WebSocketDisconnect, Exception):
             pass
 
 @router.post("/")
@@ -199,8 +200,8 @@ async def list_models():
                 data = resp.json()
                 models = [m["name"] for m in data.get("models", [])]
                 return {"models": models}
-    except:
-        pass
+    except (httpx.RequestError, Exception) as e:
+        logger.warning(f"Ollama model listesi alınamadı: {e}")
     return {"models": []}
 
 class SummarizeRequest(BaseModel):
@@ -213,8 +214,8 @@ async def summarize(msg: SummarizeRequest):
     try:
         from conversation_summarizer import ConversationSummarizer
         summarizer = ConversationSummarizer()
-    except:
-        return {"success": False, "error": "Summarizer yüklü değil"}
+    except (ImportError, Exception) as e:
+        return {"success": False, "error": f"Summarizer yüklü değil: {e}"}
 
     if not msg.text:
         return {"success": False, "error": "text gerekli"}

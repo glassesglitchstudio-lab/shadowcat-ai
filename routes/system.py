@@ -2,8 +2,10 @@ from fastapi import APIRouter
 import psutil
 import platform
 import os
+import logging
 from datetime import datetime
 
+logger = logging.getLogger("routes.system")
 router = APIRouter()
 
 def _get_cpu_name() -> str:
@@ -101,22 +103,22 @@ async def health_check():
         from shadowcat_core import get_core
         c = get_core()
         checks["core"] = True
-    except:
-        pass
+    except (ImportError, Exception) as e:
+        logger.debug(f"Core kontrolü başarısız: {e}")
 
     try:
         import httpx
         r = httpx.get("http://localhost:11434/api/tags", timeout=3.0)
         checks["ollama"] = r.status_code == 200
-    except:
-        pass
+    except (httpx.RequestError, Exception) as e:
+        logger.debug(f"Ollama kontrolü başarısız: {e}")
 
     try:
         from obsidian_memory import get_obsidian_memory
         m = get_obsidian_memory()
         checks["memory"] = True
-    except:
-        pass
+    except (ImportError, Exception) as e:
+        logger.debug(f"Hafıza kontrolü başarısız: {e}")
 
     all_ok = all(checks.values())
     return {"status": "healthy" if all_ok else "degraded", "checks": checks}

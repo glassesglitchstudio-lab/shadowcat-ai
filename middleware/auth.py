@@ -54,9 +54,12 @@ def verify_password(password: str, stored: str) -> bool:
 
 def create_session(user_email: str) -> str:
     token = secrets.token_hex(32)
+    user = users.get(user_email, {})
     sessions[token] = {
         "email": user_email,
-        "created": datetime.now().isoformat()
+        "created": datetime.now().isoformat(),
+        "is_admin": bool(user.get("is_admin", False)),
+        "is_dev": bool(user.get("is_dev", False)),
     }
     return token
 
@@ -70,8 +73,8 @@ async def require_auth(request: Request):
     return sessions[token]
 
 async def require_admin(request: Request):
+    """Admin yetkisi: kullanıcının is_admin bayrağına bakar (oturum oluşturulurken kopyalanır)."""
     user = await require_auth(request)
-    admin_password = os.getenv("ADMIN_PASSWORD", "")
-    if not admin_password:
-        raise HTTPException(status_code=500, detail="Admin şifresi tanımlı değil")
+    if not user.get("is_admin", False):
+        raise HTTPException(status_code=403, detail="Admin yetkisi gerekli")
     return user

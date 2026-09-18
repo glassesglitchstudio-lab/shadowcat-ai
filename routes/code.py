@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from typing import Optional
 import os
@@ -6,6 +6,8 @@ import sys
 import subprocess
 import time
 import logging
+
+from middleware.auth import require_auth, require_admin
 
 logger = logging.getLogger("routes.code")
 router = APIRouter()
@@ -19,7 +21,7 @@ class CodeExecuteRequest(BaseModel):
     language: Optional[str] = "python"
 
 
-SUPPORTED_LANGUAGES = ["python", "javascript", "bash", "lua", "ruby", "go"]
+SUPPORTED_LANGUAGES = ["python", "javascript", "lua", "ruby", "go"]  # bash: shell=True RCE riski → devre dışı
 
 
 def _get_lang_config():
@@ -43,6 +45,7 @@ def _get_lang_config():
             "ext": ".sh",
             "use_code_arg": True,
             "shell": True,
+            "disabled": True,  # shell=True ile komut enjeksiyonu → sadece sandbox içinden açılır
         },
         "lua": {
             "cmd": ["lua", "-e"],
@@ -66,7 +69,7 @@ def _get_lang_config():
 
 
 @router.post("/execute")
-async def code_execute(req: CodeExecuteRequest):
+async def code_execute(req: CodeExecuteRequest, user=Depends(require_auth)):
     code = req.code.strip()
     language = req.language.strip().lower()
 
@@ -81,6 +84,12 @@ async def code_execute(req: CodeExecuteRequest):
 
     lang_config = _get_lang_config()
     config = lang_config[language]
+
+    if config.get("disabled"):
+        raise HTTPException(
+            status_code=403,
+            detail=f"{language} calistirma guvenlik nedeniyle devre disi (shell injection riski)",
+        )
 
     try:
         # Go icin ozel islem (gecici dosya)

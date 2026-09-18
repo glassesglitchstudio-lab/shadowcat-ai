@@ -1,14 +1,17 @@
 from fastapi import APIRouter, HTTPException
 from pydantic import BaseModel
 from typing import Optional, List
+import logging
 
+logger = logging.getLogger("routes.scheduler")
 router = APIRouter()
 
 def get_scheduler():
     try:
         from task_scheduler import TaskScheduler
         return TaskScheduler()
-    except:
+    except (ImportError, Exception) as e:
+        logger.warning(f"Scheduler yüklenemedi: {e}")
         return None
 
 class TaskCreate(BaseModel):
@@ -158,7 +161,8 @@ async def get_history(task_id: Optional[str] = None, limit: int = 50):
     try:
         history = scheduler.get_history(task_id=task_id, limit=limit)
         return {"history": history}
-    except:
+    except Exception as e:
+        logger.warning(f"Geçmiş alınamadı: {e}")
         return {"history": []}
 
 @router.get("/status")
@@ -170,5 +174,6 @@ async def scheduler_status():
     try:
         status = scheduler.get_status_summary()
         return {"available": True, **status}
-    except:
+    except Exception as e:
+        logger.warning(f"Scheduler durumu alınamadı: {e}")
         return {"available": True, "total_tasks": 0, "running": 0, "paused": 0}

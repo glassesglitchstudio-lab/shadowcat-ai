@@ -1074,10 +1074,17 @@ class ToolHandlers:
         import io
         import contextlib
         
-        # Güvenlik filtresi
-        forbidden = ['import os', 'import subprocess', '__import__', 'eval(', 'exec(']
+        # Güvenlik filtresi — tehlikeli kalıpları engelle
+        forbidden = [
+            'import os', 'import subprocess', 'import sys', 'import shutil',
+            '__import__', 'eval(', 'exec(', 'compile(',
+            'open(', '__builtins__', 'globals()', 'locals()', 'vars(',
+            'getattr(', 'setattr(', 'delattr(',
+            'os.', 'subprocess.', 'sys.',
+        ]
+        code_lower = code.lower()
         for pattern in forbidden:
-            if pattern in code:
+            if pattern.lower() in code_lower:
                 return {
                     "success": False,
                     "error": f"Güvenlik: '{pattern}' içeren kod çalıştırılamaz"
@@ -1088,7 +1095,7 @@ class ToolHandlers:
         
         try:
             with contextlib.redirect_stdout(output):
-                exec_globals = {"__name__": "__main__", "math": math}
+                exec_globals = {"__name__": "__main__", "math": math, "__builtins__": {}}
                 exec(code, exec_globals)
         except Exception as e:
             error = f"{type(e).__name__}: {e}"

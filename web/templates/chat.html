@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0a0910">
+    <meta name="color-scheme" content="dark light">
     <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta http-equiv="Expires" content="0">
@@ -637,6 +639,15 @@
 
         .ide-ai-panel{width:380px;background:#09070f;border-left:1px solid rgba(255,255,255,0.08);display:flex;flex-direction:column;padding:14px}
 
+        /* ── WIG AUDIT FIXES (erişilebilirlik + dokunma + dark native) ── */
+        html { color-scheme: dark light; }
+        :focus-visible { outline: 2px solid #7c3aed; outline-offset: 2px; border-radius: 4px; }
+        .tb-btn, .new-btn, .chip, button { touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+        }
+        .claude-modal-overlay, .upload-overlay, .ide-modal-overlay, .ide-ai-panel, aside { overscroll-behavior: contain; }
+
 </style>
 </head>
 <body>
@@ -686,6 +697,7 @@
         <div class="topbar-left">
             <button class="hamburger" onclick="toggleSidebar()">&#9776;</button>
             <span id="modeBadge" class="mode-badge live" title="Modal 7/24 Bulut AI"> Modal Canlı</span>
+        <button class="tb-btn" id="ctxBadge" onclick="refreshContextBadge()" title="0-Kayıpsız Context Engine — eski mesajlar özetlenmez, arşive gömülür, sorguya göre geri çağrılır">∞ Context</button>
         </div>
         <div class="tb-group">
             <button class="tb-btn" onclick="toggleStyle()" id="styleBtn" title="Yanıt stili">Stil</button>
@@ -1295,7 +1307,7 @@
     </div>
 </div>
 
-<div id="toast" class="toast"></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
 
 <script src="skills-library.js" onerror="this.onerror=null;this.src='/static/skills-library.js'"></script>
 <script>
@@ -4184,7 +4196,7 @@ Temel Kuralların:
             const apiRes = await fetch(LOCAL_FASTAPI_API, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({message: msg, model: gonderilecekModel()})
+                body: JSON.stringify(buildChatPayload(msg))
             });
             if (apiRes.ok) {
                 const d = await apiRes.json();
@@ -4218,6 +4230,7 @@ Temel Kuralların:
         if (window.puter && window.puter.ai) {
             const messages = [
                 { role: 'system', content: STUDIO_SYSTEM_PROMPT },
+                ...((chatId && chats[chatId]) ? chats[chatId].msgs.slice(-12).map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.text })) : []),
                 { role: 'user', content: msg }
             ];
             const models = ['deepseek-reasoner', 'deepseek-chat', 'claude-3-5-sonnet', 'gpt-4o'];
@@ -4239,7 +4252,7 @@ Temel Kuralların:
             const apiRes = await fetch(LOCAL_FASTAPI_API, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({message: msg, model: gonderilecekModel(), stream: true})
+                body: JSON.stringify(buildChatPayload(msg, true))
             });
             if (apiRes.ok && apiRes.body) {
                     const _ct = (apiRes.headers.get("content-type") || "");
@@ -4333,6 +4346,7 @@ Temel Kuralların:
         if (window.puter && window.puter.ai) {
             const messages = [
                 { role: 'system', content: STUDIO_SYSTEM_PROMPT },
+                ...((chatId && chats[chatId]) ? chats[chatId].msgs.slice(-12).map(m => ({ role: m.role === 'user' ? 'user' : 'assistant', content: m.text })) : []),
                 { role: 'user', content: msg }
             ];
             const models = ['deepseek-reasoner', 'deepseek-chat', 'claude-3-5-sonnet', 'gpt-4o'];
@@ -4353,7 +4367,7 @@ Temel Kuralların:
         }
 
         // Fallback: Normal çağrı
-        const reply = await callChat(msg);
+        const reply = await callChat(t);
         let cleanText = reply;
         const thinkMatch = reply.match(/<think>([\s\S]*?)<\/think>/i);
         if (thinkMatch) {
@@ -5253,6 +5267,7 @@ Temel Kuralların:
             const ms = chats[chatId].msgs;
             if (ms.length) { ms[ms.length - 1].text = full; if (thinkingText) ms[ms.length - 1].thinking = thinkingText; }
         }
+        refreshContextBadge();
         setTimeout(() => hljs.highlightAll(), 50);
         return full;
     }
@@ -5282,6 +5297,25 @@ Temel Kuralların:
     newChat();
     checkBackend();
     initSupabaseAuth();
+
+    // ─── 0-KAYIPSIZ CONTEXT (10MContext Engine) ───
+    function buildChatPayload(msg, stream = false) {
+        // Not: addMsg('user') send() başında çalıştığı için mevcut mesaj zaten msgs'ta —
+        // sunucu (_effective_messages) bunu ayıklar, burada tekrar etmiyoruz.
+        const h = (chatId && chats[chatId]) ? chats[chatId].msgs.slice(-24) : [];
+        const p = { message: msg, model: gonderilecekModel(), history: h, conv_id: chatId || 'default' };
+        if (stream) p.stream = true;
+        return p;
+    }
+    async function refreshContextBadge() {
+        try {
+            const d = await (await fetch('/api/context/stats')).json();
+            const b = document.getElementById('ctxBadge');
+            if (!b || !d.available) return;
+            b.innerHTML = '<span style="color:#10b981">●</span> Context: ' + d.archived_segments.toLocaleString('tr-TR') + ' kayıt arşivde (0 kayıp)';
+        } catch(e) {}
+    }
+    refreshContextBadge();
 
     // ─── THEME TOGGLE (DARK MODE & LIGHT MODE) ───
     function applyTheme(theme) {
@@ -5583,7 +5617,7 @@ function saveQuickNote() {
 
 function exportChat() {
     const fmt = prompt("Format: json / md / html", "md") || "md";
-    if (![�json�,�md�,�html�].includes(fmt.toLowerCase())) { alert("Gecersiz format"); return; }
+    if (!["json","md","html"].includes(fmt.toLowerCase())) { alert("Gecersiz format"); return; }
     fetch("/api/chat/export", {
         method: "POST",
         headers: {"Content-Type": "application/json"},
@@ -5601,20 +5635,13 @@ function exportChat() {
 function showSysStatus() {
     document.getElementById("sysStatusModal").style.display = "flex";
     fetch("/api/system/status").then(r => r.json()).then(d => {
-        let s = "CPU: %" + (d.cpu?.percent ?? "?") + " (" + (d.cpu?.cores ?? "?") + " cekirdek)
-";
-        s += "RAM: " + (d.memory?.used_gb ?? "?") + "GB / " + (d.memory?.total_gb ?? "?") + "GB (%" + (d.memory?.percent ?? "?") + ")
-";
-        s += "Disk: %" + (d.disk?.partitions?.[0]?.percent ?? "?") + " kullaniliyor
-";
-        s += "GPU: " + (d.gpu?.available ? d.gpu.devices?.[0]?.name : "Yok") + "
-";
-        s += "Uptime: " + (d.uptime ?? "?") + "
-";
-        s += "IP: " + (d.network?.ip ?? "?") + "
-";
-        if (d.top_processes?.length) { d.top_processes.forEach(p => { s += "  - " + (p.name ?? "?") + " (%" + (p.memory_percent ?? 0) + ")
-"; }); }
+        let s = "CPU: %" + (d.cpu?.percent ?? "?") + " (" + (d.cpu?.cores ?? "?") + " cekirdek)" + "\n";
+        s += "RAM: " + (d.memory?.used_gb ?? "?") + "GB / " + (d.memory?.total_gb ?? "?") + "GB (%" + (d.memory?.percent ?? "?") + ")" + "\n";
+        s += "Disk: %" + (d.disk?.partitions?.[0]?.percent ?? "?") + " kullaniliyor" + "\n";
+        s += "GPU: " + (d.gpu?.available ? d.gpu.devices?.[0]?.name : "Yok") + "\n";
+        s += "Uptime: " + (d.uptime ?? "?") + "\n";
+        s += "IP: " + (d.network?.ip ?? "?") + "\n";
+        if (d.top_processes?.length) { d.top_processes.forEach(p => { s += "  - " + (p.name ?? "?") + " (%" + (p.memory_percent ?? 0) + ")" + "\n"; }); }
         document.getElementById("sysStatusBody").textContent = s;
     }).catch(e => {
         document.getElementById("sysStatusBody").textContent = "Sistem verisi alinamadi: " + e;

@@ -75,6 +75,103 @@ from actions import launch_app, APP_MAPPINGS
 
 from utils import get_system_status
 
+# ── Context Archive: 0 kayıpsız sonsuz context (özetsiz retrieval bellek) ──
+try:
+    sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "elytra_vnpu"))
+    from context_archive import ContextArchive
+    CONTEXT_ARCHIVE_AVAILABLE = True
+except Exception:  # ImportError veya sys.path sorunu
+    CONTEXT_ARCHIVE_AVAILABLE = False
+
+_CONTEXT_ARCHIVE = None
+
+def get_context_archive():
+    """Sohbet geçmişinin 0-kayıpsız arşivi (lazy singleton)."""
+    global _CONTEXT_ARCHIVE
+    if _CONTEXT_ARCHIVE is None and CONTEXT_ARCHIVE_AVAILABLE:
+        try:
+            _CONTEXT_ARCHIVE = ContextArchive(os.path.join(
+                os.path.dirname(os.path.abspath(__file__)), "storage", "context_archive.db"))
+            logger.info("[ContextArchive] Aktif — context dolunca eskiler özetsiz arşive gider, sorguya göre geri gelir")
+        except Exception as e:
+            logger.warning(f"[ContextArchive] Başlatılamadı: {e}")
+    return _CONTEXT_ARCHIVE
+
+import sys as _sys
+_context_window_soft_limit = 24000   # yaklaşık karakter eşiği (≈6K token) — async stack'lerde bilgi amaçlı
+_context_keep_last = 12              # prompt'ta tutulacak son mesaj sayısı
+
+def _normalize_history(raw: Optional[List[Any]]) -> List[Dict[str, str]]:
+    """Frontend'den gelen history'yi temizler: role/content stringleri, max 80 mesaj.
+    Frontend rolü 'ai' → Ollama rolü 'assistant' eşlemesi burada yapılır."""
+    if not isinstance(raw, list):
+        return []
+    _ROLE_MAP = {"ai": "assistant", "bot": "assistant", "model": "assistant", "human": "user", "system": "system"}
+    out = []
+    for m in raw[-80:]:
+        if not isinstance(m, dict):
+            continue
+        role = _ROLE_MAP.get(str(m.get("role", "user")).lower(), "user")
+        content = m.get("content", m.get("text", ""))
+        if not isinstance(content, str):
+            content = str(content)
+        if content.strip():
+            out.append({"role": role, "content": content})
+    return out
+
+
+def _archive_from_history(username: str, conv_id: str, history: List[Dict[str, str]]) -> None:
+    """Gelen geçmişi arşive yazar (idempotent id'lerle)."""
+    arc = get_context_archive()
+    if not arc or not history:
+        return
+    base = f"{username}:{conv_id}:"
+    for i, m in enumerate(history):
+        try:
+            # idempotent, içerik-bağımlı id → aynı mesaj tekrar arşive yazılmaz
+            ctag = hashlib.md5(m["content"].encode("utf-8")).hexdigest()[:10]
+            arc.add(base + str(i) + ":" + ctag, m["content"],
+                    {"role": m["role"], "username": username, "conv_id": conv_id})
+        except Exception:
+            pass
+
+
+def _build_context_block(user_query: str) -> str:
+    """Arşivden sorguya göre ilgili eski bağlamı getirir (0 kayıp: özet yok, orijinal metin)."""
+    arc = get_context_archive()
+    if not arc:
+        return ""
+    try:
+        return arc.build_context(user_query, k=3, max_chars=2000) or ""
+    except Exception:
+        return ""
+
+
+def _effective_messages(history: List[Dict[str, str]], user_msg: str, system_prompt: str) -> List[Dict[str, str]]:
+    """Modele gidecek mesaj listesi: [system] + [arşiv bağlamı] + [son N geçmiş] + [yeni mesaj].
+    Geçmiş yumuşak limiti aşarsa en eski kısım arşive taşınır (özetsiz — kayıp yok)."""
+    msgs: List[Dict[str, str]] = [{"role": "system", "content": system_prompt}]
+    hist = list(history or [])
+    # Mükerrer engelle: frontend son kullanıcı mesajını history'ye de koyabilir
+    if hist and hist[-1].get("role") == "user" and hist[-1].get("content", "").strip() == user_msg.strip():
+        hist.pop()
+    # Yumuşak pencere: geçmiş çok uzunsa eskileri arşive at, son N'i tut
+    while len(hist) > _context_keep_last:
+        oldest = hist.pop(0)
+        arc = get_context_archive()
+        if arc:
+            try:
+                arc.add(f"soft:{uuid.uuid4().hex[:12]}", oldest["content"],
+                        {"role": oldest["role"], "note": "soft-window"})
+            except Exception:
+                pass
+    ctx_block = _build_context_block(user_msg)
+    if ctx_block:
+        msgs.append({"role": "system", "content": ctx_block})
+    msgs.extend(hist)
+    msgs.append({"role": "user", "content": user_msg})
+    return msgs
+
 from vision import analyze_image, ocr_from_image
 
 
@@ -496,6 +593,10 @@ class ChatRequest(BaseModel):
 
     stream: Optional[bool] = False
 
+    history: Optional[List[Any]] = None  # [{role, content}, ...] — 0-kayıpsız context için
+
+    conv_id: Optional[str] = None      # arşiv id-keying için sohbet kimliği
+
 
 
 
@@ -825,6 +926,28 @@ async def chat(request: ChatRequest):
 
         increment_message_count(username)
 
+        
+
+        # ── 0-KAYIPSIZ CONTEXT: geçmişi al, arşivle, ilgili kısmı geri çağır ──
+        conv_id = request.conv_id or "default"
+        history = _normalize_history(request.history)
+        if history:
+            _archive_from_history(username, conv_id, history)
+        else:
+            arc = get_context_archive()
+            if arc:
+                try:  # frontend geçmişi göndermediyse sunucu tarafı hafızadan kurtar
+                    recovered = [h for h in arc.search(request.message, k=6) if h["score"] > 0.05]
+                    recovered.sort(key=lambda x: x.get("ts", ""))  # kronolojik sıra
+                    for h in recovered:
+                        history.append({"role": h["role"], "content": h["content"]})
+                except Exception:
+                    pass
+        history = history[-_context_keep_last:]
+        # Routerlar (xopus/codes) mevcut mesajı kendileri ekler → history'den çıkar (mükerrer engel)
+        if history and history[-1]["role"] == "user" and history[-1]["content"].strip() == request.message.strip():
+            history = history[:-1]
+
 
 
         
@@ -864,13 +987,10 @@ async def chat(request: ChatRequest):
                             override = CODE_MODEL
 
                         for ch in xopus.chat_stream(
-
                             message=request.message,
-
                             system_prompt=None,
-
-                            model=override
-
+                            model=override,
+                            context=history
                         ):
 
                             yield sse(ch)
@@ -881,7 +1001,7 @@ async def chat(request: ChatRequest):
 
                         # CodeS ticari kademeleri → sınıflandırma + fallback
                         codes = get_codes_router()
-                        for ch in codes.chat_stream(request.message, tier=model_choice):
+                        for ch in codes.chat_stream(request.message, tier=model_choice, context=history):
                             yield sse(ch)
                         yield sse({"done": True})
 
@@ -909,16 +1029,14 @@ async def chat(request: ChatRequest):
                         think_enabled = getattr(core, '_extended_thinking', False) if core else False
                         
                         try:
+                            _eff_msgs = _effective_messages(history, request.message, system_prompt)
                             async with httpx.AsyncClient(timeout=180.0) as client:
                                 async with client.stream(
                                     "POST",
                                     target_api_url,
                                     json={
                                         "model": stream_model,
-                                        "messages": [
-                                            {"role": "system", "content": system_prompt},
-                                            {"role": "user", "content": request.message}
-                                        ],
+                                        "messages": _eff_msgs,
                                         "stream": True,
                                         "think": think_enabled,
                                         "options": {"temperature": 0.7, "num_predict": 2000}
@@ -1044,13 +1162,10 @@ async def chat(request: ChatRequest):
                 override = GLITCH_MODEL if model_choice == "X_GLITCH_OPUS" else CODE_MODEL
 
                 result = xopus.chat(
-
                     message=request.message,
-
                     system_prompt=None,
-
-                    model=override
-
+                    model=override,
+                    context=history
                 )
 
                 response_text = result.get("response", "")
@@ -1084,7 +1199,7 @@ async def chat(request: ChatRequest):
 
                 codes = get_codes_router()
 
-                result = codes.chat(request.message, tier=model_choice)
+                result = codes.chat(request.message, tier=model_choice, context=history)
 
                 response_text = result.get("response", "")
 
@@ -1171,6 +1286,15 @@ async def chat(request: ChatRequest):
         if not response_text:
 
             response_text = "AI motorları yanıt vermedi."
+        
+        # ── AI cevabını da arşive yaz (MIRA: kendi ürettiğini hatırlama) ──
+        _arc = get_context_archive()
+        if _arc and response_text:
+            try:
+                _arc.add(f"{username}:{conv_id}:ai:{uuid.uuid4().hex[:8]}", str(response_text),
+                         {"role": "assistant", "username": username, "conv_id": conv_id})
+            except Exception:
+                pass
 
         
 
@@ -1190,8 +1314,11 @@ async def chat(request: ChatRequest):
 
             "thinking": thinking_text,
 
-            "deeper": deeper_data
-
+            "deeper": deeper_data,
+            "context_stats": {
+                "history_used": len(history),
+                "archived": (get_context_archive().count() if get_context_archive() else 0)
+            }
         }
 
     except Exception as e:
@@ -1307,6 +1434,30 @@ async def health():
         "ai_primary": AI_CONFIG["primary"]["enabled"],
 
         "ai_fallback": AI_CONFIG["fallback"]["enabled"]
+
+    }
+
+
+
+
+
+@app.get("/api/context/stats")
+
+async def context_stats():
+
+    """0-kayıpsız context arşivi durumu"""
+
+    arc = get_context_archive()
+
+    return {
+
+        "available": CONTEXT_ARCHIVE_AVAILABLE,
+
+        "archived_segments": arc.count() if arc else 0,
+
+        "window_keep_last": _context_keep_last,
+
+        "note": "Eski mesajlar özetlenmez — SQLite'a orijinal haliyle gömülür, sorguya göre geri çağrılır"
 
     }
 
