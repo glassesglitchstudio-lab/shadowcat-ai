@@ -81,12 +81,12 @@ async def login(req: LoginRequest, response: Response):
             raise HTTPException(status_code=401, detail="Geçersiz e-posta veya şifre")
 
     user = users[req.email]
-    if not dev_mode and not verify_password(req.password, user["password"]):
+    if not dev_mode and not verify_password(req.password, user.get("password", "")):
         raise HTTPException(status_code=401, detail="Geçersiz e-posta veya şifre")
 
     token = create_session(req.email)
     response.set_cookie("session_token", token, httponly=True, max_age=7*24*3600)
-    return {"message": "Giriş başarılı", "token": token, "user": {"name": user["name"], "email": user["email"]}}
+    return {"message": "Giriş başarılı", "token": token, "user": {"name": user.get("name", req.email.split("@")[0]), "email": user.get("email", req.email)}}
 
 @router.get("/me")
 async def get_me(request: Request):
